@@ -1,3 +1,5 @@
+package LoginSystemPackage;
+
 import android.os.StrictMode;
 import android.util.Log;
 
@@ -21,7 +23,7 @@ public class LoginSystem {
     /**
      * Verifies if username and password are correct. If correct, a jwt token is generated.
      */
-    private String checkCredentials(String username, String password) throws IOException, JSONException {
+    public String checkCredentials(String username, String password) throws IOException, JSONException {
         Log.d("myTag", "Check Credentials");
 
         OkHttpClient client = new OkHttpClient();
@@ -61,7 +63,7 @@ public class LoginSystem {
     /**
      * Verifies if jwt token is valid.
      */
-    private void VerifyJWTToken(String jwt) throws IOException {
+    public static void VerifyJWTToken(String jwt) throws IOException {
         Log.d("myTag", "Verify Token");
 
         OkHttpClient client = new OkHttpClient();
