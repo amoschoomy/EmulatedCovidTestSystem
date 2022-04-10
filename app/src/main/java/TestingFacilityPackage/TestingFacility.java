@@ -11,6 +11,7 @@ public class TestingFacility {
   private String openingTime;
   private String closingTime;
 
+
   public TestingFacility(
       TestingFacilityType testingFacilityType,
       boolean onSiteBooking,

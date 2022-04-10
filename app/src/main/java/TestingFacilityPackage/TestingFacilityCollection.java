@@ -28,11 +28,9 @@ public class TestingFacilityCollection {
     OkHttpClient client = new OkHttpClient();
 
     // insert key here
-    final String MY_API_KEY = API_KEY;
     String usersUrl = "https://fit3077.com/api/v1/testing-site";
 
-    Request request =
-        new Request.Builder().url(usersUrl).header("Authorization", MY_API_KEY).build();
+    Request request = new Request.Builder().url(usersUrl).header("Authorization", API_KEY).build();
 
     client
         .newCall(request)
@@ -50,6 +48,10 @@ public class TestingFacilityCollection {
                   assert response.body() != null;
                   String strResponse = response.body().string();
                   String strResponseCode = Integer.toString(response.code());
+                  //                    Type listType = new
+                  // TypeToken<ArrayList<TestingFacility>>(){}.getType();
+                  //                    testingFacilities = new Gson().fromJson(jsonArray,
+                  // listType);
                 } else {
                 }
               }
