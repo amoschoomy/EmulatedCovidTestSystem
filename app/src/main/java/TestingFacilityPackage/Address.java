@@ -10,6 +10,33 @@ public class Address {
   private String state;
   private String postcode;
 
+  @Override
+  public String toString() {
+    return "Address{"
+        + "latitude="
+        + latitude
+        + ", longitude="
+        + longitude
+        + ", unitNumber="
+        + unitNumber
+        + ", street='"
+        + street
+        + '\''
+        + ", street2='"
+        + street2
+        + '\''
+        + ", suburb='"
+        + suburb
+        + '\''
+        + ", state='"
+        + state
+        + '\''
+        + ", postcode='"
+        + postcode
+        + '\''
+        + '}';
+  }
+
   public Address(
       float latitude,
       float longitude,
