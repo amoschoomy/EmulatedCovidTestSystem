@@ -1,5 +1,9 @@
 package TestingFacilityPackage;
 
+import java.util.ArrayList;
+
+import BookingPackage.Booking;
+
 public class TestingFacility {
   private TestingFacilityType testingFacilityType;
   private boolean onSiteBooking;
@@ -10,7 +14,7 @@ public class TestingFacility {
   private String phoneNumber;
   private String openingTime;
   private String closingTime;
-
+  private ArrayList<Booking> bookings;
 
   public TestingFacility(
       TestingFacilityType testingFacilityType,
@@ -21,7 +25,8 @@ public class TestingFacility {
       String websiteURL,
       String phoneNumber,
       String openingTime,
-      String closingTime) {
+      String closingTime,
+      ArrayList<Booking> bookings) {
     this.testingFacilityType = testingFacilityType;
     this.onSiteBooking = onSiteBooking;
     this.waitingTime = waitingTime;
@@ -31,6 +36,7 @@ public class TestingFacility {
     this.phoneNumber = phoneNumber;
     this.openingTime = openingTime;
     this.closingTime = closingTime;
+    this.bookings = bookings;
   }
 
   public String getOpeningTime() {
