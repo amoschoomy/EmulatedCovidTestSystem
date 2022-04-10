@@ -2,15 +2,15 @@ package BookingPackage;
 
 import java.util.ArrayList;
 
-import CovidTestPackage.CovidTest;
-import TestingFacilityPackage.TestingFacility;
+import CovidTestPackage.PatientCovidTest;
+import TestingFacilityPackage.TestingFacilityInterface;
 import UserPackage.User;
 
-public class Booking {
-  private TestingFacility testingFacility;
+public class Booking implements BookingInterface {
+  private TestingFacilityInterface testingFacility;
   private String startTime;
   private BookingStatus bookingStatus;
   private String notes;
   private User user;
-  private ArrayList<CovidTest> covidTests;
+  private ArrayList<PatientCovidTest> covidTests;
 }

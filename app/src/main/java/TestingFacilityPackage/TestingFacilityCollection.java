@@ -1,8 +1,17 @@
 package TestingFacilityPackage;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import okhttp3.Call;
@@ -48,14 +57,21 @@ public class TestingFacilityCollection {
                   assert response.body() != null;
                   String strResponse = response.body().string();
                   String strResponseCode = Integer.toString(response.code());
-                  //                    Type listType = new
-                  // TypeToken<ArrayList<TestingFacility>>(){}.getType();
-                  //                    testingFacilities = new Gson().fromJson(jsonArray,
-                  // listType);
+                  Type listType = new TypeToken<ArrayList<TestingFacility>>() {}.getType();
+                  testingFacilities = new Gson().fromJson(strResponse, listType);
+                  for (TestingFacility testingFacility : testingFacilities) {
+                    try {
+                      JSONArray jsonArray = new JSONArray(strResponse);
+                    } catch (JSONException err) {
+                      Log.d("myTag", err.toString());
+                    }
+                  }
                 } else {
+                  System.out.println("Failed");
                 }
               }
             });
+    Log.d("myTag", "Pain");
     return testingFacilities;
   }
 
