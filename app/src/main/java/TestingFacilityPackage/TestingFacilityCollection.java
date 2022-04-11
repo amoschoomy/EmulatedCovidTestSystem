@@ -1,7 +1,6 @@
 package TestingFacilityPackage;
 
 import android.os.StrictMode;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,31 +43,7 @@ public class TestingFacilityCollection {
     String output = response.body().string();
     Type listType = new TypeToken<ArrayList<TestingFacility>>() {}.getType();
     testingFacilities = new Gson().fromJson(output, listType);
-    Log.d("myTag", testingFacilities.toString());
-    //    client
-    //        .newCall(request)
-    //        .enqueue(
-    //            new Callback() {
-    //              @Override
-    //              public void onFailure(@NonNull Call call, @NonNull IOException e) {
-    //                e.printStackTrace();
-    //              }
-    //
-    //              @Override
-    //              public void onResponse(@NonNull Call call, @NonNull Response response)
-    //                  throws IOException {
-    //                if (response.isSuccessful()) {
-    //                  assert response.body() != null;
-    //                  String strResponse = response.body().string();
-    //                  String strResponseCode = Integer.toString(response.code());
-    //                  Type listType = new TypeToken<ArrayList<TestingFacility>>() {}.getType();
-    //                  testingFacilities = new Gson().fromJson(strResponse, listType);
-    //                  Log.d("myTag", testingFacilities.toString());
-    //                } else {
-    //                  System.out.println("Failed");
-    //                }
-    //              }
-    //            });
+    //    Log.d("myTag", testingFacilities.toString());
 
     return testingFacilities;
   }

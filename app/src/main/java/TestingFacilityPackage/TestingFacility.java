@@ -1,26 +1,16 @@
 package TestingFacilityPackage;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 
 import BookingPackage.Booking;
 
 public class TestingFacility implements TestingFacilityInterface {
-  private TestingFacilityType testingFacilityType;
-  private int waitingTime;
   private String name;
   private String description;
   private String websiteURL;
   private String phoneNumber;
 
-  public TestingFacilityType getTestingFacilityType() {
-    return testingFacilityType;
-  }
 
-  public int getWaitingTime() {
-    return waitingTime;
-  }
 
   public String getName() {
     return name;
@@ -46,37 +36,24 @@ public class TestingFacility implements TestingFacilityInterface {
     return address;
   }
 
-  public AdditionalInfo getAdditionalInfo() {
-    return additionalInfo;
+  public String getOpeningTimes() {
+    return additionalInfo.getOpeningTime();
   }
 
-  @Override
-  @NonNull
-  public String toString() {
-    return "TestingFacility{"
-        + "testingFacilityType="
-        + testingFacilityType
-        + ", waitingTime="
-        + waitingTime
-        + ", name='"
-        + name
-        + '\''
-        + ", description='"
-        + description
-        + '\''
-        + ", websiteURL='"
-        + websiteURL
-        + '\''
-        + ", phoneNumber='"
-        + phoneNumber
-        + '\''
-        + ", bookings="
-        + bookings
-        + ", address="
-        + address
-        + ", additionalInfo="
-        + additionalInfo
-        + '}';
+  public String getClosingTimes() {
+    return additionalInfo.getClosingTime();
+  }
+
+  public TestingFacilityType getTestingFacilityType() {
+    return additionalInfo.getTestingFacilityType();
+  }
+
+  public boolean isOnSiteBooking() {
+    return additionalInfo.isOnSiteBooking();
+  }
+
+  public String getWaitingTimes() {
+    return additionalInfo.getWaitingTime();
   }
 
   private ArrayList<Booking> bookings;
