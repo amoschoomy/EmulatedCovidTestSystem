@@ -1,3 +1,5 @@
+package TestingFacilityPackage;
+
 public class Address {
   private float latitude;
   private float longitude;
@@ -7,6 +9,33 @@ public class Address {
   private String suburb;
   private String state;
   private String postcode;
+
+  @Override
+  public String toString() {
+    return "Address{"
+        + "latitude="
+        + latitude
+        + ", longitude="
+        + longitude
+        + ", unitNumber="
+        + unitNumber
+        + ", street='"
+        + street
+        + '\''
+        + ", street2='"
+        + street2
+        + '\''
+        + ", suburb='"
+        + suburb
+        + '\''
+        + ", state='"
+        + state
+        + '\''
+        + ", postcode='"
+        + postcode
+        + '\''
+        + '}';
+  }
 
   public Address(
       float latitude,
