@@ -11,7 +11,9 @@ import android.widget.EditText;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.text.Collator;
 
+import LoginSystemPackage.LoginAuthentication;
 import LoginSystemPackage.LoginSystem;
 
 
@@ -41,10 +43,13 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String username = inputUsername.getText().toString();
+                String password = inputPassword.getText().toString();
                 try {
-                    String output = ls.checkCredentials(inputUsername.getText().toString(),
-                            inputPassword.getText().toString());
+                    String jwt = ls.checkCredentials(username, password);
 
+//                    String userid = ls.getUserId(jwt);
+                    LoginAuthentication newInstance = LoginAuthentication.getInstance(jwt);
 //                    loginAuthentication.getInstance().setJWT(jwt);
 
 //                    VerifyJWTToken(output);

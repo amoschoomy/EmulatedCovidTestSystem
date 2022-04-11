@@ -1,7 +1,7 @@
 package UserPackage;
 
-public class Customer implements User{
-    public Customer(String givenName, String familyName, String userName, String phoneNumber,
+public class HealthcareWorker implements User {
+    public HealthcareWorker(String givenName, String familyName, String userName, String phoneNumber,
                     Boolean isCustomer, Boolean isReceptionist, Boolean isHealthcareWorker,
                     String additionalInfo) {
     }
