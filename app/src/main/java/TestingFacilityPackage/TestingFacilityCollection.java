@@ -47,8 +47,4 @@ public class TestingFacilityCollection {
 
     return testingFacilities;
   }
-
-  public ArrayList<TestingFacility> getTestingFacilities() {
-    return testingFacilities;
-  }
 }

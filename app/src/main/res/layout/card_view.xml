@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="197dp"
         app:layout_constraintBottom_toBottomOf="@+id/open"
         app:layout_constraintTop_toBottomOf="@+id/open">
 
@@ -23,18 +23,19 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="14dp"
             android:text="TextView"
             app:layout_constraintBottom_toTopOf="@+id/sitetype"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside" />
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/sitetype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
             android:text="TextView"
             app:layout_constraintBottom_toTopOf="@+id/onsitebooking"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,31 +45,41 @@
             android:id="@+id/onsitebooking"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
             android:text="TextView"
             app:layout_constraintBottom_toTopOf="@+id/open"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/sitetype"
             app:layout_constraintTop_toBottomOf="@+id/sitetype" />
 
         <TextView
             android:id="@+id/open"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="3dp"
             android:text="TextView"
             app:layout_constraintBottom_toTopOf="@+id/closed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/onsitebooking"
             app:layout_constraintTop_toBottomOf="@+id/onsitebooking" />
 
         <TextView
             android:id="@+id/closed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="12dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toTopOf="@+id/suburb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/open" />
+
+        <TextView
+            android:id="@+id/suburb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:text="TextView"
             app:layout_constraintBottom_toTopOf="@+id/openstatus"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/open" />
+            app:layout_constraintTop_toBottomOf="@+id/closed" />
 
         <TextView
             android:id="@+id/openstatus"
@@ -77,18 +88,20 @@
             android:layout_marginBottom="7dp"
             android:text="TextView"
             app:layout_constraintBottom_toTopOf="@+id/waitingtime"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/closed" />
+            app:layout_constraintStart_toStartOf="@+id/suburb"
+            app:layout_constraintTop_toBottomOf="@+id/suburb" />
 
         <TextView
             android:id="@+id/waitingtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            android:layout_marginBottom="1dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/openstatus" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
