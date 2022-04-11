@@ -17,7 +17,7 @@ import okhttp3.Response;
 public class LoginSystem {
 
     // insert key here
-    public static final String MY_API_KEY = "TnC99fqGhGDjt7tzWWRjLj7r8TwBHQ";
+    public static final String MY_API_KEY = "KEY";
     public static final String ROOT_URL = "https://fit3077.com/api/v1";
 
     /**
