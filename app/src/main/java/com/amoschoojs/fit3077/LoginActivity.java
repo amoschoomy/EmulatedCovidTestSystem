@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         inputPassword = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.loginButton);
 
-        LoginSystem ls = new LoginSystem();
+        LoginSystem ls = new LoginSystem(getString(R.string.api_key));
 
         // test username: mbrown123
         // test password: mbrown123

@@ -3,6 +3,8 @@ package LoginSystemPackage;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.amoschoojs.fit3077.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,9 +18,12 @@ import okhttp3.Response;
 
 public class LoginSystem {
 
-    // insert key here
-    public static final String MY_API_KEY = "KEY";
+    public static String MY_API_KEY;
     public static final String ROOT_URL = "https://fit3077.com/api/v1";
+
+    public LoginSystem(String apikey) {
+        MY_API_KEY = apikey;
+    }
 
     /**
      * Verifies if username and password are correct. If correct, a jwt token is generated.
