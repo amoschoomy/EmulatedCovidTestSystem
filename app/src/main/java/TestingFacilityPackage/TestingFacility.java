@@ -1,5 +1,7 @@
 package TestingFacilityPackage;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 import BookingPackage.Booking;
@@ -12,7 +14,44 @@ public class TestingFacility implements TestingFacilityInterface {
   private String websiteURL;
   private String phoneNumber;
 
+  public TestingFacilityType getTestingFacilityType() {
+    return testingFacilityType;
+  }
+
+  public int getWaitingTime() {
+    return waitingTime;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public String getWebsiteURL() {
+    return websiteURL;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public ArrayList<Booking> getBookings() {
+    return bookings;
+  }
+
+  public Address getAddress() {
+    return address;
+  }
+
+  public AdditionalInfo getAdditionalInfo() {
+    return additionalInfo;
+  }
+
   @Override
+  @NonNull
   public String toString() {
     return "TestingFacility{"
         + "testingFacilityType="
