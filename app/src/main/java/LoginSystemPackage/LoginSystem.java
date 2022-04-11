@@ -3,6 +3,8 @@ package LoginSystemPackage;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.amoschoojs.fit3077.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,15 +18,20 @@ import okhttp3.Response;
 
 public class LoginSystem {
 
-    // insert key here
-    private static final String myApiKey = "KEY";
-    private static final String rootUrl = "https://fit3077.com/api/v1";
+    public static String MY_API_KEY;
+    public static final String ROOT_URL = "https://fit3077.com/api/v1";
+
+    public LoginSystem(String apikey) {
+        MY_API_KEY = apikey;
+    }
 
     /**
      * Verifies if username and password are correct. If correct, a jwt token is generated.
      */
     public String checkCredentials(String username, String password) throws IOException, JSONException {
         Log.d("myTag", "Check Credentials");
+        Log.d("myTag", username);
+        Log.d("myTag", password);
 
         OkHttpClient client = new OkHttpClient();
 
@@ -34,11 +41,11 @@ public class LoginSystem {
                 .add("password", password)
                 .build();
 
-        String loginUrl = rootUrl + "/user/login?jwt=true";
+        String loginUrl = ROOT_URL + "/user/login?jwt=true";
 
         Request request = new Request.Builder()
                 .url(loginUrl)
-                .header("Authorization", myApiKey)
+                .header("Authorization", MY_API_KEY)
                 .header("Content-Type","application/json")
                 .post(formBody)
                 .build();
@@ -50,6 +57,8 @@ public class LoginSystem {
         Response response = client.newCall(request).execute();
 
         String output = response.body().string();
+
+        Log.d("myTag", output);
 
         // obtain jwt value from string
         JSONObject jObj = new JSONObject(output);
@@ -72,11 +81,11 @@ public class LoginSystem {
                 .add("jwt", jwt)
                 .build();
 
-        String verifyTokenUrl = rootUrl + "/user/verify-token";
+        String verifyTokenUrl = ROOT_URL + "/user/verify-token";
 
         Request request = new Request.Builder()
                 .url(verifyTokenUrl)
-                .header("Authorization", myApiKey)
+                .header("Authorization", MY_API_KEY)
                 .header("Content-Type","application/json")
                 .post(formBody)
                 .build();
