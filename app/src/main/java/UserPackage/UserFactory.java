@@ -1,26 +1,47 @@
 package UserPackage;
 
+import java.util.Locale;
+
 public class UserFactory {
     public User createUser(String givenName, String familyName, String userName, String phoneNumber,
                            Boolean isCustomer, Boolean isReceptionist, Boolean isHealthcareWorker,
-                           String additionalInfo) {
+                           String additionalInfo, String userRole) {
 
         User newUser = null;
 
         // Need better method to differentiate Users
 
-        if (additionalInfo.equals("isPatient")) {
-            newUser = new Patient(givenName, familyName, userName, phoneNumber,
-                    isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
-        } else if(isReceptionist){
-            newUser = new Receptionist(givenName, familyName, userName, phoneNumber,
-                    isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
-        } else if (isHealthcareWorker) {
-            newUser = new HealthcareWorker(givenName, familyName, userName, phoneNumber,
-                    isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
-        } else if (isCustomer) {
-            newUser = new Customer(givenName, familyName, userName, phoneNumber,
-                    isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+//        if (additionalInfo.equals("isPatient")) {
+//            newUser = new Patient(givenName, familyName, userName, phoneNumber,
+//                    isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+//        } else if(isReceptionist){
+//            newUser = new Receptionist(givenName, familyName, userName, phoneNumber,
+//                    isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+//        } else if (isHealthcareWorker) {
+//            newUser = new HealthcareWorker(givenName, familyName, userName, phoneNumber,
+//                    isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+//        } else if (isCustomer) {
+//            newUser = new Customer(givenName, familyName, userName, phoneNumber,
+//                    isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+//        }
+
+        switch (userRole) {
+            case "customer":
+                newUser = new Customer(givenName, familyName, userName, phoneNumber,
+                        isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+                break;
+            case "receptionist":
+                newUser = new Receptionist(givenName, familyName, userName, phoneNumber,
+                        isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+                break;
+            case "healthcare worker":
+                newUser = new HealthcareWorker(givenName, familyName, userName, phoneNumber,
+                        isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+                break;
+            case "patient":
+                newUser = new Patient(givenName, familyName, userName, phoneNumber,
+                        isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+                break;
         }
 
         return newUser;

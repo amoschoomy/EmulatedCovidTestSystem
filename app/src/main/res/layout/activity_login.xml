@@ -19,7 +19,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
-        app:layout_constraintVertical_bias="0.087" />
+        app:layout_constraintVertical_bias="0.09" />
 
     <EditText
         android:id="@+id/editTextUsername"
@@ -34,7 +34,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.352" />
+        app:layout_constraintVertical_bias="0.379" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group"
@@ -52,5 +52,28 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-        app:layout_constraintVertical_bias="0.269" />
+        app:layout_constraintVertical_bias="0.187" />
+
+    <Spinner
+        android:id="@+id/dropdownmenu"
+        android:layout_width="206dp"
+        android:layout_height="47dp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/LoginAsTxt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.754" />
+
+    <TextView
+        android:id="@+id/LoginAsTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login as: "
+        app:layout_constraintBottom_toTopOf="@+id/editTextUsername"
+        app:layout_constraintEnd_toStartOf="@+id/dropdownmenu"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.72" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Locale;
 
 import UserPackage.User;
 import UserPackage.UserFactory;
@@ -24,12 +25,14 @@ public class LoginAuthentication {
 
     private static LoginAuthentication instance = null;
     private User user;
-    private String jwt;
+//    private String jwt;
 
-    private LoginAuthentication(String jwt) throws JSONException, IOException {
-        Log.d("myTag", "Constructor");
+    private LoginAuthentication(){
 
-        this.jwt = jwt;
+    }
+
+    public void setUser(String jwt, String userRole) throws JSONException, IOException {
+//        this.jwt = jwt;
 
         // Create User object
         // Get Userid
@@ -49,20 +52,17 @@ public class LoginAuthentication {
         Log.d("myTag", familyName);
 
         UserFactory uf = new UserFactory();
-
-        User newUser = uf.createUser(givenName, familyName, userName, phoneNumber,
-                isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
-
-        this.user = newUser;
-
+        userRole = userRole.toLowerCase();
+        this.user = uf.createUser(givenName, familyName, userName, phoneNumber,
+                isCustomer, isReceptionist, isHealthcareWorker, additionalInfo, userRole);
     }
 
     /**
      * To get the LoginAuthentication Instance
      */
-    public static LoginAuthentication getInstance(String jwt) throws IOException, JSONException {
+    public static LoginAuthentication getInstance() throws IOException, JSONException {
         if(instance == null) {
-            instance = new LoginAuthentication(jwt);
+            instance = new LoginAuthentication();
         }
         return instance;
     }
