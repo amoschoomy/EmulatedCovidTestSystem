@@ -54,7 +54,7 @@ public class LoginAuthentication {
 
         UserFactory uf = new UserFactory();
         userRole = userRole.toLowerCase();
-        this.user = uf.createUser(givenName, familyName, userName, phoneNumber,
+        this.user = uf.createUser(userid, givenName, familyName, userName, phoneNumber,
                 isCustomer, isReceptionist, isHealthcareWorker, additionalInfo, userRole);
     }
 
