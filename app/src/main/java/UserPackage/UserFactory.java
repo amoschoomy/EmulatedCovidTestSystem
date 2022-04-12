@@ -5,7 +5,7 @@ import java.util.Locale;
 public class UserFactory {
     public User createUser(String givenName, String familyName, String userName, String phoneNumber,
                            Boolean isCustomer, Boolean isReceptionist, Boolean isHealthcareWorker,
-                           String additionalInfo, String userRole) {
+                           String additionalInfo, String userRole) throws InvalidRoleException {
 
         User newUser = null;
 
@@ -27,15 +27,18 @@ public class UserFactory {
 
         switch (userRole) {
             case "customer":
-                newUser = new Customer(givenName, familyName, userName, phoneNumber,
-                        isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+                if (isCustomer)
+                    newUser = new Customer(givenName, familyName, userName, phoneNumber,
+                            isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
                 break;
             case "receptionist":
-                newUser = new Receptionist(givenName, familyName, userName, phoneNumber,
+                if (isReceptionist)
+                    newUser = new Receptionist(givenName, familyName, userName, phoneNumber,
                         isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
                 break;
             case "healthcare worker":
-                newUser = new HealthcareWorker(givenName, familyName, userName, phoneNumber,
+                if (isHealthcareWorker)
+                    newUser = new HealthcareWorker(givenName, familyName, userName, phoneNumber,
                         isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
                 break;
             case "patient":
@@ -43,6 +46,8 @@ public class UserFactory {
                         isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
                 break;
         }
+
+        if (newUser==null)  throw new InvalidRoleException("User Account does not have role");
 
         return newUser;
     }

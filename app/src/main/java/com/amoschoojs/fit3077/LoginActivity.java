@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 import org.json.JSONException;
@@ -19,6 +20,7 @@ import java.text.Collator;
 
 import LoginSystemPackage.LoginAuthentication;
 import LoginSystemPackage.LoginSystem;
+import UserPackage.InvalidRoleException;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -75,8 +77,11 @@ public class LoginActivity extends AppCompatActivity {
                     LoginAuthentication newInstance = LoginAuthentication.getInstance();
                     newInstance.setUser(jwt, userRole);
 //                   VerifyJWTToken(output);
+
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
+                } catch (InvalidRoleException e) {
+                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         });

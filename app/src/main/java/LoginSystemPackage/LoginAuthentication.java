@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Locale;
 
+import UserPackage.InvalidRoleException;
 import UserPackage.User;
 import UserPackage.UserFactory;
 import okhttp3.FormBody;
@@ -31,7 +32,7 @@ public class LoginAuthentication {
 
     }
 
-    public void setUser(String jwt, String userRole) throws JSONException, IOException {
+    public void setUser(String jwt, String userRole) throws JSONException, IOException, InvalidRoleException {
 //        this.jwt = jwt;
 
         // Create User object
