@@ -53,9 +53,13 @@ public class LoginAuthentication {
         User newUser = uf.createUser(givenName, familyName, userName, phoneNumber,
                 isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
 
+        this.user = newUser;
 
     }
 
+    /**
+     * To get the LoginAuthentication Instance
+     */
     public static LoginAuthentication getInstance(String jwt) throws IOException, JSONException {
         if(instance == null) {
             instance = new LoginAuthentication(jwt);
@@ -87,7 +91,7 @@ public class LoginAuthentication {
     /**
      * Get Userinfo from userid
      */
-    private String getUserInfo(String userid) throws JSONException, IOException {
+    private String getUserInfo(String userid) throws IOException {
 
         OkHttpClient client = new OkHttpClient();
 

@@ -7,14 +7,19 @@ public class UserFactory {
 
         User newUser = null;
 
-        if(isCustomer){
-            newUser = new Customer(givenName, familyName, userName, phoneNumber,
+        // Need better method to differentiate Users
+
+        if (additionalInfo.equals("isPatient")) {
+            newUser = new Patient(givenName, familyName, userName, phoneNumber,
                     isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
-        } else if (isReceptionist) {
+        } else if(isReceptionist){
             newUser = new Receptionist(givenName, familyName, userName, phoneNumber,
                     isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
         } else if (isHealthcareWorker) {
             newUser = new HealthcareWorker(givenName, familyName, userName, phoneNumber,
+                    isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+        } else if (isCustomer) {
+            newUser = new Customer(givenName, familyName, userName, phoneNumber,
                     isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
         }
 
