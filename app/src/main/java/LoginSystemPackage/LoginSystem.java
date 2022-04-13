@@ -60,10 +60,11 @@ public class LoginSystem {
 
         Log.d("myTag", output);
 
-        if (output == null) throw new InvalidCredentialsException();
-
         // obtain jwt value from string
         JSONObject jObj = new JSONObject(output);
+
+        if (jObj.getString("statusCode").equals("403")) throw new InvalidCredentialsException();
+
         String jwt = jObj.getString("jwt");
         Log.d("myTag", jwt);
 
