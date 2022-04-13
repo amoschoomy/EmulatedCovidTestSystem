@@ -10,6 +10,23 @@ public abstract class User {
     private String phoneNumber;
     private Boolean isCustomer;
     private Boolean isReceptionist;
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public Boolean getCustomer() {
+    return isCustomer;
+  }
+
+  public Boolean getReceptionist() {
+    return isReceptionist;
+  }
+
+  public Boolean getHealthcareWorker() {
+    return isHealthcareWorker;
+  }
+
     private Boolean isHealthcareWorker;
     private String additionalInfo;
 

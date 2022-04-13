@@ -1,6 +1,6 @@
 package CovidTestPackage;
 
-import BookingPackage.BookingInterface;
+import BookingPackage.Booking;
 import TestingFacilityPackage.TestingFacilityInterface;
 import UserPackage.User;
 
@@ -14,5 +14,5 @@ public class PatientCovidTest {
   private String notes;
   private String datePerformed;
   private String dateOfResults;
-  private BookingInterface booking;
+  private Booking booking;
 }
