@@ -1,9 +1,11 @@
 package UserPackage;
 
+import org.json.JSONObject;
+
 public class UserFactory {
     public User createUser(String userId, String givenName, String familyName, String userName, String phoneNumber,
                            Boolean isCustomer, Boolean isReceptionist, Boolean isHealthcareWorker,
-                           String additionalInfo, String userRole) throws InvalidRoleException {
+                           JSONObject additionalInfo, String userRole) throws InvalidRoleException {
 
         User newUser = null;
 

@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    Intent switchActivityIntent = new Intent(this, SearchTestingSite.class);
+    Intent switchActivityIntent = new Intent(this, LoginActivity.class);
     startActivity(switchActivityIntent);
   }
 }

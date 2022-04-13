@@ -51,9 +51,9 @@ public class LoginAuthentication {
         Boolean isCustomer = Boolean.valueOf(jObj.getString("isCustomer"));
         Boolean isReceptionist = Boolean.valueOf(jObj.getString("isReceptionist"));
         Boolean isHealthcareWorker = Boolean.valueOf(jObj.getString("isHealthcareWorker"));
-        String additionalInfo = jObj.getString("additionalInfo");
+        JSONObject additionalInfo = new JSONObject(jObj.getString("additionalInfo"));
+//        String additionalInfo = jObj.getString("additionalInfo");
 
-        Log.d("myTag", familyName);
 
         UserFactory uf = new UserFactory();
         userRole = userRole.toLowerCase();
@@ -75,19 +75,17 @@ public class LoginAuthentication {
      * Get Userid from jwt
      */
     public String getUserId(String jwt) throws JSONException {
-        Log.d("myTag", "Get User ID");
 
         Base64.Decoder decoder = Base64.getUrlDecoder();
 
+        // split jwt into its 3 parts and take the payload
         String[] chunks = jwt.split("\\.");
         String payload = new String(decoder.decode(chunks[1]));
 
-        Log.d("myTag", payload);
 
         // obtain userid from JSON String
         JSONObject jObj = new JSONObject(payload);
         String userid = jObj.getString("sub");
-        Log.d("myTag", userid);
 
         return userid;
     }
@@ -114,8 +112,6 @@ public class LoginAuthentication {
         Response response = client.newCall(request).execute();
 
         String output = response.body().string();
-
-        Log.d("myTag", output);
 
         return output;
     }
