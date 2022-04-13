@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import BookingPackage.Booking;
 
 public class TestingFacility implements TestingFacilityInterface {
+  private String id;
   private String name;
   private String description;
   private String websiteURL;
   private String phoneNumber;
 
-
+  public String getId() {
+    return id;
+  }
 
   public String getName() {
     return name;
@@ -55,7 +58,6 @@ public class TestingFacility implements TestingFacilityInterface {
   public String getWaitingTimes() {
     return additionalInfo.getWaitingTime();
   }
-
   private ArrayList<Booking> bookings;
   private Address address;
   private AdditionalInfo additionalInfo;
