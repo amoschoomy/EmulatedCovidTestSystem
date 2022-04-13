@@ -33,7 +33,7 @@ public class LoginAuthentication {
     }
 
     /**
-     * Creates the User Object in LoginAuthentication
+     * Creates and sets the User Object in LoginAuthentication
      */
     public void setUser(String jwt, String userRole) throws JSONException, IOException, InvalidRoleException {
 //        this.jwt = jwt;

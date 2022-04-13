@@ -27,6 +27,8 @@ public class LoginSystem {
 
     /**
      * Verifies if username and password are correct. If correct, a jwt token is generated.
+     *
+     * Throws InvalidCredentialsException if username or password is incorrect.
      */
     public String checkCredentials(String username, String password) throws IOException, JSONException, InvalidCredentialsException {
         Log.d("myTag", "Check Credentials");
@@ -58,13 +60,14 @@ public class LoginSystem {
 
         String output = response.body().string();
 
-        Log.d("myTag", output);
+        String header = response.toString();
+
+        if (header.contains("code=403")) throw new InvalidCredentialsException();
+
+        Log.d("myTag", header);
 
         // obtain jwt value from string
         JSONObject jObj = new JSONObject(output);
-
-        if (jObj.getString("statusCode").equals("403")) throw new InvalidCredentialsException();
-
         String jwt = jObj.getString("jwt");
         Log.d("myTag", jwt);
 
@@ -76,7 +79,7 @@ public class LoginSystem {
     /**
      * Verifies if jwt token is valid.
      */
-    public static void VerifyJWTToken(String jwt) throws IOException {
+    public static void VerifyJWTToken(String jwt) throws IOException, JSONException, InvalidTokenException {
         Log.d("myTag", "Verify Token");
 
         OkHttpClient client = new OkHttpClient();
@@ -103,6 +106,10 @@ public class LoginSystem {
         String output = response.body().string();
 
         Log.d("myTag", output);
+
+        if (output != null) {
+            throw new InvalidTokenException();
+        }
 
     }
 }

@@ -16,7 +16,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.text.Collator;
 
 import LoginSystemPackage.InvalidCredentialsException;
 import LoginSystemPackage.LoginAuthentication;
@@ -26,9 +25,6 @@ import UserPackage.InvalidRoleException;
 
 public class LoginActivity extends AppCompatActivity {
 
-    // insert key here
-    private static final String myApiKey = "KEY";
-    private static final String rootUrl = "https://fit3077.com/api/v1";
 
     private EditText inputUsername;
     private EditText inputPassword;
@@ -75,9 +71,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 try {
                     String jwt = ls.checkCredentials(username, password);
+
+                    Log.d("myTag", "here");
+//                    LoginSystem.VerifyJWTToken(jwt);
+                    Log.d("myTag", "there");
                     LoginAuthentication newInstance = LoginAuthentication.getInstance();
                     newInstance.setUser(jwt, userRole);
-//                   VerifyJWTToken(output);
+
 
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
