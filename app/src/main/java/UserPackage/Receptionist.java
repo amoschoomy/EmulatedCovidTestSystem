@@ -1,5 +1,25 @@
 package UserPackage;
 
+import static LoginSystemPackage.LoginSystem.MY_API_KEY;
+import static LoginSystemPackage.LoginSystem.ROOT_URL;
+
+import android.os.StrictMode;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import LoginSystemPackage.InvalidCredentialsException;
+import LoginSystemPackage.LoginAuthentication;
+import LoginSystemPackage.LoginSystem;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class Receptionist extends User{
 
 
@@ -7,5 +27,82 @@ public class Receptionist extends User{
                    Boolean isCustomer, Boolean isReceptionist, Boolean isHealthcareWorker,
                    String additionalInfo) {
         super(userId, givenName, familyName, userName, phoneNumber, isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+    }
+
+    /**
+     * Creates a new customer user using the input information. Returns the created User object.
+     */
+    public User createNewCustomer(String custGivenName, String custFamilyName, String custUserName,
+                               String custPassword, String custPhoneNumber, String custAdditionalInfo)
+            throws JSONException, IOException, InvalidRoleException, InvalidCredentialsException {
+
+        Log.d("myTag", "createNewCustomer");
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("givenName", custGivenName)
+                .add("familyName", custFamilyName)
+                .add("userName", custUserName)
+                .add("password", custPassword)
+                .add("phoneNumber", custPhoneNumber)
+                .add("isCustomer", String.valueOf(true))
+                .add("isAdmin", String.valueOf(false))
+                .add("isHealthcareWorker", String.valueOf(false))
+                .add("additionalInfo", custAdditionalInfo)
+                .build();
+
+        String verifyTokenUrl = ROOT_URL + "/user";
+
+        Request request = new Request.Builder()
+                .url(verifyTokenUrl)
+                .header("Authorization", MY_API_KEY)
+                .header("Content-Type","application/json")
+                .post(formBody)
+                .build();
+
+        // Have the response run in background or system will crash
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        Response response = client.newCall(request).execute();
+
+        assert response.body() != null;
+        String output = response.body().string();
+
+        Log.d("myTag", output);
+
+        return useExistingCustomer(custUserName, custPassword);
+    }
+
+    /**
+     * Returns the existing User object.
+     *
+     * InvalidCredentialsException is thrown when username and password is invalid.
+     */
+    public User useExistingCustomer(String custUserName, String custPassword)
+            throws JSONException, IOException, InvalidRoleException, InvalidCredentialsException {
+
+        LoginSystem ls = new LoginSystem(MY_API_KEY);
+        String jwt = ls.checkCredentials(custUserName, custPassword);
+
+        LoginAuthentication la = LoginAuthentication.getInstance();
+        String custUserId = la.getUserId(jwt);
+        String custUserInfo = la.getUserInfo(custUserId);
+
+        JSONObject jObj = new JSONObject(custUserInfo);
+        String custGivenName = jObj.getString("givenName");
+        String custFamilyName = jObj.getString("familyName");
+        String custPhoneNumber = jObj.getString("phoneNumber");
+        Boolean custIsCustomer = Boolean.valueOf(jObj.getString("isCustomer"));
+        Boolean custIsReceptionist = Boolean.valueOf(jObj.getString("isReceptionist"));
+        Boolean cutsIsHealthcareWorker = Boolean.valueOf(jObj.getString("isHealthcareWorker"));
+        String custAdditionalInfo = jObj.getString("additionalInfo");
+
+        UserFactory uf = new UserFactory();
+        String userRole = "customer";
+
+        return uf.createUser(custUserId, custGivenName, custFamilyName, custUserName, custPhoneNumber,
+                custIsCustomer, custIsReceptionist, cutsIsHealthcareWorker, custAdditionalInfo, userRole);
     }
 }

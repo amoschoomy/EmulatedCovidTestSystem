@@ -18,6 +18,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.text.Collator;
 
+import LoginSystemPackage.InvalidCredentialsException;
 import LoginSystemPackage.LoginAuthentication;
 import LoginSystemPackage.LoginSystem;
 import UserPackage.InvalidRoleException;
@@ -80,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
-                } catch (InvalidRoleException e) {
+                } catch (InvalidRoleException | InvalidCredentialsException e) {
                     Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                 }
             }

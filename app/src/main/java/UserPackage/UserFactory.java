@@ -29,7 +29,7 @@ public class UserFactory {
                 break;
         }
 
-        if (newUser==null)  throw new InvalidRoleException("User Account does not have role");
+        if (newUser==null)  throw new InvalidRoleException();
 
         return newUser;
     }

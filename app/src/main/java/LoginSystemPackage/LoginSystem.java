@@ -28,7 +28,7 @@ public class LoginSystem {
     /**
      * Verifies if username and password are correct. If correct, a jwt token is generated.
      */
-    public String checkCredentials(String username, String password) throws IOException, JSONException {
+    public String checkCredentials(String username, String password) throws IOException, JSONException, InvalidCredentialsException {
         Log.d("myTag", "Check Credentials");
         Log.d("myTag", username);
         Log.d("myTag", password);
@@ -60,10 +60,13 @@ public class LoginSystem {
 
         Log.d("myTag", output);
 
+        if (output == null) throw new InvalidCredentialsException();
+
         // obtain jwt value from string
         JSONObject jObj = new JSONObject(output);
         String jwt = jObj.getString("jwt");
         Log.d("myTag", jwt);
+
 
         return jwt;
 

@@ -32,6 +32,9 @@ public class LoginAuthentication {
 
     }
 
+    /**
+     * Creates the User Object in LoginAuthentication
+     */
     public void setUser(String jwt, String userRole) throws JSONException, IOException, InvalidRoleException {
 //        this.jwt = jwt;
 
@@ -71,7 +74,7 @@ public class LoginAuthentication {
     /**
      * Get Userid from jwt
      */
-    private String getUserId(String jwt) throws JSONException {
+    public String getUserId(String jwt) throws JSONException {
         Log.d("myTag", "Get User ID");
 
         Base64.Decoder decoder = Base64.getUrlDecoder();
@@ -92,7 +95,7 @@ public class LoginAuthentication {
     /**
      * Get Userinfo from userid
      */
-    private String getUserInfo(String userid) throws IOException {
+    public String getUserInfo(String userid) throws IOException {
 
         OkHttpClient client = new OkHttpClient();
 

@@ -1,8 +1,8 @@
 package UserPackage;
 
 public class InvalidRoleException extends Exception{
-    public InvalidRoleException (String str)
+    public InvalidRoleException ()
     {
-        super(str);
+        super("User Account does not have role");
     }
 }
