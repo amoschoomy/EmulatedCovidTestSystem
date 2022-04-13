@@ -28,6 +28,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     return new ViewHolder(v) {};
   }
 
+
+
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     TestingFacility testingFacility = testingFacilities.get(holder.getAdapterPosition());
@@ -104,9 +106,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
       };
 
-  public class ViewHolder extends RecyclerView.ViewHolder {
+  public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
     }
+
+    @Override
+    public void onClick(View view) {}
   }
 }
