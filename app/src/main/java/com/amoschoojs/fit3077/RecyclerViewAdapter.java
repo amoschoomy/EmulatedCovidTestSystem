@@ -1,6 +1,7 @@
 package com.amoschoojs.fit3077;
 
-import android.util.Log;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
@@ -127,11 +129,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private boolean verifyInput(
         String givenName, String familyName, String username, String password, String phone) {
-      return (givenName.length() == 0
-          || familyName.length() == 0
-          || username.length() == 0
-          || password.length() == 0
-          || phone.length() == 0);
+      return (givenName.length() > 0
+          && familyName.length() > 0
+          && username.length() > 0
+          && password.length() > 0
+          && phone.length() > 0);
     }
 
     @Override
@@ -159,12 +161,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
       } else if (user.getReceptionist()) {
         View formView = View.inflate(view.getContext(), R.layout.enter_details, null);
-        String givenName = ((EditText) formView.findViewById(R.id.givenname)).getText().toString();
-        String familyName =
-            ((EditText) formView.findViewById(R.id.familyname)).getText().toString();
-        String userName = ((EditText) formView.findViewById(R.id.username)).getText().toString();
-        String password = ((EditText) formView.findViewById(R.id.password)).getText().toString();
-        String phoneNumber = ((EditText) formView.findViewById(R.id.phoneno)).getText().toString();
 
         new AlertDialog.Builder(view.getContext())
             .setView(formView)
@@ -174,26 +170,49 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 android.R.string.yes,
                 (dialog, which) -> {
                   Receptionist r = (Receptionist) user;
-                  // TODO: Await fixed receptionist method
                   try {
+
+                    String givenName =
+                        ((EditText) formView.findViewById(R.id.givenname)).getText().toString();
+                    String familyName =
+                        ((EditText) formView.findViewById(R.id.familyname)).getText().toString();
+                    String userName =
+                        ((EditText) formView.findViewById(R.id.username)).getText().toString();
+                    String password =
+                        ((EditText) formView.findViewById(R.id.password)).getText().toString();
+                    String phoneNumber =
+                        ((EditText) formView.findViewById(R.id.phoneno)).getText().toString();
                     if (!verifyInput(givenName, familyName, userName, password, phoneNumber)) {
                       throw new InvalidCredentialsException();
                     }
-                    Log.d("myTag", "givenname:" + givenName);
-                    Log.d("myTag", "familyname:" + familyName);
-                    Log.d("myTag", "username:" + userName);
-                    Log.d("myTag", "password:" + password);
-                    Log.d("myTag", "phone:" + phoneNumber);
                     Customer c =
                         r.createCustomer(
-                            givenName, familyName, userName, password, phoneNumber, new JSONObject("{}"));
-                    MakeBookingFacade.makeBooking(
-                        c,
-                        testingFacilityID,
-                        null,
-                        false,
-                        Instant.now().plusSeconds(604800).toString(),
-                        view.getContext().getString(R.string.api_key));
+                            givenName,
+                            familyName,
+                            userName,
+                            password,
+                            phoneNumber,
+                            new JSONObject("{}"));
+                    String pin =
+                        MakeBookingFacade.makeBooking(
+                            c,
+                            testingFacilityID,
+                            null,
+                            false,
+                            Instant.now().plusSeconds(604800).toString(),
+                            view.getContext().getString(R.string.api_key));
+
+                    NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
+                            .setContentTitle("Booking Pin")
+                            .setSmallIcon(R.drawable.ic_launcher_background)
+                            .setContentText(pin)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    Toast.makeText(view.getContext(), pin, Toast.LENGTH_LONG).show();
+                    NotificationManager notificationManager =
+                        (NotificationManager)
+                            view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(1, builder.build());
 
                   } catch (InvalidCredentialsException e) {
                     e.printStackTrace();
@@ -234,9 +253,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     } catch (IOException e) {
                       e.printStackTrace();
                     }
-                    Toast.makeText(view.getContext(), pin, Toast.LENGTH_SHORT).show();
 
-                  } else {
+                    NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
+                            .setContentTitle("Booking Pin")
+                            .setSmallIcon(R.drawable.ic_launcher_background)
+                            .setContentText(pin)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    Toast.makeText(view.getContext(), pin, Toast.LENGTH_LONG).show();
+                    NotificationManager notificationManager =
+                        (NotificationManager)
+                            view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(1, builder.build());
+
+                  } else { // homebooking here
                     Toast.makeText(view.getContext(), "HomeBooking selectedd", Toast.LENGTH_SHORT)
                         .show();
                   }
