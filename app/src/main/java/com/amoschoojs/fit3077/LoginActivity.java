@@ -1,7 +1,6 @@
 package com.amoschoojs.fit3077;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 
@@ -60,33 +60,37 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginSystem ls = new LoginSystem(getString(R.string.api_key));
 
-        // test username: mbrown123
-        // test password: mbrown123
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = inputUsername.getText().toString();
-                String password = inputPassword.getText().toString();
-                String userRole = userRoleSelected[0];
+    // test username: mbrown123
+    // test password: mbrown123
+    loginButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            String username = inputUsername.getText().toString();
+            String password = inputPassword.getText().toString();
+            String userRole = userRoleSelected[0];
 
-                try {
-                    String jwt = ls.checkCredentials(username, password);
+            try {
+              String jwt = ls.checkCredentials(username, password);
 
-                    Log.d("myTag", "here");
-//                    LoginSystem.VerifyJWTToken(jwt);
-                    Log.d("myTag", "there");
-                    LoginAuthentication newInstance = LoginAuthentication.getInstance();
-                    newInstance.setUser(jwt, userRole);
+              Log.d("myTag", "here");
+              //                    LoginSystem.VerifyJWTToken(jwt);
+              Log.d("myTag", "there");
+              LoginAuthentication newInstance = LoginAuthentication.getInstance();
+              newInstance.setUser(jwt, userRole);
+              Toast.makeText(getApplicationContext(), "Logined", Toast.LENGTH_LONG).show();
 
+              Intent switchActivityIntent =
+                  new Intent(getApplicationContext(), SearchTestingSite.class);
+              startActivity(switchActivityIntent);
 
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                } catch (InvalidRoleException | InvalidCredentialsException e) {
-                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                }
+            } catch (IOException | JSONException e) {
+              e.printStackTrace();
+            } catch (InvalidRoleException | InvalidCredentialsException e) {
+              Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
             }
+          }
         });
-
     }
 
 

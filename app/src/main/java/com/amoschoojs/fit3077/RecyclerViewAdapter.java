@@ -1,24 +1,70 @@
 package com.amoschoojs.fit3077;
 
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 
+import BookingPackage.MakeBookingFacade;
+import LoginSystemPackage.LoginAuthentication;
 import TestingFacilityPackage.TestingFacility;
+import UserPackage.User;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
     implements Filterable {
 
   ArrayList<TestingFacility> testingFacilities;
   ArrayList<TestingFacility> testingFacilitiesFiltered;
+  private Filter exampleFilter =
+      new Filter() {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+          ArrayList<TestingFacility> filteredList = new ArrayList<>();
+
+          if (constraint == null || constraint.length() == 0) {
+            filteredList.addAll(testingFacilitiesFiltered);
+          } else {
+            String filterPattern = constraint.toString().toLowerCase().trim();
+
+            for (TestingFacility item : testingFacilitiesFiltered) {
+              if (item.getAddress().getSuburb().toLowerCase().contains(filterPattern)
+                  || item.getTestingFacilityType()
+                      .toString()
+                      .toLowerCase()
+                      .contains(filterPattern)) {
+                filteredList.add(item);
+              }
+            }
+          }
+          FilterResults results = new FilterResults();
+          results.values = filteredList;
+
+          return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+          testingFacilities.clear();
+          testingFacilities.addAll((ArrayList) filterResults.values);
+          notifyDataSetChanged();
+        }
+      };
 
   @NonNull
   @Override
@@ -27,8 +73,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     return new ViewHolder(v) {};
   }
-
-
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -70,48 +114,73 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     return exampleFilter;
   }
 
-  private Filter exampleFilter =
-      new Filter() {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-          ArrayList<TestingFacility> filteredList = new ArrayList<>();
-
-          if (constraint == null || constraint.length() == 0) {
-            filteredList.addAll(testingFacilitiesFiltered);
-          } else {
-            String filterPattern = constraint.toString().toLowerCase().trim();
-
-            for (TestingFacility item : testingFacilitiesFiltered) {
-              if (item.getAddress().getSuburb().toLowerCase().contains(filterPattern)
-                  || item.getTestingFacilityType()
-                      .toString()
-                      .toLowerCase()
-                      .contains(filterPattern)) {
-                filteredList.add(item);
-              }
-            }
-          }
-          FilterResults results = new FilterResults();
-          results.values = filteredList;
-
-          return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-          testingFacilities.clear();
-          testingFacilities.addAll((ArrayList) filterResults.values);
-          notifyDataSetChanged();
-        }
-      };
-
   public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
+      itemView.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View view) {}
+    public void onClick(View view) {
+      LoginAuthentication loginAuthentication = null;
+      try {
+        loginAuthentication = LoginAuthentication.getInstance();
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (JSONException e) {
+        e.printStackTrace();
+      }
+      int pos = getAdapterPosition();
+      TestingFacility testingFacility = testingFacilitiesFiltered.get(pos);
+      String testingFacilityID = testingFacility.getId();
+
+      User user = loginAuthentication.getUser();
+      View checkBoxView = View.inflate(view.getContext(), R.layout.checkbox, null);
+      CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
+      checkBox.setText("Home Booking?");
+
+      if (user.getReceptionist()) {
+        Toast.makeText(view.getContext(), "Fucking receptionist", Toast.LENGTH_SHORT).show();
+
+      } else if (user.getCustomer()) {
+        new AlertDialog.Builder(view.getContext())
+            .setView(checkBoxView)
+            .setTitle("Make Booking?")
+            .setMessage("Are you sure you want to make a booking ?")
+            .setPositiveButton(
+                android.R.string.yes,
+                new DialogInterface.OnClickListener() {
+                  public void onClick(DialogInterface dialog, int which) {
+                    if (!checkBox.isChecked()) { // on site testing booking from home
+                      String pin = null;
+                      try {
+                        pin =
+                            MakeBookingFacade.makeBooking(
+                                user,
+                                testingFacilityID,
+                                null,
+                                false,
+                                Instant.now().plusSeconds(604800).toString(),
+                                view.getContext().getString(R.string.api_key));
+                      } catch (JSONException e) {
+                        e.printStackTrace();
+                      } catch (IOException e) {
+                        e.printStackTrace();
+                      }
+                      Toast.makeText(view.getContext(), pin, Toast.LENGTH_SHORT).show();
+
+                    } else {
+                      Toast.makeText(view.getContext(), "HomeBooking selectedd", Toast.LENGTH_SHORT)
+                          .show();
+                    }
+                  }
+                })
+
+            // A null listener allows the button to dismiss the dialog and take no further action.
+            .setNegativeButton(android.R.string.no, null)
+            .setIcon(R.drawable.ic_launcher_background)
+            .show();
+      }
+    }
   }
 }

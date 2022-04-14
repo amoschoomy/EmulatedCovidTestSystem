@@ -22,13 +22,14 @@ public class TestingOnSiteBooking implements Booking {
     String usersUrl = "https://fit3077.com/api/v1/booking";
     OkHttpClient client = new OkHttpClient();
     // Create json object
-    RequestBody formBody =
+
+    FormBody.Builder builder =
         new FormBody.Builder()
             .add("customerId", customerID)
             .add("testingSiteId", testingSiteID)
-            .add("startTime", startTime)
-            .add("notes", notes)
-            .build();
+            .add("startTime", startTime);
+    if (notes != null) builder.add("notes", notes);
+    RequestBody formBody = builder.build();
 
     Request request =
         new Request.Builder().url(usersUrl).header("Authorization", API_KEY).post(formBody).build();
@@ -41,6 +42,7 @@ public class TestingOnSiteBooking implements Booking {
     assert response.body() != null;
     String output = response.body().string();
     JSONObject jObj = new JSONObject(output);
+    System.out.println(jObj.toString());
     String smsPin = jObj.getString("smsPin");
     Log.d("myTag", smsPin);
 
