@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -20,8 +21,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 import BookingPackage.MakeBookingFacade;
+import LoginSystemPackage.InvalidCredentialsException;
 import LoginSystemPackage.LoginAuthentication;
 import TestingFacilityPackage.TestingFacility;
+import UserPackage.Customer;
 import UserPackage.Receptionist;
 import UserPackage.User;
 
@@ -120,6 +123,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
       itemView.setOnClickListener(this);
     }
 
+    private boolean verifyInput(
+        String givenName, String familyName, String username, String password, String phone) {
+      return (givenName.length() == 0
+          || familyName.length() == 0
+          || username.length() == 0
+          || password.length() == 0
+          || phone.length() == 0);
+    }
+
     @Override
     public void onClick(View view) {
       LoginAuthentication loginAuthentication = null;
@@ -144,16 +156,47 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             .show();
 
       } else if (user.getReceptionist()) {
+        View formView = View.inflate(view.getContext(), R.layout.enter_details, null);
+        String givenName = ((EditText) formView.findViewById(R.id.givenname)).getText().toString();
+        String familyName =
+            ((EditText) formView.findViewById(R.id.familyname)).getText().toString();
+        String userName = ((EditText) formView.findViewById(R.id.username)).getText().toString();
+        String password = ((EditText) formView.findViewById(R.id.password)).getText().toString();
+        String phoneNumber = ((EditText) formView.findViewById(R.id.phoneno)).getText().toString();
+
         new AlertDialog.Builder(view.getContext())
-            .setView(View.inflate(view.getContext(), R.layout.enter_details, null))
+            .setView(formView)
             .setTitle("Make Booking?")
             .setMessage("Are you sure you want to make a booking for a customer ?")
             .setPositiveButton(
                 android.R.string.yes,
                 (dialog, which) -> {
                   Receptionist r = (Receptionist) user;
-                  // TODO: Await receptionist method
+                  // TODO: Await fixed receptionist method
+                  try {
+                    if (!verifyInput(givenName, familyName, userName, password, phoneNumber)) {
+                      throw new InvalidCredentialsException();
+                    }
+                    Customer c =
+                        r.createCustomer(
+                            givenName, familyName, userName, password, phoneNumber, null);
+                    MakeBookingFacade.makeBooking(
+                        c,
+                        testingFacilityID,
+                        null,
+                        false,
+                        Instant.now().plusSeconds(604800).toString(),
+                        view.getContext().getString(R.string.api_key));
 
+                  } catch (InvalidCredentialsException e) {
+                    e.printStackTrace();
+                    Toast.makeText(view.getContext(), "Wrong/Empty credentials", Toast.LENGTH_SHORT)
+                        .show();
+                  } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(view.getContext(), "Failed, try again", Toast.LENGTH_SHORT)
+                        .show();
+                  }
                 })
 
             // A null listener allows the button to dismiss the dialog and take no further action.
