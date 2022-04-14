@@ -1,7 +1,6 @@
 package BookingPackage;
 
 import android.os.StrictMode;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,9 +41,7 @@ public class TestingOnSiteBooking implements Booking {
     assert response.body() != null;
     String output = response.body().string();
     JSONObject jObj = new JSONObject(output);
-    System.out.println(jObj.toString());
     String smsPin = jObj.getString("smsPin");
-    Log.d("myTag", smsPin);
 
     return smsPin;
   }
