@@ -1,5 +1,6 @@
 package com.amoschoojs.fit3077;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -177,9 +179,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     if (!verifyInput(givenName, familyName, userName, password, phoneNumber)) {
                       throw new InvalidCredentialsException();
                     }
+                    Log.d("myTag", "givenname:" + givenName);
+                    Log.d("myTag", "familyname:" + familyName);
+                    Log.d("myTag", "username:" + userName);
+                    Log.d("myTag", "password:" + password);
+                    Log.d("myTag", "phone:" + phoneNumber);
                     Customer c =
                         r.createCustomer(
-                            givenName, familyName, userName, password, phoneNumber, null);
+                            givenName, familyName, userName, password, phoneNumber, new JSONObject("{}"));
                     MakeBookingFacade.makeBooking(
                         c,
                         testingFacilityID,
