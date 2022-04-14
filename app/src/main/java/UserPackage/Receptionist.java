@@ -28,10 +28,7 @@ public class Receptionist extends User{
         super(userId, givenName, familyName, userName, phoneNumber, isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
     }
 
-  @Override
-  public String checkBooking(String pin) {
-    return null;
-  }
+
 
     /**
      * Creates a customer user object using the input information. Returns the created User object.

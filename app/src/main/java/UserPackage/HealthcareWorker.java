@@ -11,8 +11,5 @@ public class HealthcareWorker extends User {
         super(userId, givenName, familyName, userName, phoneNumber, isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
     }
 
-  @Override
-  public String checkBooking(String pin) {
-    return null;
-  }
+
 }

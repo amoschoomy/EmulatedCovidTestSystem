@@ -45,5 +45,4 @@ public abstract class User {
     return isHealthcareWorker;
   }
 
-  public abstract String checkBooking(String pin);
 }
