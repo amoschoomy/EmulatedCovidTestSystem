@@ -64,12 +64,10 @@ public class LoginSystem {
 
         if (header.contains("code=403")) throw new InvalidCredentialsException();
 
-        Log.d("myTag", header);
 
         // obtain jwt value from string
         JSONObject jObj = new JSONObject(output);
         String jwt = jObj.getString("jwt");
-        Log.d("myTag", jwt);
 
 
         return jwt;

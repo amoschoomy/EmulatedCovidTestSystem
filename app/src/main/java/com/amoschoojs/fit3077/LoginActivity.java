@@ -82,26 +82,23 @@ public class LoginActivity extends AppCompatActivity {
               LoginAuthentication newInstance = LoginAuthentication.getInstance();
               newInstance.setUser(jwt, userRole);
 
-              // testing receptionist code
-              if (newInstance.getUser().getReceptionist()) {
-                Receptionist rec = (Receptionist) newInstance.getUser();
-                Customer cust =
-                    rec.createNewCustomer(
-                        "testgname",
-                        "testfname",
-                        "test1",
-                        "test1",
-                        "0410000000",
-                        new JSONObject("{}"));
-
-                //                        Log.d("myTag", "LOLXD");
-                //                        Log.d("myTag", cust.getUserId());
-              }
+//              // testing receptionist code
+//              if (newInstance.getUser().getReceptionist()) {
+//                Receptionist rec = (Receptionist) newInstance.getUser();
+//                Customer cust =
+//                    rec.createNewCustomer(
+//                        "testgname",
+//                        "testfname",
+//                        "test1",
+//                        "test1",
+//                        "0410000000",
+//                        new JSONObject("{}"));
+//              }
 
               Intent switchActivityIntent =
-                  new Intent(getApplicationContext(), SearchTestingSite.class);
+                  new Intent(getApplicationContext(), HomeActivity.class);
               startActivity(switchActivityIntent);
-              Toast.makeText(getApplicationContext(), "Logined", Toast.LENGTH_LONG).show();
+              Toast.makeText(getApplicationContext(), "Logged In Successfully", Toast.LENGTH_LONG).show();
 
             } catch (IOException | JSONException e) {
               e.printStackTrace();
