@@ -13,17 +13,17 @@ public class UserFactory {
             case "customer":
                 if (isCustomer)
                     newUser = new Customer(userId, givenName, familyName, userName, phoneNumber,
-                            isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+                            true, false, false, additionalInfo);
                 break;
             case "receptionist":
                 if (isReceptionist)
                     newUser = new Receptionist(userId, givenName, familyName, userName, phoneNumber,
-                        isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+                        false, true, false, additionalInfo);
                 break;
             case "healthcare worker":
                 if (isHealthcareWorker)
                     newUser = new HealthcareWorker(userId, givenName, familyName, userName, phoneNumber,
-                        isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
+                        false, false, true, additionalInfo);
                 break;
             case "patient":
                 newUser = new Patient(userId, givenName, familyName, userName, phoneNumber,
