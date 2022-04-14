@@ -20,19 +20,13 @@ public class OnSiteTestingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_site_testing);
 
-        TextView testRecView = findViewById(R.id.RecommendedTestTxt);
-        testRecView.setVisibility(View.INVISIBLE);
-
         RadioGroup feverRadioGroup = findViewById(R.id.FeverRadioGroup);
-        Log.d("myTag", String.valueOf(R.id.FeverRadioGroup));
         RadioGroup coughRadioGroup = findViewById(R.id.CoughRadioGroup);
         RadioGroup throatRadioGroup = findViewById(R.id.ThroatRadioGroup);
         RadioGroup fatigueRadioGroup = findViewById(R.id.FatigueRadioGroup);
         RadioGroup diarrheaRadioGroup = findViewById(R.id.DiarrheaRadioGroup);
         RadioGroup nauseaRadioGroup = findViewById(R.id.NauseaRadioGroup);
         RadioGroup jointRadioGroup = findViewById(R.id.JointRadioGroup);
-
-        Log.d("myTag", String.valueOf(R.id.FeverRadioGroup));
 
         Button recButton = findViewById(R.id.RecButton);
         recButton.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +41,7 @@ public class OnSiteTestingActivity extends AppCompatActivity {
                     nauseaStatus = checkStatus(nauseaRadioGroup);
                     jointStatus = checkStatus(jointRadioGroup);
 
+                    TextView testRecView = findViewById(R.id.RecommendedTestTxt);
                     if (feverStatus || coughStatus || throatStatus || fatigueStatus || diarrheaStatus || nauseaStatus || jointStatus) {
                         // recommend PCR Test
                         testRecView.setText("PCR Test");
@@ -57,6 +52,8 @@ public class OnSiteTestingActivity extends AppCompatActivity {
                     }
                     testRecView.setVisibility(View.VISIBLE);
 
+                    // TODO: Store recommendation in additional Info
+
                 } catch (NullPointerException e) {
                     Toast.makeText(getApplicationContext(), "Please Input All Fields", Toast.LENGTH_SHORT).show();
                 }
@@ -66,6 +63,11 @@ public class OnSiteTestingActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Checks If Yes or No is selected from the Radio Button Group. If yes is selected, return true,
+     * otherwise return false.
+     * @throws NullPointerException Nothing is selected in the radio group.
+     */
     private boolean checkStatus(RadioGroup v) throws NullPointerException {
         int radioId = v.getCheckedRadioButtonId();
 
