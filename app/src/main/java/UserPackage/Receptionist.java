@@ -31,11 +31,53 @@ public class Receptionist extends User{
     }
 
 
+    /**
+     * Creates a customer user using the input information. Returns the created User object.
+     */
+    public Customer createCustomer(String custGivenName, String custFamilyName, String custUserName,
+                                   String custPassword, String custPhoneNumber, JSONObject custAdditionalInfo)
+            throws JSONException, IOException, InvalidRoleException, InvalidCredentialsException {
+
+        // Check if customer exist
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("userName", custUserName)
+                .add("password", custPassword)
+                .build();
+
+        String loginUrl = ROOT_URL + "/user/login";
+
+        Request request = new Request.Builder()
+                .url(loginUrl)
+                .header("Authorization", MY_API_KEY)
+                .header("Content-Type","application/json")
+                .post(formBody)
+                .build();
+
+        // Have the response run in background or system will crash
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        Response response = client.newCall(request).execute();
+
+        String header = response.toString();
+
+        Customer cust = null;
+
+        if (header.contains("code=403")) cust = createNewCustomer(custGivenName, custFamilyName,
+                custUserName, custPassword, custPhoneNumber, custAdditionalInfo);
+        else cust = useExistingCustomer(custUserName, custPassword);
+
+        return cust;
+
+    }
+
 
     /**
      * Creates a new customer user using the input information. Returns the created User object.
      */
-    public Customer createNewCustomer(String custGivenName, String custFamilyName, String custUserName,
+    private Customer createNewCustomer(String custGivenName, String custFamilyName, String custUserName,
                                String custPassword, String custPhoneNumber, JSONObject custAdditionalInfo)
             throws JSONException, IOException, InvalidRoleException, InvalidCredentialsException {
 
@@ -54,7 +96,6 @@ public class Receptionist extends User{
 //                .build();
 
         String custAdditionalInfoStr = custAdditionalInfo.toString();
-//        Log.d("myTag", custAdditionalInfoStr);
 
         String jsonstr = String.format("{\"givenName\":\"%s\"," +
                         "\"familyName\":\"%s\"," +
@@ -100,7 +141,7 @@ public class Receptionist extends User{
      *
      * InvalidCredentialsException is thrown when username and password is invalid.
      */
-    public Customer useExistingCustomer(String custUserName, String custPassword)
+    private Customer useExistingCustomer(String custUserName, String custPassword)
             throws JSONException, IOException, InvalidCredentialsException {
 
         LoginSystem ls = new LoginSystem(MY_API_KEY);
@@ -124,4 +165,5 @@ public class Receptionist extends User{
         return new Customer(custUserId, custGivenName, custFamilyName, custUserName, custPhoneNumber,
                 custIsCustomer, custIsReceptionist, cutsIsHealthcareWorker, custAdditionalInfo);
     }
+
 }
