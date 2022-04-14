@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import LoginSystemPackage.InvalidCredentialsException;
 import LoginSystemPackage.LoginAuthentication;
@@ -32,11 +33,12 @@ public class Receptionist extends User{
 
 
     /**
-     * Creates a customer user using the input information. Returns the created User object.
+     * Creates a customer user object using the input information. Returns the created User object.
      */
     public Customer createCustomer(String custGivenName, String custFamilyName, String custUserName,
                                    String custPassword, String custPhoneNumber, JSONObject custAdditionalInfo)
-            throws JSONException, IOException, InvalidRoleException, InvalidCredentialsException {
+            throws JSONException, IOException, InvalidCredentialsException {
+
 
         // Check if customer exist
         OkHttpClient client = new OkHttpClient();
@@ -46,7 +48,7 @@ public class Receptionist extends User{
                 .add("password", custPassword)
                 .build();
 
-        String loginUrl = ROOT_URL + "/user/login";
+        String loginUrl = ROOT_URL + "/user/login?jwt=true";
 
         Request request = new Request.Builder()
                 .url(loginUrl)
@@ -64,10 +66,12 @@ public class Receptionist extends User{
         String header = response.toString();
 
         Customer cust = null;
-
         if (header.contains("code=403")) cust = createNewCustomer(custGivenName, custFamilyName,
                 custUserName, custPassword, custPhoneNumber, custAdditionalInfo);
-        else cust = useExistingCustomer(custUserName, custPassword);
+        else {
+            String jwt = response.body().string();
+            cust = useExistingCustomerJWT(jwt);
+        }
 
         return cust;
 
@@ -79,21 +83,9 @@ public class Receptionist extends User{
      */
     private Customer createNewCustomer(String custGivenName, String custFamilyName, String custUserName,
                                String custPassword, String custPhoneNumber, JSONObject custAdditionalInfo)
-            throws JSONException, IOException, InvalidRoleException, InvalidCredentialsException {
+            throws JSONException, IOException {
 
         OkHttpClient client = new OkHttpClient();
-
-//        RequestBody formBody = new FormBody.Builder()
-//                .add("givenName", custGivenName)
-//                .add("familyName", custFamilyName)
-//                .add("userName", custUserName)
-//                .add("password", custPassword)
-//                .add("phoneNumber", custPhoneNumber)
-//                .add("isCustomer", String.valueOf(true))
-//                .add("isAdmin", String.valueOf(false))
-//                .add("isHealthcareWorker", String.valueOf(false))
-//                .add("additionalInfo", custAdditionalInfo)
-//                .build();
 
         String custAdditionalInfoStr = custAdditionalInfo.toString();
 
@@ -110,8 +102,6 @@ public class Receptionist extends User{
                 custPhoneNumber, true, false, false, custAdditionalInfoStr);
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonstr);
-//        String jwt = jObj.getString("jwt");
-//        Log.d("myTag", jwt);
 
         String verifyTokenUrl = ROOT_URL + "/user";
 
@@ -137,33 +127,106 @@ public class Receptionist extends User{
     }
 
     /**
-     * Returns the existing User object.
-     *
-     * InvalidCredentialsException is thrown when username and password is invalid.
+     * Get Userinfo using username and password, and create a customer object
      */
-    private Customer useExistingCustomer(String custUserName, String custPassword)
-            throws JSONException, IOException, InvalidCredentialsException {
+    private Customer useExistingCustomer(String custUserName, String custPassword) throws IOException, JSONException {
 
-        LoginSystem ls = new LoginSystem(MY_API_KEY);
-        String jwt = ls.checkCredentials(custUserName, custPassword);
+        // Get jwt from userName and password
+        OkHttpClient client = new OkHttpClient();
 
-        LoginAuthentication la = LoginAuthentication.getInstance();
-        String custUserId = la.getUserId(jwt);
-        String custUserInfo = la.getUserInfo(custUserId);
+        RequestBody formBody = new FormBody.Builder()
+                .add("userName", custUserName)
+                .add("password", custPassword)
+                .build();
 
-        JSONObject jObj = new JSONObject(custUserInfo);
-        String custGivenName = jObj.getString("givenName");
-        String custFamilyName = jObj.getString("familyName");
-        String custPhoneNumber = jObj.getString("phoneNumber");
-        Boolean custIsCustomer = Boolean.valueOf(jObj.getString("isCustomer"));
-        Boolean custIsReceptionist = Boolean.valueOf(jObj.getString("isReceptionist"));
-        Boolean cutsIsHealthcareWorker = Boolean.valueOf(jObj.getString("isHealthcareWorker"));
-        JSONObject custAdditionalInfo = new JSONObject(jObj.getString("additionalInfo"));
+        String loginUrl = ROOT_URL + "/user/login?jwt=true";
+
+        Request request = new Request.Builder()
+                .url(loginUrl)
+                .header("Authorization", MY_API_KEY)
+                .header("Content-Type","application/json")
+                .post(formBody)
+                .build();
+
+        // Have the response run in background or system will crash
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        Response response = client.newCall(request).execute();
+
+        String jwt = response.body().string();
+        return useExistingCustomerJWT(jwt);
+
+    }
+
+    /**
+     * Get Userinfo using jwt and create a customer object
+     */
+    private Customer useExistingCustomerJWT(String jwt) throws IOException, JSONException {
+
+        // Get User Id from jwt
+        String custUserId = getCustId(jwt);
+
+        // Get User Info from User Id
+        String custUserInfo = getCustInfo(custUserId);
+        JSONObject custInfo = new JSONObject(custUserInfo);
+
+        String custGivenName = custInfo.getString("givenName");
+        String custFamilyName = custInfo.getString("familyName");
+        String custUserName = custInfo.getString("phoneNumber");
+        String custPhoneNumber = custInfo.getString("phoneNumber");
+        Boolean custIsCustomer = Boolean.valueOf(custInfo.getString("isCustomer"));
+        Boolean custIsReceptionist = Boolean.valueOf(custInfo.getString("isReceptionist"));
+        Boolean cutsIsHealthcareWorker = Boolean.valueOf(custInfo.getString("isHealthcareWorker"));
+        JSONObject custAdditionalInfo = new JSONObject(custInfo.getString("additionalInfo"));
 //        String custAdditionalInfo = jObj.getString("additionalInfo");
-
 
         return new Customer(custUserId, custGivenName, custFamilyName, custUserName, custPhoneNumber,
                 custIsCustomer, custIsReceptionist, cutsIsHealthcareWorker, custAdditionalInfo);
+    }
+
+    /**
+     * Get Userid from jwt
+     */
+    private String getCustId(String jwt) throws JSONException {
+
+        // Get User Id from jwt
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+
+        // split jwt into its 3 parts and take the payload
+        String[] chunks = jwt.split("\\.");
+        String payload = new String(decoder.decode(chunks[1]));
+
+
+        // obtain userid from JSON String
+        JSONObject jObj = new JSONObject(payload);
+        String custUserId = jObj.getString("sub");
+
+        return custUserId;
+    }
+
+    /**
+     * Get Userinfo from userid
+     */
+    private String getCustInfo(String custUserId) throws IOException {
+
+        OkHttpClient client = new OkHttpClient();
+
+        String loginUrl = ROOT_URL + "/user/" + custUserId;
+
+        Request request = new Request.Builder()
+                .url(loginUrl)
+                .header("Authorization", MY_API_KEY)
+                .get()
+                .build();
+
+        // Have the response run in background or system will crash
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        Response response = client.newCall(request).execute();
+
+        return response.body().string();
     }
 
 }

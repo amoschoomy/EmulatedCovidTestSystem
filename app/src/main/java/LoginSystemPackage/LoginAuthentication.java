@@ -74,7 +74,7 @@ public class LoginAuthentication {
     /**
      * Get Userid from jwt
      */
-    public String getUserId(String jwt) throws JSONException {
+    private String getUserId(String jwt) throws JSONException {
 
         Base64.Decoder decoder = Base64.getUrlDecoder();
 
@@ -93,7 +93,7 @@ public class LoginAuthentication {
     /**
      * Get Userinfo from userid
      */
-    public String getUserInfo(String userid) throws IOException {
+    private String getUserInfo(String userid) throws IOException {
 
         OkHttpClient client = new OkHttpClient();
 

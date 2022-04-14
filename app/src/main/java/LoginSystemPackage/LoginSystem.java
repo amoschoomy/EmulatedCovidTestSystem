@@ -61,6 +61,8 @@ public class LoginSystem {
         String output = response.body().string();
 
         String header = response.toString();
+//        Log.d("myTag", "header:");
+//        Log.d("myTag", header);
 
         if (header.contains("code=403")) throw new InvalidCredentialsException();
 
