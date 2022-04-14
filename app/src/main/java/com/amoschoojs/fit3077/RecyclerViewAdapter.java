@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 
-import BookingPackage.MakeBookingFacade;
+import BookingPackage.BookingFacade;
 import LoginSystemPackage.InvalidCredentialsException;
 import LoginSystemPackage.LoginAuthentication;
 import TestingFacilityPackage.TestingFacility;
@@ -194,7 +194,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             phoneNumber,
                             new JSONObject("{}"));
                     String pin =
-                        MakeBookingFacade.makeBooking(
+                        BookingFacade.makeBooking(
                             c,
                             testingFacilityID,
                             null,
@@ -241,7 +241,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     String pin = null;
                     try {
                       pin =
-                          MakeBookingFacade.makeBooking(
+                          BookingFacade.makeBooking(
                               user,
                               testingFacilityID,
                               null,

@@ -13,7 +13,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MakeBookingFacade {
+public class BookingFacade {
 
   public static String makeBooking(
       User user,

@@ -12,7 +12,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import BookingPackage.MakeBookingFacade;
+import BookingPackage.BookingFacade;
 
 public class CheckBooking extends AppCompatActivity {
 
@@ -29,7 +29,7 @@ public class CheckBooking extends AppCompatActivity {
           public void onClick(View view) {
             try {
               String pinText = pin.getText().toString();
-              String status = MakeBookingFacade.checkBooking(pinText, getString(R.string.api_key));
+              String status = BookingFacade.checkBooking(pinText, getString(R.string.api_key));
               TextView statusView = findViewById(R.id.bookingstatus);
               statusView.setText(status);
             } catch (IOException e) {
