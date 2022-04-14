@@ -50,8 +50,8 @@ public class HomeActivity extends AppCompatActivity {
             onSiteTestingBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                  Intent switchActivityIntent = new Intent(getApplicationContext(), OnSiteTestingActivity.class);
-//                  startActivity(switchActivityIntent);
+                  Intent switchActivityIntent = new Intent(getApplicationContext(), OnSiteTestingActivity.class);
+                  startActivity(switchActivityIntent);
                 }
             });
         }
