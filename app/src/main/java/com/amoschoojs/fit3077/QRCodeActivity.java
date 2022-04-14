@@ -3,18 +3,16 @@ package com.amoschoojs.fit3077;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.qrcode.encoder.ByteMatrix;
 
 public class QRCodeActivity extends AppCompatActivity {
 
