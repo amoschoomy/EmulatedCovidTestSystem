@@ -1,6 +1,7 @@
 package com.amoschoojs.fit3077;
 
-import android.content.Intent;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,16 +12,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
 import LoginSystemPackage.InvalidCredentialsException;
 import LoginSystemPackage.LoginAuthentication;
 import LoginSystemPackage.LoginSystem;
+import UserPackage.Customer;
 import UserPackage.InvalidRoleException;
+import UserPackage.Receptionist;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -40,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         inputPassword = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.loginButton);
 
+        // Creating the drop down menu
         inputRole = findViewById(R.id.dropdownmenu);
         String[] roles = new String[] {"Customer", "Receptionist", "Healthcare Worker"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, roles);
@@ -60,37 +64,42 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginSystem ls = new LoginSystem(getString(R.string.api_key));
 
-    // test username: mbrown123
-    // test password: mbrown123
-    loginButton.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            String username = inputUsername.getText().toString();
-            String password = inputPassword.getText().toString();
-            String userRole = userRoleSelected[0];
+        // test username: mbrown123
+        // test password: mbrown123
+        // test username: jrymdr
+        // test password: jrymdr
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String username = inputUsername.getText().toString();
+                String password = inputPassword.getText().toString();
+                String userRole = userRoleSelected[0];
 
-            try {
-              String jwt = ls.checkCredentials(username, password);
+                try {
+                    String jwt = ls.checkCredentials(username, password);
 
-              Log.d("myTag", "here");
-              //                    LoginSystem.VerifyJWTToken(jwt);
-              Log.d("myTag", "there");
-              LoginAuthentication newInstance = LoginAuthentication.getInstance();
-              newInstance.setUser(jwt, userRole);
-              Toast.makeText(getApplicationContext(), "Logined", Toast.LENGTH_LONG).show();
+//                    LoginSystem.VerifyJWTToken(jwt);
+                    LoginAuthentication newInstance = LoginAuthentication.getInstance();
+                    newInstance.setUser(jwt, userRole);
 
-              Intent switchActivityIntent =
-                  new Intent(getApplicationContext(), SearchTestingSite.class);
-              startActivity(switchActivityIntent);
+                    // testing receptionist code
+                    if (newInstance.getUser().getReceptionist()) {
+                        Receptionist rec = (Receptionist) newInstance.getUser();
+                        Customer cust = rec.createNewCustomer("testgname", "testfname", "test1", "test1",
+                                "0410000000", new JSONObject("{}"));
 
-            } catch (IOException | JSONException e) {
-              e.printStackTrace();
-            } catch (InvalidRoleException | InvalidCredentialsException e) {
-              Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+//                        Log.d("myTag", "LOLXD");
+//                        Log.d("myTag", cust.getUserId());
+                    }
+
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                } catch (InvalidRoleException | InvalidCredentialsException e) {
+                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                }
             }
-          }
         });
+
     }
 
 
