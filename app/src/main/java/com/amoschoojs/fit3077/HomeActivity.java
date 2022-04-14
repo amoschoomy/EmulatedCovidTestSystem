@@ -1,11 +1,11 @@
 package com.amoschoojs.fit3077;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 
@@ -23,6 +23,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Button onSiteTestingBtn = this.findViewById(R.id.onSiteTestingBtn);
         Button SearchTestingSitesBtn = this.findViewById(R.id.searchTestingSitesBtn);
+    Button checkBookingButton = this.findViewById(R.id.checkbooking);
 
         SearchTestingSitesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +33,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+    checkBookingButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            Intent switchActivityIntent = new Intent(getApplicationContext(), CheckBooking.class);
+            startActivity(switchActivityIntent);
+          }
+        });
 
         LoginAuthentication loginAuthentication = null;
         try {

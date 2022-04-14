@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.util.Base64;
 
 import LoginSystemPackage.InvalidCredentialsException;
-import LoginSystemPackage.LoginAuthentication;
-import LoginSystemPackage.LoginSystem;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,6 +28,10 @@ public class Receptionist extends User{
         super(userId, givenName, familyName, userName, phoneNumber, isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
     }
 
+  @Override
+  public String checkBooking(String pin) {
+    return null;
+  }
 
     /**
      * Creates a customer user object using the input information. Returns the created User object.
