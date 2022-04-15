@@ -27,15 +27,17 @@ public class CheckBooking extends AppCompatActivity {
         new View.OnClickListener() {
           @Override
           public void onClick(View view) {
+            TextView statusView = findViewById(R.id.bookingstatus);
             try {
               String pinText = pin.getText().toString();
-              String status = BookingFacade.checkBooking(pinText, getString(R.string.api_key));
-              TextView statusView = findViewById(R.id.bookingstatus);
-              statusView.setText(status);
+              String[] array = BookingFacade.checkBooking(pinText, getString(R.string.api_key));
+              statusView.setText(array[1]);
             } catch (IOException e) {
               e.printStackTrace();
             } catch (JSONException e) {
               e.printStackTrace();
+            } catch (Exception e) {
+              statusView.setText("No Booking Found");
             }
           }
         });

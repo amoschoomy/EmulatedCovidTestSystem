@@ -1,15 +1,19 @@
 package com.amoschoojs.fit3077;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import BookingPackage.BookingFacade;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class OnSiteTestingActivity extends AppCompatActivity {
 
@@ -27,40 +31,61 @@ public class OnSiteTestingActivity extends AppCompatActivity {
         RadioGroup diarrheaRadioGroup = findViewById(R.id.DiarrheaRadioGroup);
         RadioGroup nauseaRadioGroup = findViewById(R.id.NauseaRadioGroup);
         RadioGroup jointRadioGroup = findViewById(R.id.JointRadioGroup);
-
+    EditText bookingPin = findViewById(R.id.pinInput);
         Button recButton = findViewById(R.id.RecButton);
-        recButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    feverStatus = checkStatus(feverRadioGroup);
-                    coughStatus = checkStatus(coughRadioGroup);
-                    throatStatus = checkStatus(throatRadioGroup);
-                    fatigueStatus = checkStatus(fatigueRadioGroup);
-                    diarrheaStatus = checkStatus(diarrheaRadioGroup);
-                    nauseaStatus = checkStatus(nauseaRadioGroup);
-                    jointStatus = checkStatus(jointRadioGroup);
+    recButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            try {
+              feverStatus = checkStatus(feverRadioGroup);
+              coughStatus = checkStatus(coughRadioGroup);
+              throatStatus = checkStatus(throatRadioGroup);
+              fatigueStatus = checkStatus(fatigueRadioGroup);
+              diarrheaStatus = checkStatus(diarrheaRadioGroup);
+              nauseaStatus = checkStatus(nauseaRadioGroup);
+              jointStatus = checkStatus(jointRadioGroup);
+              String pin = bookingPin.getText().toString();
+              String[] array = BookingFacade.checkBooking(pin, getString(R.string.api_key));
+              if (pin.length() < 6) {
+                throw new Exception("Invalid Pin");
+              }
+              TextView testRecView = findViewById(R.id.RecommendedTestTxt);
+              String recommendedTest = "PCR Test";
+              if (feverStatus
+                  || coughStatus
+                  || throatStatus
+                  || fatigueStatus
+                  || diarrheaStatus
+                  || nauseaStatus
+                  || jointStatus) {
+                // recommend PCR Test
+                testRecView.setText(recommendedTest);
 
-                    TextView testRecView = findViewById(R.id.RecommendedTestTxt);
-                    if (feverStatus || coughStatus || throatStatus || fatigueStatus || diarrheaStatus || nauseaStatus || jointStatus) {
-                        // recommend PCR Test
-                        testRecView.setText("PCR Test");
+              } else {
+                // recommend RAT Test
+                recommendedTest = "RAT Test";
+                testRecView.setText(recommendedTest);
+              }
+              testRecView.setVisibility(View.VISIBLE);
 
-                    } else {
-                        // recommend RAT Test
-                        testRecView.setText("RAT Test");
-                    }
-                    testRecView.setVisibility(View.VISIBLE);
-
-                    // TODO: Store recommendation in additional Info
-
-                } catch (NullPointerException e) {
-                    Toast.makeText(getApplicationContext(), "Please Input All Fields", Toast.LENGTH_SHORT).show();
-                }
-
+              String bookingID = array[0];
+              String jsonstr =
+                  String.format(
+                      "{\"additionalInfo\":{\"recommendedTest\":\"%s\"}}", recommendedTest);
+              System.out.println(bookingID);
+              System.out.println(jsonstr);
+              RequestBody body =
+                  RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonstr);
+              BookingFacade.updateBookingDetails(getString(R.string.api_key), bookingID, body);
+            } catch (NullPointerException e) {
+              Toast.makeText(getApplicationContext(), "Please Input All Fields", Toast.LENGTH_SHORT)
+                  .show();
+            } catch (Exception e) {
+              Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
+          }
         });
-
     }
 
     /**

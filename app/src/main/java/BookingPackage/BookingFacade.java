@@ -11,6 +11,7 @@ import java.io.IOException;
 import UserPackage.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class BookingFacade {
@@ -38,8 +39,7 @@ public class BookingFacade {
     return smsPin;
   }
 
-  public static String checkBooking(String smsPin, String API_KEY)
-      throws IOException, JSONException {
+  public static String[] checkBooking(String smsPin, String API_KEY) throws Exception {
     String usersUrl = "https://fit3077.com/api/v1/booking";
     OkHttpClient client = new OkHttpClient();
     // Create json object
@@ -58,13 +58,34 @@ public class BookingFacade {
     for (int i = 0; i < c.length(); i++) {
       JSONObject obj = c.getJSONObject(i);
       String A = obj.getString("smsPin");
-      //      System.out.println(smsPin);
-      //      System.out.println(A);
       if (A.equals(smsPin)) {
         String B = obj.getString("status");
-        return B;
+        String bookingID = obj.getString("id");
+        return new String[] {bookingID, B};
       }
     }
-    return "No Booking Found";
+    throw new Exception("No Booking Found");
+  }
+
+  public static void updateBookingDetails(String API_KEY, String bookingID, RequestBody requestBody)
+      throws IOException {
+    OkHttpClient client = new OkHttpClient();
+
+    // insert key here
+    String usersUrl = String.format("https://fit3077.com/api/v1/booking/%s", bookingID);
+    System.out.println(usersUrl);
+    Request request =
+        new Request.Builder()
+            .url(usersUrl)
+            .header("Authorization", API_KEY)
+            .patch(requestBody)
+            .build();
+
+    // Have the response run in background or system will crash
+    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
+
+    Response response = client.newCall(request).execute();
+    System.out.println(response.body().string());
   }
 }
