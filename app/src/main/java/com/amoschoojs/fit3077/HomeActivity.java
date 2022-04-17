@@ -25,23 +25,6 @@ public class HomeActivity extends AppCompatActivity {
         Button SearchTestingSitesBtn = this.findViewById(R.id.searchTestingSitesBtn);
     Button checkBookingButton = this.findViewById(R.id.checkbooking);
 
-        SearchTestingSitesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                  Intent switchActivityIntent = new Intent(getApplicationContext(), SearchTestingSite.class);
-                  startActivity(switchActivityIntent);
-            }
-        });
-
-    checkBookingButton.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            Intent switchActivityIntent = new Intent(getApplicationContext(), CheckBooking.class);
-            startActivity(switchActivityIntent);
-          }
-        });
-
         LoginAuthentication loginAuthentication = null;
         try {
             loginAuthentication = LoginAuthentication.getInstance();
@@ -51,6 +34,24 @@ public class HomeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         User user = loginAuthentication.getUser();
+
+        SearchTestingSitesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                  Intent switchActivityIntent = new Intent(getApplicationContext(), SearchTestingSite.class);
+                  startActivity(switchActivityIntent);
+            }
+        });
+    if (user.getHealthcareWorker()) checkBookingButton.setVisibility(View.GONE);
+    checkBookingButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            Intent switchActivityIntent = new Intent(getApplicationContext(), CheckBooking.class);
+            startActivity(switchActivityIntent);
+          }
+        });
+
 
         // On-site testing button visibility and function
         if (!user.getHealthcareWorker()) {
