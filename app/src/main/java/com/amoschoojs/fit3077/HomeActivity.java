@@ -23,7 +23,8 @@ public class HomeActivity extends AppCompatActivity {
 
         Button onSiteTestingBtn = this.findViewById(R.id.onSiteTestingBtn);
         Button SearchTestingSitesBtn = this.findViewById(R.id.searchTestingSitesBtn);
-    Button checkBookingButton = this.findViewById(R.id.checkbooking);
+        Button checkBookingButton = this.findViewById(R.id.checkbooking);
+        Button qrCodeBtn = this.findViewById(R.id.qrCodeBtn);
 
         LoginAuthentication loginAuthentication = null;
         try {
@@ -42,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
                   startActivity(switchActivityIntent);
             }
         });
+
+        // Healthcare workers cannot check booking status
     if (user.getHealthcareWorker()) checkBookingButton.setVisibility(View.GONE);
     checkBookingButton.setOnClickListener(
         new View.OnClickListener() {
@@ -52,7 +55,6 @@ public class HomeActivity extends AppCompatActivity {
           }
         });
 
-
         // On-site testing button visibility and function
         if (!user.getHealthcareWorker()) {
             onSiteTestingBtn.setVisibility(View.GONE);
@@ -62,6 +64,19 @@ public class HomeActivity extends AppCompatActivity {
                 public void onClick(View view) {
                   Intent switchActivityIntent = new Intent(getApplicationContext(), OnSiteTestingActivity.class);
                   startActivity(switchActivityIntent);
+                }
+            });
+        }
+
+        // Generated QR Code only visible to Customer
+        if (!user.getCustomer()) {
+            qrCodeBtn.setVisibility(View.GONE);
+        } else {
+            qrCodeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent switchActivityIntent = new Intent(getApplicationContext(), QRCodeActivity.class);
+                    startActivity(switchActivityIntent);
                 }
             });
         }
