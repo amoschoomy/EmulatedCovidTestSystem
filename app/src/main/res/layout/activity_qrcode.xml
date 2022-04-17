@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.675" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/placeholderQRtxt"
         android:layout_width="179dp"
         android:layout_height="40dp"
         android:text="No QR Code Generated as homebooking not created"

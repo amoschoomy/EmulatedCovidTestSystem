@@ -1,6 +1,10 @@
 package BookingPackage;
 
+import android.graphics.Bitmap;
 import android.os.StrictMode;
+import android.util.Log;
+
+import com.google.zxing.WriterException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +27,7 @@ public class BookingFacade {
       boolean homeTesting,
       String startTime,
       String API_KEY)
-      throws JSONException, IOException {
+          throws JSONException, IOException, WriterException {
     Booking booking = null;
     String smsPin = null;
     String userID = user.getUserId();
@@ -31,7 +35,10 @@ public class BookingFacade {
       booking = new TestingOnSiteBooking();
       smsPin = booking.create(userID, testingFacilityID, startTime, notes, API_KEY);
     } else if (user.getCustomer() && homeTesting) {
-
+      Log.d("myTag", "herefirst");
+      booking = HomeBooking.getInstance();
+      smsPin = booking.create(userID, testingFacilityID, startTime, notes, API_KEY);
+      ((HomeBooking) booking).setQRCode(smsPin);
     } else if (user.getCustomer()) {
       booking = new TestingOnSiteBooking();
       smsPin = booking.create(userID, testingFacilityID, startTime, notes, API_KEY);

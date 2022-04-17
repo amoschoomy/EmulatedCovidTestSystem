@@ -2,6 +2,7 @@ package com.amoschoojs.fit3077;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.zxing.WriterException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -252,6 +254,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                       e.printStackTrace();
                     } catch (IOException e) {
                       e.printStackTrace();
+                    } catch (WriterException e) {
+                      e.printStackTrace();
                     }
 
                     NotificationCompat.Builder builder =
@@ -267,9 +271,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     notificationManager.notify(1, builder.build());
 
                   } else { // homebooking here
-                    Toast.makeText(view.getContext(), "HomeBooking selectedd", Toast.LENGTH_SHORT)
-                        .show();
+                    String pin = null;
+                    try {
+                      pin =
+                              BookingFacade.makeBooking(
+                                      user,
+                                      testingFacilityID,
+                                      null,
+                                      true,
+                                      Instant.now().plusSeconds(604800).toString(),
+                                      view.getContext().getString(R.string.api_key));
+                    } catch (JSONException e) {
+                      e.printStackTrace();
+                    } catch (IOException e) {
+                      e.printStackTrace();
+                    } catch (WriterException e) {
+                      e.printStackTrace();
+                    }
+
+                    NotificationCompat.Builder builder =
+                            new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
+                                    .setContentTitle("Booking Pin")
+                                    .setSmallIcon(R.drawable.ic_launcher_background)
+                                    .setContentText(pin)
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    Toast.makeText(view.getContext(), pin, Toast.LENGTH_LONG).show();
+                    NotificationManager notificationManager =
+                            (NotificationManager)
+                                    view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(1, builder.build());
+
                   }
+
                 })
 
             // A null listener allows the button to dismiss the dialog and take no further action.
