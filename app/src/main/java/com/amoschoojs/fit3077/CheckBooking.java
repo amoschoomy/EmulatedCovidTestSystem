@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import BookingPackage.BookingFacade;
 
+/** CheckBooking UI class */
 public class CheckBooking extends AppCompatActivity {
 
   @Override
@@ -33,8 +34,10 @@ public class CheckBooking extends AppCompatActivity {
               String[] array = BookingFacade.checkBooking(pinText, getString(R.string.api_key));
               statusView.setText(array[1]);
             } catch (IOException e) {
+              statusView.setText("No Booking Found");
               e.printStackTrace();
             } catch (JSONException e) {
+              statusView.setText("No Booking Found");
               e.printStackTrace();
             } catch (Exception e) {
               statusView.setText("No Booking Found");

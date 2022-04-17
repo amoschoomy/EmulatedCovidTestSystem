@@ -13,16 +13,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
 import LoginSystemPackage.InvalidCredentialsException;
 import LoginSystemPackage.LoginAuthentication;
 import LoginSystemPackage.LoginSystem;
-import UserPackage.Customer;
 import UserPackage.InvalidRoleException;
-import UserPackage.Receptionist;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -81,19 +78,6 @@ public class LoginActivity extends AppCompatActivity {
               //                    LoginSystem.VerifyJWTToken(jwt);
               LoginAuthentication newInstance = LoginAuthentication.getInstance();
               newInstance.setUser(jwt, userRole);
-
-//              // testing receptionist code
-//              if (newInstance.getUser().getReceptionist()) {
-//                Receptionist rec = (Receptionist) newInstance.getUser();
-//                Customer cust =
-//                    rec.createNewCustomer(
-//                        "testgname",
-//                        "testfname",
-//                        "test1",
-//                        "test1",
-//                        "0410000000",
-//                        new JSONObject("{}"));
-//              }
 
               Intent switchActivityIntent =
                   new Intent(getApplicationContext(), HomeActivity.class);

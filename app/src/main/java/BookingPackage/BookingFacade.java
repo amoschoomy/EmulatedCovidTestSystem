@@ -1,8 +1,6 @@
 package BookingPackage;
 
-import android.graphics.Bitmap;
 import android.os.StrictMode;
-import android.util.Log;
 
 import com.google.zxing.WriterException;
 
@@ -27,19 +25,25 @@ public class BookingFacade {
       boolean homeTesting,
       String startTime,
       String API_KEY)
-          throws JSONException, IOException, WriterException {
-    Booking booking = null;
+      throws JSONException, IOException, WriterException {
+    Booking booking;
     String smsPin = null;
     String userID = user.getUserId();
+
+    // receptionist
     if (user.getReceptionist()) {
       booking = new TestingOnSiteBooking();
       smsPin = booking.create(userID, testingFacilityID, startTime, notes, API_KEY);
-    } else if (user.getCustomer() && homeTesting) {
-      Log.d("myTag", "herefirst");
+    }
+    // customer that choose home testing
+    else if (user.getCustomer() && homeTesting) {
       booking = HomeBooking.getInstance();
       smsPin = booking.create(userID, testingFacilityID, startTime, notes, API_KEY);
       ((HomeBooking) booking).setQRCode(smsPin);
-    } else if (user.getCustomer()) {
+
+    }
+    // customer online booking
+    else if (user.getCustomer()) {
       booking = new TestingOnSiteBooking();
       smsPin = booking.create(userID, testingFacilityID, startTime, notes, API_KEY);
     }
@@ -93,6 +97,5 @@ public class BookingFacade {
     StrictMode.setThreadPolicy(policy);
 
     Response response = client.newCall(request).execute();
-    System.out.println(response.body().string());
   }
 }
