@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FIT3077</string>
+    <string name="testing_link"><a href="http://www.example.com">http://www.example.com</a></string>
 </resources>

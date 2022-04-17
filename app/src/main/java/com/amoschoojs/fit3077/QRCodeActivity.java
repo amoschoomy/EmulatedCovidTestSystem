@@ -3,6 +3,7 @@ package com.amoschoojs.fit3077;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +34,8 @@ public class QRCodeActivity extends AppCompatActivity {
         if (qrCode != null) {
             QRCodeView.setImageBitmap(qrCode);
             placeholderQRText.setVisibility(View.INVISIBLE);
-            urlToTestingText.setText("http://www.example.com/");
+            urlToTestingText.setText(R.string.testing_link);
+            urlToTestingText.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
 
