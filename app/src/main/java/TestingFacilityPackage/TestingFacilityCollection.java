@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/** Singleton pattern of collection of TestingFacilities */
 public class TestingFacilityCollection {
   private static TestingFacilityCollection instance;
   private ArrayList<TestingFacility> testingFacilities = new ArrayList<>();
@@ -43,7 +44,6 @@ public class TestingFacilityCollection {
     String output = response.body().string();
     Type listType = new TypeToken<ArrayList<TestingFacility>>() {}.getType();
     testingFacilities = new Gson().fromJson(output, listType);
-    //    Log.d("myTag", testingFacilities.toString());
 
     return testingFacilities;
   }

@@ -73,8 +73,7 @@ public class OnSiteTestingActivity extends AppCompatActivity {
               String jsonstr =
                   String.format(
                       "{\"additionalInfo\":{\"recommendedTest\":\"%s\"}}", recommendedTest);
-              System.out.println(bookingID);
-              System.out.println(jsonstr);
+
               RequestBody body =
                   RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonstr);
               BookingFacade.updateBookingDetails(getString(R.string.api_key), bookingID, body);

@@ -27,7 +27,6 @@ public class SearchTestingSite extends AppCompatActivity {
     TestingFacilityCollection testingFacilityCollection = TestingFacilityCollection.getInstance();
     try {
       testingFacilities = testingFacilityCollection.retrieveTestingFacilities(API_KEY);
-      //      Log.d("myTag",Integer.toString(testingFacilities.size()));
       recyclerViewAdapter.setCars(testingFacilities);
       LinearLayoutManager layoutManager = new LinearLayoutManager(this);
       recyclerView.setLayoutManager(layoutManager);

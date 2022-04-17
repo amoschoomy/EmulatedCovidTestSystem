@@ -2,7 +2,6 @@ package com.amoschoojs.fit3077;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.WriterException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,9 +39,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
   ArrayList<TestingFacility> testingFacilities;
   ArrayList<TestingFacility> testingFacilitiesFiltered;
+
+  // Filtering details
   private Filter exampleFilter =
       new Filter() {
 
+        /**
+         * Filtering algorithm
+         *
+         * @param constraint constraint of search
+         * @return
+         */
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
           ArrayList<TestingFacility> filteredList = new ArrayList<>();
@@ -52,6 +60,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             String filterPattern = constraint.toString().toLowerCase().trim();
 
             for (TestingFacility item : testingFacilitiesFiltered) {
+              // search by suburb or testing type
               if (item.getAddress().getSuburb().toLowerCase().contains(filterPattern)
                   || item.getTestingFacilityType()
                       .toString()
@@ -106,7 +115,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
   @Override
   public int getItemCount() {
-    //        Log.d("myTag",Integer.toString(testingFacilities.size()));
     if (testingFacilities == null) {
       return 0;
     }
@@ -129,6 +137,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
       itemView.setOnClickListener(this);
     }
 
+    /**
+     * verifyInput of Booking details
+     *
+     * @param givenName
+     * @param familyName
+     * @param username
+     * @param password
+     * @param phone
+     * @return
+     */
     private boolean verifyInput(
         String givenName, String familyName, String username, String password, String phone) {
       return (givenName.length() > 0
@@ -149,14 +167,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         e.printStackTrace();
       }
       int pos = getAdapterPosition();
+
+      // get testing facility position of user click
       TestingFacility testingFacility = testingFacilitiesFiltered.get(pos);
       String testingFacilityID = testingFacility.getId();
       Boolean onSiteBooking = testingFacility.isOnSiteBooking();
-      User user = loginAuthentication.getUser();
+      User user = loginAuthentication.getUser(); // retrieve user of application
       View checkBoxView = View.inflate(view.getContext(), R.layout.checkbox, null);
       CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
       checkBox.setText("Home Booking?");
 
+      // onsite booking not allowed for receptionist
       if (user.getReceptionist() && !onSiteBooking) {
         Toast.makeText(view.getContext(), "Sorry On Site Booking not allowed", Toast.LENGTH_SHORT)
             .show();
@@ -204,6 +225,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             Instant.now().plusSeconds(604800).toString(),
                             view.getContext().getString(R.string.api_key));
 
+                    // notify user the booking pin
                     NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
                             .setContentTitle("Booking Pin")
@@ -231,7 +253,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             .setNegativeButton(android.R.string.no, null)
             .setIcon(R.drawable.ic_launcher_background)
             .show();
-      } else if (user.getCustomer()) {
+      }
+
+      // customer booking
+      else if (user.getCustomer()) {
         new AlertDialog.Builder(view.getContext())
             .setView(checkBoxView)
             .setTitle("Make Booking?")
@@ -274,13 +299,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     String pin = null;
                     try {
                       pin =
-                              BookingFacade.makeBooking(
-                                      user,
-                                      testingFacilityID,
-                                      null,
-                                      true,
-                                      Instant.now().plusSeconds(604800).toString(),
-                                      view.getContext().getString(R.string.api_key));
+                          BookingFacade.makeBooking(
+                              user,
+                              testingFacilityID,
+                              null,
+                              true,
+                              Instant.now().plusSeconds(604800).toString(),
+                              view.getContext().getString(R.string.api_key));
                     } catch (JSONException e) {
                       e.printStackTrace();
                     } catch (IOException e) {
@@ -290,19 +315,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
 
                     NotificationCompat.Builder builder =
-                            new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
-                                    .setContentTitle("Booking Pin")
-                                    .setSmallIcon(R.drawable.ic_launcher_background)
-                                    .setContentText(pin)
-                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
+                            .setContentTitle("Booking Pin")
+                            .setSmallIcon(R.drawable.ic_launcher_background)
+                            .setContentText(pin)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     Toast.makeText(view.getContext(), pin, Toast.LENGTH_LONG).show();
                     NotificationManager notificationManager =
-                            (NotificationManager)
-                                    view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        (NotificationManager)
+                            view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(1, builder.build());
-
                   }
-
                 })
 
             // A null listener allows the button to dismiss the dialog and take no further action.
