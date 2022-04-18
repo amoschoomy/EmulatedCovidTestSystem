@@ -2,6 +2,7 @@ package com.amoschoojs.fit3077;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -326,6 +327,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(1, builder.build());
                   }
+
+                  Intent switchActivityIntent = new Intent(itemView.getContext(), QRCodeActivity.class);
+                  itemView.getContext().startActivity(switchActivityIntent);
                 })
 
             // A null listener allows the button to dismiss the dialog and take no further action.

@@ -24,7 +24,6 @@ public class HomeActivity extends AppCompatActivity {
     Button onSiteTestingBtn = this.findViewById(R.id.onSiteTestingBtn);
     Button SearchTestingSitesBtn = this.findViewById(R.id.searchTestingSitesBtn);
     Button checkBookingButton = this.findViewById(R.id.checkbooking);
-    Button qrCodeBtn = this.findViewById(R.id.qrCodeBtn);
 
     LoginAuthentication loginAuthentication = null;
     try {
@@ -72,19 +71,5 @@ public class HomeActivity extends AppCompatActivity {
           });
     }
 
-    // Generated QR Code only visible to Customer
-    if (!user.getCustomer()) {
-      qrCodeBtn.setVisibility(View.GONE);
-    } else {
-      qrCodeBtn.setOnClickListener(
-          new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              Intent switchActivityIntent =
-                  new Intent(getApplicationContext(), QRCodeActivity.class);
-              startActivity(switchActivityIntent);
-            }
-          });
-    }
   }
 }
