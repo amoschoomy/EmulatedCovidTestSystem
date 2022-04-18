@@ -72,4 +72,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
   }
+
+    @Override
+    public void onBackPressed() {
+        // disable back button
+    }
+
 }
