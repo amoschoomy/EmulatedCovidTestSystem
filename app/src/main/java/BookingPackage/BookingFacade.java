@@ -37,10 +37,8 @@ public class BookingFacade {
     }
     // customer that choose home testing
     else if (user.getCustomer() && homeTesting) {
-      booking = HomeBooking.getInstance();
+      booking = new HomeBooking();
       smsPin = booking.create(userID, testingFacilityID, startTime, notes, API_KEY);
-      ((HomeBooking) booking).setQRCode(smsPin);
-
     }
     // customer online booking
     else if (user.getCustomer()) {

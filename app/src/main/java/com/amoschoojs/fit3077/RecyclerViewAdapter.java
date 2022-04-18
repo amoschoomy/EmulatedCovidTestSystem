@@ -326,10 +326,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         (NotificationManager)
                             view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(1, builder.build());
+
+
+//                  ((HomeBooking) booking).setQRCode(smsPin);
+
+                    Intent switchActivityIntent = new Intent(itemView.getContext(), QRCodeActivity.class);
+                    switchActivityIntent.putExtra("smsPin", pin);
+                    itemView.getContext().startActivity(switchActivityIntent);
                   }
 
-                  Intent switchActivityIntent = new Intent(itemView.getContext(), QRCodeActivity.class);
-                  itemView.getContext().startActivity(switchActivityIntent);
                 })
 
             // A null listener allows the button to dismiss the dialog and take no further action.

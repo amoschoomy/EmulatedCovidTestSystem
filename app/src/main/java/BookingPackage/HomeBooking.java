@@ -26,60 +26,6 @@ import okhttp3.Response;
 
 public class HomeBooking implements Booking{
 
-    private static HomeBooking instance = null;
-    private Bitmap qrCode = null;
-
-    private HomeBooking(){
-
-    }
-
-    /**
-     * To get the HomeBooking Instance
-     */
-    public static HomeBooking getInstance(){
-        if(instance == null) {
-            instance = new HomeBooking();
-        }
-        return instance;
-    }
-
-
-    /**
-     * Generates a QRCode (Bitmap) that returns the infoText when scanned.
-     */
-    private Bitmap generateQRCode(String infoText) throws WriterException {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-
-        int length = 250;
-
-        BitMatrix bitMatrix = qrCodeWriter.encode(infoText, BarcodeFormat.QR_CODE, length, length);
-        int[] pixels = new int[length * length];
-
-        int xlength, ylength;
-        xlength = ylength = length;
-
-        for (int y = 0; y < ylength; y++) {
-            int offset = y * xlength;
-            for (int x = 0; x < xlength; x++) {
-                pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
-            }
-        }
-
-        Bitmap myBitmap = Bitmap.createBitmap(length, length, Bitmap.Config.ARGB_8888);
-        myBitmap.setPixels(pixels, 0, length, 0, 0, length, length);
-
-        return myBitmap;
-
-    }
-
-    public void setQRCode(String infoText) throws WriterException {
-        Log.d("myTag", "here");
-        this.qrCode = generateQRCode(infoText);
-    }
-
-    public Bitmap getQRCode() {
-        return this.qrCode;
-    }
 
     @Override
     public String create(String customerID, String testingSiteID, String startTime,
@@ -87,14 +33,6 @@ public class HomeBooking implements Booking{
 
         String bookingUrl = "https://fit3077.com/api/v1/booking";
         OkHttpClient client = new OkHttpClient();
-
-//        FormBody.Builder builder =
-//                new FormBody.Builder()
-//                        .add("customerId", customerID)
-//                        .add("testingSiteId", testingSiteID)
-//                        .add("startTime", startTime);
-//        if (notes != null) builder.add("notes", notes);
-//        RequestBody formBody = builder.build();
 
         // creating post body
 
