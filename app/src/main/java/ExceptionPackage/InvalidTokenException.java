@@ -1,5 +1,8 @@
 package ExceptionPackage;
 
+/**
+ * Exception that catches errors where jwt token is invalid
+ */
 public class InvalidTokenException extends Exception {
 
     public InvalidTokenException() {

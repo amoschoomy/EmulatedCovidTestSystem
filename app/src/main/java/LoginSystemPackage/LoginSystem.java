@@ -16,6 +16,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Class that handles all the login functions
+ */
 public class LoginSystem {
 
     public static String MY_API_KEY;
@@ -28,7 +31,7 @@ public class LoginSystem {
     /**
      * Verifies if username and password are correct. If correct, a jwt token is generated.
      *
-     * Throws InvalidCredentialsException if username or password is incorrect.
+     * @throws InvalidCredentialsException if username or password is incorrect
      */
     public String checkCredentials(String username, String password) throws IOException, JSONException, InvalidCredentialsException {
         Log.d("myTag", "Check Credentials");

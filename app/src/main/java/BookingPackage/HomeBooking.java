@@ -1,23 +1,12 @@
 package BookingPackage;
 
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.WHITE;
-
-import android.graphics.Bitmap;
 import android.os.StrictMode;
-import android.util.Log;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,7 +15,18 @@ import okhttp3.Response;
 
 public class HomeBooking implements Booking{
 
-
+    /**
+     * Creates homebooking
+     *
+     * @param customerID
+     * @param testingSiteID
+     * @param startTime
+     * @param notes
+     * @param API_KEY
+     * @return sms pin for user to keep track of booking
+     * @throws IOException
+     * @throws JSONException
+     */
     @Override
     public String create(String customerID, String testingSiteID, String startTime,
                          String notes, String API_KEY) throws IOException, JSONException {

@@ -18,6 +18,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * Class to keep track of user that is logged in
+ */
 public class LoginAuthentication {
 
   private static LoginAuthentication instance = null;

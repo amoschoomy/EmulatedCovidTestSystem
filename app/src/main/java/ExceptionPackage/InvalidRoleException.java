@@ -1,5 +1,8 @@
 package ExceptionPackage;
 
+/**
+ * Exception that catches errors where users input a role they do not have
+ */
 public class InvalidRoleException extends Exception{
     public InvalidRoleException ()
     {
