@@ -43,10 +43,10 @@ We have 4 separate packages in our system that adheres to ths principle, `UserPa
 Any changes inside any of the classes inside these packages will also affect all of the other
 classes inside the packages but no other packages shall be affected.
 
-The reason this principle is adhered to is because as programmers, maintainbility is the key to good
-code practices and we want to ensure that changes or refactoring that occurs in those packages are
-closed only to that packages being modified. This would allow simplification in our tasks if we have
-to change the classes inside these packages without worrying about other packages. Had we not
+The reason this principle is adhered to is because as programmers, maintainability is the key to
+good code practices and we want to ensure that changes or refactoring that occurs in those packages
+are closed only to that packages being modified. This would allow simplification in our tasks if we
+have to change the classes inside these packages without worrying about other packages. Had we not
 adhered to this principle, each small change would need to be revalidated in every other packgages
 to avoid any breaking changes.
 
@@ -63,5 +63,21 @@ balance between the size of our packages.
 ## Package Coupling Principles
 
 ### The Acyclic Dependencies Principle (ADP)
+
+We have maintained our packages in a way such that there are no cycles between our packages. This is
+achieved through dependency inversion principle mainly as we made the lower level classes inside the
+package depend on the higher level class, while the classes inside the other packages will also
+depend on the higher level class inside the earlier package therefore avoiding a cycle between these
+two packages.
+
+An example is from above, where we applied dependency inversion principle on `UserPackage`
+and `LoginSystemPackage`, thereby also avoding cyclic dependencies between the packages.
+
+The reason we want to avoid cycles between our packages is because we want to avoid tight coupling
+between these packages which we want to avoid. Also, if any minor changes in these packages will
+cause potential errors and bugs, if the programmers do not inspect all the remaining cyclic
+dependencies between these packages. It may also cause trouble if there is a domino effect between
+the packages where one change inside a package leads to another and so on which waste a lot of the
+programmers time.
 
 
