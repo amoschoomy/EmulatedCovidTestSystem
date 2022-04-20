@@ -27,6 +27,13 @@ public class TestingFacilityCollection {
     return instance;
   }
 
+  /**
+   * Retrieve testing facilities
+   *
+   * @param API_KEY
+   * @return
+   * @throws IOException
+   */
   public ArrayList<TestingFacility> retrieveTestingFacilities(String API_KEY) throws IOException {
     OkHttpClient client = new OkHttpClient();
 
