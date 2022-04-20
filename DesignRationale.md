@@ -123,3 +123,19 @@ A trade off of using Singleton pattern design is it violates the `Single Respons
 
 ### Facade
 
+![alt text](markdown_images/facade1.png)\
+*Figure 6. Facade pattern applied to Booking Subsystem*
+
+We applied a Facade design pattern in our system, specifcally in our `Booking`subsystem. With a
+facade design pattern, we have provided a simple interface for the clients to use without worrying
+about the internal implementation of the subsystem. This provides an abstraction for the client
+interface to our complex `Booking`subsytem. Our complex subsystem involves several methods of
+Booking involving `HomeBooking` and `OnSiteBooking` and there are 3rd party dependencies needed to
+implement the `HomeBooking` subsystem QR code. With these facade pattern, the interface to make a
+booking is largely simplified for the client.
+
+We also considered Strategy design pattern instead of Facade but decided against it because we have
+covered all exhaustive cases of possible booking scenarios which are not a lot in the first place
+and we did not feel a need to overcomplicate our system with too many classes and interface. Also,
+with a Facade design pattern, they do not need to know what strategy to apply as opposed to a Facade
+design pattern.
