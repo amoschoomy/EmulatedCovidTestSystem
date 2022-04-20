@@ -16,8 +16,23 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/** Booking Facade class */
 public class BookingFacade {
 
+  /**
+   * method to make booking using a facade
+   *
+   * @param user
+   * @param testingFacilityID
+   * @param notes
+   * @param homeTesting
+   * @param startTime
+   * @param API_KEY
+   * @return
+   * @throws JSONException
+   * @throws IOException
+   * @throws WriterException
+   */
   public static String makeBooking(
       User user,
       String testingFacilityID,
@@ -48,6 +63,14 @@ public class BookingFacade {
     return smsPin;
   }
 
+  /**
+   * check a booking using a facade
+   *
+   * @param smsPin
+   * @param API_KEY
+   * @return
+   * @throws Exception
+   */
   public static String[] checkBooking(String smsPin, String API_KEY) throws Exception {
     String usersUrl = "https://fit3077.com/api/v1/booking";
     OkHttpClient client = new OkHttpClient();
@@ -76,6 +99,14 @@ public class BookingFacade {
     throw new Exception("No Booking Found");
   }
 
+  /**
+   * method to update booking details
+   *
+   * @param API_KEY
+   * @param bookingID
+   * @param requestBody
+   * @throws IOException
+   */
   public static void updateBookingDetails(String API_KEY, String bookingID, RequestBody requestBody)
       throws IOException {
     OkHttpClient client = new OkHttpClient();
