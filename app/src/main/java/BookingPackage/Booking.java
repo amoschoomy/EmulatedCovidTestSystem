@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public interface Booking {
   /**
-   * Booking Interface
+   * create booking
    *
    * @param customerID
    * @param testingSiteID
