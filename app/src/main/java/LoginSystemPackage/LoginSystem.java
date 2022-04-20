@@ -3,13 +3,13 @@ package LoginSystemPackage;
 import android.os.StrictMode;
 import android.util.Log;
 
-import com.amoschoojs.fit3077.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
+import ExceptionPackage.InvalidCredentialsException;
+import ExceptionPackage.InvalidTokenException;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

@@ -1,4 +1,4 @@
-package UserPackage;
+package ExceptionPackage;
 
 public class InvalidRoleException extends Exception{
     public InvalidRoleException ()

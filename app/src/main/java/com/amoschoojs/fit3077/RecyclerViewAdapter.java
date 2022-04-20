@@ -28,7 +28,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 import BookingPackage.BookingFacade;
-import LoginSystemPackage.InvalidCredentialsException;
+import ExceptionPackage.InvalidCredentialsException;
 import LoginSystemPackage.LoginAuthentication;
 import TestingFacilityPackage.TestingFacility;
 import UserPackage.Customer;

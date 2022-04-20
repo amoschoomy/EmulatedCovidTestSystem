@@ -1,4 +1,4 @@
-package LoginSystemPackage;
+package ExceptionPackage;
 
 public class InvalidCredentialsException  extends Exception{
 

@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Base64;
 
-import UserPackage.InvalidRoleException;
+import ExceptionPackage.InvalidRoleException;
 import UserPackage.User;
 import UserPackage.UserFactory;
 import okhttp3.OkHttpClient;

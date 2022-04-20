@@ -16,10 +16,10 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import LoginSystemPackage.InvalidCredentialsException;
+import ExceptionPackage.InvalidCredentialsException;
 import LoginSystemPackage.LoginAuthentication;
 import LoginSystemPackage.LoginSystem;
-import UserPackage.InvalidRoleException;
+import ExceptionPackage.InvalidRoleException;
 
 
 public class LoginActivity extends AppCompatActivity {
