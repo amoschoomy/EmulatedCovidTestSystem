@@ -33,7 +33,7 @@ An example of this will be:
 
 An `Exception` package is released as it is meant to be reused in our system.
 
-TODO: Image for package
+![alt text](markdown_images/rrep1.png)\
 
 ### The Common Closure Principle (CCP)
 
@@ -97,7 +97,7 @@ our client worrying on what User subclasses object they should create.
 This is because we do not know what type of `User` someone is going to login to our system
 beforehand therefore making the Factory method design pattern useful to our system. With this, we
 also avoid a tight coupling between the creator (`UserFactory`) class and the concrete classes. One
-disadvantage of this pattern is that we have to introduce multiple subclasses which introudces more
+disadvantage of this pattern is that we have to introduce multiple subclasses which introduces more
 complexity to our backend system.
 
 ### Singleton
@@ -126,10 +126,10 @@ A trade off of using Singleton pattern design is it violates the `Single Respons
 ![alt text](markdown_images/facade1.png)\
 *Figure 6. Facade pattern applied to Booking Subsystem*
 
-We applied a Facade design pattern in our system, specifcally in our `Booking`subsystem. With a
+We applied a Facade design pattern in our system, specifically in our `Booking`subsystem. With a
 facade design pattern, we have provided a simple interface for the clients to use without worrying
 about the internal implementation of the subsystem. This provides an abstraction for the client
-interface to our complex `Booking`subsytem. Our complex subsystem involves several methods of
+interface to our complex `Booking`subsystem. Our complex subsystem involves several methods of
 Booking involving `HomeBooking` and `OnSiteBooking` and there are 3rd party dependencies needed to
 implement the `HomeBooking` subsystem QR code. With these facade pattern, the interface to make a
 booking is largely simplified for the client.
