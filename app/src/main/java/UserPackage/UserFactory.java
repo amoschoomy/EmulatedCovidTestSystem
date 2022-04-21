@@ -55,4 +55,10 @@ public class UserFactory {
         return newUser;
     }
 
+    public User createSpecificUser(String userId, String givenName, String familyName, String userName, String phoneNumber,
+                                            Boolean isCustomer, Boolean isReceptionist, Boolean isHealthcareWorker,
+                                            JSONObject additionalInfo) {
+        return null;
+    }
+
 }

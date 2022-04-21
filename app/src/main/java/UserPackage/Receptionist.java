@@ -191,8 +191,11 @@ public class Receptionist extends User{
         JSONObject custAdditionalInfo = new JSONObject(custInfo.getString("additionalInfo"));
 //        String custAdditionalInfo = jObj.getString("additionalInfo");
 
-        return new Customer(custUserId, custGivenName, custFamilyName, custUserName, custPhoneNumber,
+        CustomerFactory cf = new CustomerFactory();
+        return cf.createSpecificUser(custUserId, custGivenName, custFamilyName, custUserName, custPhoneNumber,
                 custIsCustomer, custIsReceptionist, cutsIsHealthcareWorker, custAdditionalInfo);
+//        return new Customer(custUserId, custGivenName, custFamilyName, custUserName, custPhoneNumber,
+//                custIsCustomer, custIsReceptionist, cutsIsHealthcareWorker, custAdditionalInfo);
     }
 
     /**
