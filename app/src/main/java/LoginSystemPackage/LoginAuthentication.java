@@ -66,8 +66,6 @@ public class LoginAuthentication {
     Boolean isHealthcareWorker = Boolean.valueOf(jObj.getString("isHealthcareWorker"));
     JSONObject additionalInfo = new JSONObject(jObj.getString("additionalInfo"));
     //        String additionalInfo = jObj.getString("additionalInfo");
-    Log.d("myTag", userRole.toLowerCase());
-    Log.d("myTag", String.valueOf(isReceptionist));
 
     User newUser = null;
     UserFactory uf;
@@ -80,7 +78,6 @@ public class LoginAuthentication {
         }
         break;
       case "receptionist":
-        Log.d("myTag", "isithere");
         if (isReceptionist){
           Log.d("myTag", "here");
           uf = new ReceptionistFactory();
@@ -107,20 +104,6 @@ public class LoginAuthentication {
 
     this.user=newUser;
 
-//    UserFactory uf = new UserFactory();
-//    userRole = userRole.toLowerCase();
-//    this.user =
-//        uf.createUser(
-//            userid,
-//            givenName,
-//            familyName,
-//            userName,
-//            phoneNumber,
-//            isCustomer,
-//            isReceptionist,
-//            isHealthcareWorker,
-//            additionalInfo,
-//            userRole);
   }
 
   /** Get Userid from jwt */
