@@ -80,21 +80,23 @@ public class LoginAuthentication {
         if (isReceptionist){
           uf = new ReceptionistFactory();
           newUser = uf.createSpecificUser(userid, givenName, familyName, userName, phoneNumber,
-                  true, false, false, additionalInfo);
+                  false, true, false, additionalInfo);
           break;
         }
       case "healthcare worker":
         if (isHealthcareWorker){
           uf = new HealthcareWorkerFactory();
           newUser = uf.createSpecificUser(userid, givenName, familyName, userName, phoneNumber,
-                  true, false, false, additionalInfo);
+                  false, false, true, additionalInfo);
           break;
         }
       case "patient":
         uf = new PatientFactory();
         newUser = uf.createSpecificUser(userid, givenName, familyName, userName, phoneNumber,
-                true, false, false, additionalInfo);
+                false, false, false, additionalInfo);
         break;
+      default:
+        throw new InvalidRoleException();
     }
 
     this.user=newUser;
