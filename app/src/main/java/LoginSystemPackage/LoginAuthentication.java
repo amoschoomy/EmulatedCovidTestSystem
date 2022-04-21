@@ -4,6 +4,7 @@ import static LoginSystemPackage.LoginSystem.MY_API_KEY;
 import static LoginSystemPackage.LoginSystem.ROOT_URL;
 
 import android.os.StrictMode;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,6 +66,8 @@ public class LoginAuthentication {
     Boolean isHealthcareWorker = Boolean.valueOf(jObj.getString("isHealthcareWorker"));
     JSONObject additionalInfo = new JSONObject(jObj.getString("additionalInfo"));
     //        String additionalInfo = jObj.getString("additionalInfo");
+    Log.d("myTag", userRole.toLowerCase());
+    Log.d("myTag", String.valueOf(isReceptionist));
 
     User newUser = null;
     UserFactory uf;
@@ -74,30 +77,33 @@ public class LoginAuthentication {
           uf = new CustomerFactory();
           newUser = uf.createSpecificUser(userid, givenName, familyName, userName, phoneNumber,
                   true, false, false, additionalInfo);
-          break;
         }
+        break;
       case "receptionist":
+        Log.d("myTag", "isithere");
         if (isReceptionist){
+          Log.d("myTag", "here");
           uf = new ReceptionistFactory();
           newUser = uf.createSpecificUser(userid, givenName, familyName, userName, phoneNumber,
                   false, true, false, additionalInfo);
-          break;
         }
+        break;
       case "healthcare worker":
         if (isHealthcareWorker){
           uf = new HealthcareWorkerFactory();
           newUser = uf.createSpecificUser(userid, givenName, familyName, userName, phoneNumber,
                   false, false, true, additionalInfo);
-          break;
         }
+        break;
       case "patient":
         uf = new PatientFactory();
         newUser = uf.createSpecificUser(userid, givenName, familyName, userName, phoneNumber,
                 false, false, false, additionalInfo);
         break;
-      default:
-        throw new InvalidRoleException();
+
+
     }
+    if (newUser==null) throw new InvalidRoleException();
 
     this.user=newUser;
 
