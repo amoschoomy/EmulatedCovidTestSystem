@@ -17,8 +17,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
-import BookingPackage.HomeBooking;
-
 public class QRCodeActivity extends AppCompatActivity {
 
   ImageView QRCodeView;

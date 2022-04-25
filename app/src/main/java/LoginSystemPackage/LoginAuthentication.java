@@ -13,13 +13,9 @@ import java.io.IOException;
 import java.util.Base64;
 
 import ExceptionPackage.InvalidRoleException;
-import UserPackage.Customer;
 import UserPackage.CustomerFactory;
-import UserPackage.HealthcareWorker;
 import UserPackage.HealthcareWorkerFactory;
-import UserPackage.Patient;
 import UserPackage.PatientFactory;
-import UserPackage.Receptionist;
 import UserPackage.ReceptionistFactory;
 import UserPackage.User;
 import UserPackage.UserFactory;
