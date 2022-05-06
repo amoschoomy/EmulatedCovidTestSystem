@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import TestingFacilityPackage.TestingFacility;
-import TestingFacilityPackage.TestingFacilityCollection;
+import models.TestingFacilityPackage.TestingFacility;
+import models.TestingFacilityPackage.TestingFacilityCollection;
 
 public class SearchTestingSite extends AppCompatActivity {
 

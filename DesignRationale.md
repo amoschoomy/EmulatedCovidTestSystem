@@ -37,8 +37,8 @@ An `Exception` package is released as it is meant to be reused in our system.
 
 ### The Common Closure Principle (CCP)
 
-We have 4 separate packages in our system that adheres to ths principle, `UserPackage`
-, `TestingFacilityPackage`,`LoginSystemPackage`and `BookingPackage`.
+We have 4 separate packages in our system that adheres to ths principle, `models.UserPackage`
+, `models.TestingFacilityPackage`,`models.LoginSystemPackage`and `models.BookingPackage`.
 
 Any changes inside any of the classes inside these packages will also affect all of the other
 classes inside the packages but no other packages shall be affected.
@@ -70,8 +70,8 @@ package depend on the higher level class, while the classes inside the other pac
 depend on the higher level class inside the earlier package therefore avoiding a cycle between these
 two packages.
 
-An example is from above, where we applied dependency inversion principle on `UserPackage`
-and `LoginSystemPackage`, thereby also avoding cyclic dependencies between the packages.
+An example is from above, where we applied dependency inversion principle on `models.UserPackage`
+and `models.LoginSystemPackage`, thereby also avoding cyclic dependencies between the packages.
 
 The reason we want to avoid cycles between our packages is because we want to avoid tight coupling
 between these packages which we want to avoid. Also, if any minor changes in these packages will

@@ -1,4 +1,4 @@
-package BookingPackage;
+package models.BookingPackage;
 
 import android.os.StrictMode;
 

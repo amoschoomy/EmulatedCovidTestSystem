@@ -1,11 +1,11 @@
-package UserPackage;
+package models.UserPackage;
 
 import org.json.JSONObject;
 
-public class Customer extends User{
+public class HealthcareWorker extends User {
 
     /**
-     * Creates customer object
+     * Creates healthcare worker object
      *
      * @param userId
      * @param givenName
@@ -17,9 +17,9 @@ public class Customer extends User{
      * @param isHealthcareWorker
      * @param additionalInfo
      */
-    public Customer(String userId, String givenName, String familyName, String userName, String phoneNumber,
-                    Boolean isCustomer, Boolean isReceptionist, Boolean isHealthcareWorker,
-                    JSONObject additionalInfo) {
+    public HealthcareWorker(String userId, String givenName, String familyName, String userName, String phoneNumber,
+                            Boolean isCustomer, Boolean isReceptionist, Boolean isHealthcareWorker,
+                            JSONObject additionalInfo) {
         super(userId, givenName, familyName, userName, phoneNumber, isCustomer, isReceptionist, isHealthcareWorker, additionalInfo);
     }
 

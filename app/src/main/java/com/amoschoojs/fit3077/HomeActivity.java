@@ -11,8 +11,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import LoginSystemPackage.LoginAuthentication;
-import UserPackage.User;
+import models.LoginSystemPackage.LoginAuthentication;
+import models.UserPackage.User;
 
 public class HomeActivity extends AppCompatActivity {
 

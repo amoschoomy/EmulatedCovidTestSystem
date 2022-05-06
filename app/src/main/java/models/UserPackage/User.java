@@ -1,5 +1,4 @@
-package UserPackage;
-
+package models.UserPackage;
 
 import org.json.JSONObject;
 

@@ -1,4 +1,4 @@
-package ExceptionPackage;
+package models.ExceptionPackage;
 
 /**
  * Exception that catches errors where users input the wrong username or password

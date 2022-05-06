@@ -1,3 +1,3 @@
-package TestingFacilityPackage;
+package models.TestingFacilityPackage;
 
 public interface TestingFacilityInterface {}

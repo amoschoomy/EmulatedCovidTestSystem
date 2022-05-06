@@ -27,13 +27,13 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 
-import BookingPackage.BookingFacade;
-import ExceptionPackage.InvalidCredentialsException;
-import LoginSystemPackage.LoginAuthentication;
-import TestingFacilityPackage.TestingFacility;
-import UserPackage.Customer;
-import UserPackage.Receptionist;
-import UserPackage.User;
+import models.BookingPackage.BookingFacade;
+import models.ExceptionPackage.InvalidCredentialsException;
+import models.LoginSystemPackage.LoginAuthentication;
+import models.TestingFacilityPackage.TestingFacility;
+import models.UserPackage.Customer;
+import models.UserPackage.Receptionist;
+import models.UserPackage.User;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
     implements Filterable {

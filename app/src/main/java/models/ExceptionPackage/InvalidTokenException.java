@@ -1,4 +1,4 @@
-package ExceptionPackage;
+package models.ExceptionPackage;
 
 /**
  * Exception that catches errors where jwt token is invalid

@@ -12,7 +12,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import BookingPackage.BookingFacade;
+import models.BookingPackage.BookingFacade;
 
 /** CheckBooking UI class */
 public class CheckBooking extends AppCompatActivity {

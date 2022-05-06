@@ -1,4 +1,4 @@
-package TestingFacilityPackage;
+package models.TestingFacilityPackage;
 
 /** Serialise JSON to address class */
 public class Address {

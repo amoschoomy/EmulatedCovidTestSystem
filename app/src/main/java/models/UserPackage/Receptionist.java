@@ -1,7 +1,7 @@
-package UserPackage;
+package models.UserPackage;
 
-import static LoginSystemPackage.LoginSystem.MY_API_KEY;
-import static LoginSystemPackage.LoginSystem.ROOT_URL;
+import static models.LoginSystemPackage.LoginSystem.MY_API_KEY;
+import static models.LoginSystemPackage.LoginSystem.ROOT_URL;
 
 import android.os.StrictMode;
 import android.util.Log;
@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Base64;
 
-import ExceptionPackage.InvalidCredentialsException;
+import models.ExceptionPackage.InvalidCredentialsException;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;

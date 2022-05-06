@@ -1,7 +1,7 @@
-package LoginSystemPackage;
+package models.LoginSystemPackage;
 
-import static LoginSystemPackage.LoginSystem.MY_API_KEY;
-import static LoginSystemPackage.LoginSystem.ROOT_URL;
+import static models.LoginSystemPackage.LoginSystem.MY_API_KEY;
+import static models.LoginSystemPackage.LoginSystem.ROOT_URL;
 
 import android.os.StrictMode;
 import android.util.Log;
@@ -12,13 +12,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Base64;
 
-import ExceptionPackage.InvalidRoleException;
-import UserPackage.CustomerFactory;
-import UserPackage.HealthcareWorkerFactory;
-import UserPackage.PatientFactory;
-import UserPackage.ReceptionistFactory;
-import UserPackage.User;
-import UserPackage.UserFactory;
+import models.ExceptionPackage.InvalidRoleException;
+import models.UserPackage.CustomerFactory;
+import models.UserPackage.HealthcareWorkerFactory;
+import models.UserPackage.PatientFactory;
+import models.UserPackage.ReceptionistFactory;
+import models.UserPackage.User;
+import models.UserPackage.UserFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

@@ -1,8 +1,8 @@
-package TestingFacilityPackage;
+package models.TestingFacilityPackage;
 
 import java.util.ArrayList;
 
-import BookingPackage.Booking;
+import models.BookingPackage.Booking;
 
 public class TestingFacility implements TestingFacilityInterface {
   private String id;

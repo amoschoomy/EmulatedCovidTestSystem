@@ -1,4 +1,4 @@
-package TestingFacilityPackage;
+package models.TestingFacilityPackage;
 
 import android.os.StrictMode;
 

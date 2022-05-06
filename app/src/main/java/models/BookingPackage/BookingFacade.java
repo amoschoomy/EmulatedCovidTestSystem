@@ -1,4 +1,4 @@
-package BookingPackage;
+package models.BookingPackage;
 
 import android.os.StrictMode;
 
@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import UserPackage.User;
+import models.UserPackage.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;

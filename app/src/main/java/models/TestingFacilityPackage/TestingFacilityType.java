@@ -1,4 +1,4 @@
-package TestingFacilityPackage;
+package models.TestingFacilityPackage;
 
 import androidx.annotation.NonNull;
 
