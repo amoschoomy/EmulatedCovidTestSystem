@@ -38,7 +38,7 @@ public class TestingFacilityCollection {
     OkHttpClient client = new OkHttpClient();
 
     // insert key here
-    String usersUrl = "https://fit3077.com/api/v1/testing-site";
+    String usersUrl = "https://fit3077.com/api/v2/testing-site";
 
     Request request = new Request.Builder().url(usersUrl).header("Authorization", API_KEY).build();
     // Have the response run in background or system will crash
@@ -49,6 +49,8 @@ public class TestingFacilityCollection {
 
     assert response.body() != null;
     String output = response.body().string();
+    //    System.out.println(output);
+    //    Log.d("myTag",output);
     Type listType = new TypeToken<ArrayList<TestingFacility>>() {}.getType();
     testingFacilities = new Gson().fromJson(output, listType);
 

@@ -22,7 +22,7 @@ import okhttp3.Response;
 public class LoginSystem {
 
     public static String MY_API_KEY;
-    public static final String ROOT_URL = "https://fit3077.com/api/v1";
+  public static final String ROOT_URL = "https://fit3077.com/api/v2";
 
     public LoginSystem(String apikey) {
         MY_API_KEY = apikey;

@@ -1,17 +1,22 @@
 package com.amoschoojs.fit3077;
 
 import android.app.Application;
+import android.app.DatePickerDialog;
 import android.app.NotificationManager;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,7 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
@@ -37,8 +41,7 @@ import models.UserPackage.Receptionist;
 import models.UserPackage.User;
 import viewmodel.BookingViewModel;
 
-// TODO: add notification for user BookingPIN
-// TODO: add option for user to select time when booking
+// TODO: add notification for user BookingID after booking made
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
     implements Filterable {
 
@@ -193,77 +196,138 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
       } else if (user.getReceptionist()) {
         View formView = View.inflate(view.getContext(), R.layout.enter_details, null);
+        String[] time = {null};
+        {
+          new AlertDialog.Builder(view.getContext())
+              .setView(formView)
+              .setTitle("Make Booking?")
+              .setMessage("Are you sure you want to make a booking for a customer ?")
+              .setPositiveButton(
+                  android.R.string.yes,
+                  (dialog, which) -> {
+                    Receptionist r = (Receptionist) user;
+                    try {
+                      String givenName =
+                          ((EditText) formView.findViewById(R.id.givenname)).getText().toString();
+                      String familyName =
+                          ((EditText) formView.findViewById(R.id.familyname)).getText().toString();
+                      String userName =
+                          ((EditText) formView.findViewById(R.id.username)).getText().toString();
+                      String password =
+                          ((EditText) formView.findViewById(R.id.password)).getText().toString();
+                      String phoneNumber =
+                          ((EditText) formView.findViewById(R.id.phoneno)).getText().toString();
+                      if (!verifyInput(givenName, familyName, userName, password, phoneNumber)) {
+                        throw new InvalidCredentialsException();
+                      }
+                      final Calendar calendar = Calendar.getInstance();
+                      DatePickerDialog.OnDateSetListener dateSetListener =
+                          new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(
+                                DatePicker view, int year, int month, int dayOfMonth) {
+                              calendar.set(Calendar.YEAR, year);
+                              calendar.set(Calendar.MONTH, month);
+                              calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        new AlertDialog.Builder(view.getContext())
-            .setView(formView)
-            .setTitle("Make Booking?")
-            .setMessage("Are you sure you want to make a booking for a customer ?")
-            .setPositiveButton(
-                android.R.string.yes,
-                (dialog, which) -> {
-                  Receptionist r = (Receptionist) user;
-                  try {
+                              TimePickerDialog.OnTimeSetListener timeSetListener =
+                                  new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(
+                                        TimePicker view, int hourOfDay, int minute) {
+                                      calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                      calendar.set(Calendar.MINUTE, minute);
 
-                    String givenName =
-                        ((EditText) formView.findViewById(R.id.givenname)).getText().toString();
-                    String familyName =
-                        ((EditText) formView.findViewById(R.id.familyname)).getText().toString();
-                    String userName =
-                        ((EditText) formView.findViewById(R.id.username)).getText().toString();
-                    String password =
-                        ((EditText) formView.findViewById(R.id.password)).getText().toString();
-                    String phoneNumber =
-                        ((EditText) formView.findViewById(R.id.phoneno)).getText().toString();
-                    if (!verifyInput(givenName, familyName, userName, password, phoneNumber)) {
-                      throw new InvalidCredentialsException();
+                                      Customer c = null;
+                                      try {
+                                        c =
+                                            r.createCustomer(
+                                                givenName,
+                                                familyName,
+                                                userName,
+                                                password,
+                                                phoneNumber,
+                                                new JSONObject("{}"));
+                                      } catch (JSONException e) {
+                                        e.printStackTrace();
+                                      } catch (IOException e) {
+                                        e.printStackTrace();
+                                      } catch (InvalidCredentialsException e) {
+                                        e.printStackTrace();
+                                      }
+                                      Booking booking =
+                                          new TestingOnSiteBooking(
+                                              c.getUserId(),
+                                              testingFacilityID,
+                                              calendar.getTime().toInstant().toString(),
+                                              null);
+                                      // and time
+                                      String[] returned = new String[0];
+                                      try {
+                                        returned =
+                                            bookingViewModel.createBooking(
+                                                booking,
+                                                view.getContext().getString(R.string.api_key));
+                                      } catch (JSONException e) {
+                                        e.printStackTrace();
+                                      } catch (IOException e) {
+                                        e.printStackTrace();
+                                      }
+                                      String pin = returned[0];
+                                      String bookingID = returned[1];
+                                      // notify user the booking pin
+                                      NotificationCompat.Builder builder =
+                                          new NotificationCompat.Builder(
+                                                  view.getContext(), "BOOKING CONFIRM")
+                                              .setContentTitle("Booking Pin")
+                                              .setSmallIcon(R.drawable.ic_launcher_background)
+                                              .setContentText(pin)
+                                              .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                                      Toast.makeText(view.getContext(), pin, Toast.LENGTH_LONG)
+                                          .show();
+                                      NotificationManager notificationManager =
+                                          (NotificationManager)
+                                              view.getContext()
+                                                  .getSystemService(Context.NOTIFICATION_SERVICE);
+                                      notificationManager.notify(1, builder.build());
+                                    }
+                                  };
+
+                              new TimePickerDialog(
+                                      view.getContext(),
+                                      timeSetListener,
+                                      calendar.get(Calendar.HOUR_OF_DAY),
+                                      calendar.get(Calendar.MINUTE),
+                                      false)
+                                  .show();
+                            }
+                          };
+
+                      new DatePickerDialog(
+                              view.getContext(),
+                              dateSetListener,
+                              calendar.get(Calendar.YEAR),
+                              calendar.get(Calendar.MONTH),
+                              calendar.get(Calendar.DAY_OF_MONTH))
+                          .show();
+
+                    } catch (InvalidCredentialsException e) {
+                      e.printStackTrace();
+                      Toast.makeText(
+                              view.getContext(), "Wrong/Empty credentials", Toast.LENGTH_SHORT)
+                          .show();
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                      Toast.makeText(view.getContext(), "Failed, try again", Toast.LENGTH_SHORT)
+                          .show();
                     }
-                    Customer c =
-                        r.createCustomer(
-                            givenName,
-                            familyName,
-                            userName,
-                            password,
-                            phoneNumber,
-                            new JSONObject("{}"));
-                    Booking booking =
-                        new TestingOnSiteBooking(
-                            c.getUserId(),
-                            testingFacilityID,
-                            Instant.now().plusSeconds(604800).toString(),
-                            null); // TODO: add option to give user select date and time
-                    String[] returned =
-                        bookingViewModel.createBooking(
-                            booking, view.getContext().getString(R.string.api_key));
-                    String pin = returned[0];
-                    String bookingID = returned[1];
-                    // notify user the booking pin
-                    NotificationCompat.Builder builder =
-                        new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
-                            .setContentTitle("Booking Pin")
-                            .setSmallIcon(R.drawable.ic_launcher_background)
-                            .setContentText(pin)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                    Toast.makeText(view.getContext(), pin, Toast.LENGTH_LONG).show();
-                    NotificationManager notificationManager =
-                        (NotificationManager)
-                            view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(1, builder.build());
+                  })
 
-                  } catch (InvalidCredentialsException e) {
-                    e.printStackTrace();
-                    Toast.makeText(view.getContext(), "Wrong/Empty credentials", Toast.LENGTH_SHORT)
-                        .show();
-                  } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(view.getContext(), "Failed, try again", Toast.LENGTH_SHORT)
-                        .show();
-                  }
-                })
-
-            // A null listener allows the button to dismiss the dialog and take no further action.
-            .setNegativeButton(android.R.string.no, null)
-            .setIcon(R.drawable.ic_launcher_background)
-            .show();
+              // A null listener allows the button to dismiss the dialog and take no further action.
+              .setNegativeButton(android.R.string.no, null)
+              .setIcon(R.drawable.ic_launcher_background)
+              .show();
+        }
       }
 
       // customer booking
@@ -276,78 +340,158 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 android.R.string.yes,
                 (dialog, which) -> {
                   if (!checkBox.isChecked()) { // on site testing booking from home
-                    String pin = null;
-                    String bookingID = null;
-                    try {
-                      Booking booking =
-                          new TestingOnSiteBooking(
-                              user.getUserId(),
-                              testingFacilityID,
-                              Instant.now().plusSeconds(604800).toString(),
-                              null); // TODO: add option to give user select date and time
-                      String[] returned =
-                          bookingViewModel.createBooking(
-                              booking, view.getContext().getString(R.string.api_key));
-                      pin = returned[0];
-                      bookingID = returned[1];
-                    } catch (JSONException e) {
-                      e.printStackTrace();
-                    } catch (IOException e) {
-                      e.printStackTrace();
-                    }
+                    final String[] pin = {null};
+                    final String[] bookingID = {null};
+                    final Calendar calendar = Calendar.getInstance();
+                    DatePickerDialog.OnDateSetListener dateSetListener =
+                        new DatePickerDialog.OnDateSetListener() {
+                          @Override
+                          public void onDateSet(
+                              DatePicker view, int year, int month, int dayOfMonth) {
+                            calendar.set(Calendar.YEAR, year);
+                            calendar.set(Calendar.MONTH, month);
+                            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                    NotificationCompat.Builder builder =
-                        new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
-                            .setContentTitle("Booking Pin")
-                            .setSmallIcon(R.drawable.ic_launcher_background)
-                            .setContentText(pin)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                    Toast.makeText(view.getContext(), pin, Toast.LENGTH_LONG).show();
-                    NotificationManager notificationManager =
-                        (NotificationManager)
-                            view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(1, builder.build());
+                            TimePickerDialog.OnTimeSetListener timeSetListener =
+                                new TimePickerDialog.OnTimeSetListener() {
+                                  @Override
+                                  public void onTimeSet(
+                                      TimePicker view, int hourOfDay, int minute) {
+                                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                    calendar.set(Calendar.MINUTE, minute);
+                                    Booking booking =
+                                        new TestingOnSiteBooking(
+                                            user.getUserId(),
+                                            testingFacilityID,
+                                            calendar.getTime().toInstant().toString(),
+                                            null);
+                                    String[] returned = new String[0];
+                                    try {
+                                      returned =
+                                          bookingViewModel.createBooking(
+                                              booking,
+                                              view.getContext().getString(R.string.api_key));
+                                    } catch (JSONException jsonException) {
+                                      jsonException.printStackTrace();
+                                    } catch (IOException ioException) {
+                                      ioException.printStackTrace();
+                                    }
+                                    pin[0] = returned[0];
+                                    bookingID[0] = returned[1];
+                                    NotificationCompat.Builder builder =
+                                        new NotificationCompat.Builder(
+                                                view.getContext(), "BOOKING CONFIRM")
+                                            .setContentTitle("Booking Pin")
+                                            .setSmallIcon(R.drawable.ic_launcher_background)
+                                            .setContentText(pin[0])
+                                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                                    Toast.makeText(view.getContext(), pin[0], Toast.LENGTH_LONG)
+                                        .show();
+                                    NotificationManager notificationManager =
+                                        (NotificationManager)
+                                            view.getContext()
+                                                .getSystemService(Context.NOTIFICATION_SERVICE);
+                                    notificationManager.notify(1, builder.build());
+                                  }
+                                };
 
+                            new TimePickerDialog(
+                                    view.getContext(),
+                                    timeSetListener,
+                                    calendar.get(Calendar.HOUR_OF_DAY),
+                                    calendar.get(Calendar.MINUTE),
+                                    false)
+                                .show();
+                          }
+                        };
+
+                    new DatePickerDialog(
+                            view.getContext(),
+                            dateSetListener,
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
                   } else { // homebooking here
-                    String pin = null;
-                    String bookingID = null;
-                    try {
 
-                      Booking booking =
-                          new HomeBooking(
-                              user.getUserId(),
-                              testingFacilityID,
-                              Instant.now().plusSeconds(604800).toString(),
-                              null); // TODO: add option to give user select date and time
-                      String[] returned =
-                          bookingViewModel.createBooking(
-                              booking, view.getContext().getString(R.string.api_key));
-                      pin = returned[0];
-                      bookingID = returned[1];
-                    } catch (JSONException e) {
-                      e.printStackTrace();
-                    } catch (IOException e) {
-                      e.printStackTrace();
-                    }
+                    final Calendar calendar = Calendar.getInstance();
+                    String[] finalPin = {null};
+                    String[] finalBookingID = {null};
+                    DatePickerDialog.OnDateSetListener dateSetListener =
+                        new DatePickerDialog.OnDateSetListener() {
+                          @Override
+                          public void onDateSet(
+                              DatePicker view, int year, int month, int dayOfMonth) {
+                            calendar.set(Calendar.YEAR, year);
+                            calendar.set(Calendar.MONTH, month);
+                            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                    NotificationCompat.Builder builder =
-                        new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
-                            .setContentTitle("Booking Pin")
-                            .setSmallIcon(R.drawable.ic_launcher_background)
-                            .setContentText(pin)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                    Toast.makeText(view.getContext(), pin, Toast.LENGTH_LONG).show();
-                    NotificationManager notificationManager =
-                        (NotificationManager)
-                            view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(1, builder.build());
+                            TimePickerDialog.OnTimeSetListener timeSetListener =
+                                new TimePickerDialog.OnTimeSetListener() {
+                                  @Override
+                                  public void onTimeSet(
+                                      TimePicker view, int hourOfDay, int minute) {
+                                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                    calendar.set(Calendar.MINUTE, minute);
+                                    Booking booking =
+                                        new HomeBooking(
+                                            user.getUserId(),
+                                            testingFacilityID,
+                                            calendar.getTime().toInstant().toString(),
+                                            null);
+                                    // time
+                                    String[] returned = new String[0];
+                                    try {
+                                      returned =
+                                          bookingViewModel.createBooking(
+                                              booking,
+                                              view.getContext().getString(R.string.api_key));
+                                    } catch (JSONException jsonException) {
+                                      jsonException.printStackTrace();
+                                    } catch (IOException ioException) {
+                                      ioException.printStackTrace();
+                                    }
+                                    finalPin[0] = returned[0];
+                                    finalBookingID[0] = returned[1];
+                                    NotificationCompat.Builder builder =
+                                        new NotificationCompat.Builder(
+                                                view.getContext(), "BOOKING CONFIRM")
+                                            .setContentTitle("Booking Pin")
+                                            .setSmallIcon(R.drawable.ic_launcher_background)
+                                            .setContentText(finalPin[0])
+                                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                                    Toast.makeText(
+                                            view.getContext(), finalPin[0], Toast.LENGTH_LONG)
+                                        .show();
+                                    NotificationManager notificationManager =
+                                        (NotificationManager)
+                                            view.getContext()
+                                                .getSystemService(Context.NOTIFICATION_SERVICE);
+                                    notificationManager.notify(1, builder.build());
+                                    Intent switchActivityIntent =
+                                        new Intent(itemView.getContext(), QRCodeActivity.class);
+                                    switchActivityIntent.putExtra("smsPin", finalPin[0]);
+                                    itemView.getContext().startActivity(switchActivityIntent);
+                                  }
+                                };
 
-                    //                  ((HomeBooking) booking).setQRCode(smsPin);
+                            new TimePickerDialog(
+                                    view.getContext(),
+                                    timeSetListener,
+                                    calendar.get(Calendar.HOUR_OF_DAY),
+                                    calendar.get(Calendar.MINUTE),
+                                    false)
+                                .show();
+                          }
+                        };
 
-                    Intent switchActivityIntent =
-                        new Intent(itemView.getContext(), QRCodeActivity.class);
-                    switchActivityIntent.putExtra("smsPin", pin);
-                    itemView.getContext().startActivity(switchActivityIntent);
+                    new DatePickerDialog(
+                            view.getContext(),
+                            dateSetListener,
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
                   }
                 })
 
