@@ -1,5 +1,6 @@
 package com.amoschoojs.fit3077;
 
+import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.zxing.WriterException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,20 +26,25 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 
-import models.BookingPackage.BookingFacade;
+import models.BookingPackage.Booking;
+import models.BookingPackage.HomeBooking;
+import models.BookingPackage.TestingOnSiteBooking;
 import models.ExceptionPackage.InvalidCredentialsException;
 import models.LoginSystemPackage.LoginAuthentication;
 import models.TestingFacilityPackage.TestingFacility;
 import models.UserPackage.Customer;
 import models.UserPackage.Receptionist;
 import models.UserPackage.User;
+import viewmodel.BookingViewModel;
 
+// TODO: add notification for user BookingPIN
+// TODO: add option for user to select time when booking
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
     implements Filterable {
 
   ArrayList<TestingFacility> testingFacilities;
   ArrayList<TestingFacility> testingFacilitiesFiltered;
-
+  BookingViewModel bookingViewModel;
   // Filtering details
   private Filter exampleFilter =
       new Filter() {
@@ -84,6 +88,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
           notifyDataSetChanged();
         }
       };
+
+  public RecyclerViewAdapter(Application application) {
+    bookingViewModel = new BookingViewModel(application);
+  }
 
   @NonNull
   @Override
@@ -217,15 +225,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             password,
                             phoneNumber,
                             new JSONObject("{}"));
-                    String pin =
-                        BookingFacade.makeBooking(
-                            c,
+                    Booking booking =
+                        new TestingOnSiteBooking(
+                            c.getUserId(),
                             testingFacilityID,
-                            null,
-                            false,
                             Instant.now().plusSeconds(604800).toString(),
-                            view.getContext().getString(R.string.api_key));
-
+                            null); // TODO: add option to give user select date and time
+                    String[] returned =
+                        bookingViewModel.createBooking(
+                            booking, view.getContext().getString(R.string.api_key));
+                    String pin = returned[0];
+                    String bookingID = returned[1];
                     // notify user the booking pin
                     NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(view.getContext(), "BOOKING CONFIRM")
@@ -267,20 +277,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 (dialog, which) -> {
                   if (!checkBox.isChecked()) { // on site testing booking from home
                     String pin = null;
+                    String bookingID = null;
                     try {
-                      pin =
-                          BookingFacade.makeBooking(
-                              user,
+                      Booking booking =
+                          new TestingOnSiteBooking(
+                              user.getUserId(),
                               testingFacilityID,
-                              null,
-                              false,
                               Instant.now().plusSeconds(604800).toString(),
-                              view.getContext().getString(R.string.api_key));
+                              null); // TODO: add option to give user select date and time
+                      String[] returned =
+                          bookingViewModel.createBooking(
+                              booking, view.getContext().getString(R.string.api_key));
+                      pin = returned[0];
+                      bookingID = returned[1];
                     } catch (JSONException e) {
                       e.printStackTrace();
                     } catch (IOException e) {
-                      e.printStackTrace();
-                    } catch (WriterException e) {
                       e.printStackTrace();
                     }
 
@@ -298,20 +310,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                   } else { // homebooking here
                     String pin = null;
+                    String bookingID = null;
                     try {
-                      pin =
-                          BookingFacade.makeBooking(
-                              user,
+
+                      Booking booking =
+                          new HomeBooking(
+                              user.getUserId(),
                               testingFacilityID,
-                              null,
-                              true,
                               Instant.now().plusSeconds(604800).toString(),
-                              view.getContext().getString(R.string.api_key));
+                              null); // TODO: add option to give user select date and time
+                      String[] returned =
+                          bookingViewModel.createBooking(
+                              booking, view.getContext().getString(R.string.api_key));
+                      pin = returned[0];
+                      bookingID = returned[1];
                     } catch (JSONException e) {
                       e.printStackTrace();
                     } catch (IOException e) {
-                      e.printStackTrace();
-                    } catch (WriterException e) {
                       e.printStackTrace();
                     }
 
@@ -327,14 +342,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(1, builder.build());
 
+                    //                  ((HomeBooking) booking).setQRCode(smsPin);
 
-//                  ((HomeBooking) booking).setQRCode(smsPin);
-
-                    Intent switchActivityIntent = new Intent(itemView.getContext(), QRCodeActivity.class);
+                    Intent switchActivityIntent =
+                        new Intent(itemView.getContext(), QRCodeActivity.class);
                     switchActivityIntent.putExtra("smsPin", pin);
                     itemView.getContext().startActivity(switchActivityIntent);
                   }
-
                 })
 
             // A null listener allows the button to dismiss the dialog and take no further action.

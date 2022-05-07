@@ -12,16 +12,17 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import models.BookingPackage.BookingFacade;
+import viewmodel.BookingViewModel;
 
 /** CheckBooking UI class */
+// TODO: check by BookingID
 public class CheckBooking extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_check_booking);
-
+    BookingViewModel bookingViewModel = new BookingViewModel(getApplication());
     EditText pin = findViewById(R.id.bookingPinInput);
     Button check = findViewById(R.id.check);
     check.setOnClickListener(
@@ -31,7 +32,8 @@ public class CheckBooking extends AppCompatActivity {
             TextView statusView = findViewById(R.id.bookingstatus);
             try {
               String pinText = pin.getText().toString();
-              String[] array = BookingFacade.checkBooking(pinText, getString(R.string.api_key));
+              String[] array =
+                  bookingViewModel.checkBooking(pinText, getString(R.string.api_key), true);
               statusView.setText(array[1]);
             } catch (IOException e) {
               statusView.setText("No Booking Found");

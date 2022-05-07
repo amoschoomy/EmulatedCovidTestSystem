@@ -21,7 +21,7 @@ public class SearchTestingSite extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_search_testing_site);
     RecyclerView recyclerView = findViewById(R.id.recyclerView2);
-    RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter();
+    RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getApplication());
     ArrayList<TestingFacility> testingFacilities;
     final String API_KEY = getString(R.string.api_key);
     TestingFacilityCollection testingFacilityCollection = TestingFacilityCollection.getInstance();
