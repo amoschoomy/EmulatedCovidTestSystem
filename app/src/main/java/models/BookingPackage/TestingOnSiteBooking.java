@@ -9,8 +9,67 @@ public class TestingOnSiteBooking implements Booking {
 
   private String customerID;
   private String testingSiteID;
+  private String testingSiteName;
   private String startTime;
   private String notes;
+  private String bookingID;
+  private String updatedAt;
+
+  public String getTestingSiteName() {
+    return testingSiteName;
+  }
+
+  public void setTestingSiteName(String testingSiteName) {
+    this.testingSiteName = testingSiteName;
+  }
+
+  public String getCustomerID() {
+    return customerID;
+  }
+
+  public void setCustomerID(String customerID) {
+    this.customerID = customerID;
+  }
+
+  public String getTestingSiteID() {
+    return testingSiteID;
+  }
+
+  public void setTestingSiteID(String testingSiteID) {
+    this.testingSiteID = testingSiteID;
+  }
+
+  public String getStartTime() {
+    return startTime;
+  }
+
+  public void setStartTime(String startTime) {
+    this.startTime = startTime;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public String getBookingID() {
+    return bookingID;
+  }
+
+  public void setBookingID(String bookingID) {
+    this.bookingID = bookingID;
+  }
+
+  public String getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(String updatedAt) {
+    this.updatedAt = updatedAt;
+  }
 
   public TestingOnSiteBooking(
       String customerID, String testingSiteID, String startTime, String notes) {

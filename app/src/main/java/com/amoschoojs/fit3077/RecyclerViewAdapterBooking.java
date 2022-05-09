@@ -4,6 +4,7 @@ import android.app.Application;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
+import models.BookingPackage.TestingOnSiteBooking;
 import viewmodel.BookingViewModel;
 
 public class RecyclerViewAdapterBooking
@@ -20,6 +22,10 @@ public class RecyclerViewAdapterBooking
 
   public RecyclerViewAdapterBooking(Application application) {
     bookingViewModel = new BookingViewModel(application);
+  }
+
+  public void setBookings(ArrayList<Booking> bookings) {
+    this.bookings = bookings;
   }
 
   @NonNull
@@ -33,11 +39,30 @@ public class RecyclerViewAdapterBooking
   }
 
   @Override
-  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {}
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    TestingOnSiteBooking booking = (TestingOnSiteBooking) bookings.get(holder.getAdapterPosition());
+    TextView testingSiteName = holder.itemView.findViewById(R.id.testingsitecard);
+    TextView startTime = holder.itemView.findViewById(R.id.starttimecard);
+    TextView status = holder.itemView.findViewById(R.id.statuscard);
+    TextView updatedAt = holder.itemView.findViewById(R.id.updatedAtcard);
+    testingSiteName.setText(booking.getTestingSiteName());
+    startTime.setText(booking.getStartTime());
+    try {
+      String[] array =
+          bookingViewModel.checkBooking(
+              booking.getBookingID(),
+              holder.itemView.getContext().getString(R.string.api_key),
+              false);
+      status.setText(array[1]);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    updatedAt.setText(booking.getUpdatedAt());
+  }
 
   @Override
   public int getItemCount() {
-    return 0;
+    return bookings.size();
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

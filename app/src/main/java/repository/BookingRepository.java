@@ -3,17 +3,11 @@ package repository;
 import android.app.Application;
 import android.os.StrictMode;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
 import okhttp3.OkHttpClient;
@@ -25,16 +19,7 @@ public class BookingRepository {
 
   public BookingRepository(Application application) {}
 
-  public LiveData<ArrayList<Booking>> getAllBookings() {
-    // api call here //TODO: get all booking from API
-    return new LiveData<ArrayList<Booking>>() {
-      @Override
-      public void observe(
-          @NonNull LifecycleOwner owner, @NonNull Observer<? super ArrayList<Booking>> observer) {
-        super.observe(owner, observer);
-      }
-    };
-  }
+
 
   public String[] create(Booking booking, String API_KEY) throws IOException, JSONException {
     String usersUrl = "https://fit3077.com/api/v2/booking";

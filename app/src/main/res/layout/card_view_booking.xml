@@ -94,6 +94,24 @@
             app:layout_constraintBottom_toBottomOf="@+id/statuscard"
             app:layout_constraintStart_toStartOf="@+id/modifybutton"
             app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="23dp"
+            android:layout_marginBottom="19dp"
+            android:text="Updated At"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/updatedAtcard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView19"
+            app:layout_constraintStart_toStartOf="@+id/statuscard" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
