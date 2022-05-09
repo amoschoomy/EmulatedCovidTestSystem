@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
         android:ems="10"
-        android:inputType="number"
-        android:maxLength="6"
+        android:inputType="text"
+        android:maxLength="36"
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,82 +36,79 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="27dp"
-        android:layout_marginEnd="4dp"
         android:text="Check"
-        app:layout_constraintEnd_toEndOf="@+id/bookingstatus"
+        app:layout_constraintEnd_toEndOf="@+id/bookingPinInput"
+        app:layout_constraintStart_toStartOf="@+id/bookingPinInput"
         app:layout_constraintTop_toBottomOf="@+id/bookingPinInput" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="62dp"
-        android:layout_marginTop="37dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginBottom="31dp"
         android:text="Status:"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/check" />
+        app:layout_constraintBottom_toTopOf="@+id/testingsiteview"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/bookingstatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="31dp"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView19"
-        app:layout_constraintStart_toStartOf="@+id/textView19" />
+        app:layout_constraintBottom_toTopOf="@+id/testingsitevieww"
+        app:layout_constraintEnd_toStartOf="@+id/testingsitevieww"
+        app:layout_constraintStart_toStartOf="@+id/testingsitevieww" />
 
     <Button
         android:id="@+id/viewallbooking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
+        android:layout_marginBottom="85dp"
         android:text="View All Booking"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/testingsiteview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
+        android:layout_marginStart="26dp"
         android:text="Testing Site:"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/testingsitevieww"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginStart="26dp"
         android:text="Start Time:"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/testingsiteview"
-        app:layout_constraintTop_toBottomOf="@+id/testingsiteview" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/starttimeview"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView19"
+        android:id="@+id/testingsitevieww"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="3dp"
-        android:layout_marginBottom="29dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginBottom="23dp"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView20"
-        app:layout_constraintEnd_toEndOf="@+id/textView20" />
+        app:layout_constraintBottom_toTopOf="@+id/starttimeview"
+        app:layout_constraintStart_toEndOf="@+id/testingsiteview" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/starttimeview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="117dp"
-        android:layout_marginEnd="117dp"
-        android:layout_marginBottom="34dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginBottom="41dp"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/viewallbooking"
-        app:layout_constraintEnd_toEndOf="@+id/textView5"
-        app:layout_constraintStart_toEndOf="@+id/textView4" />
+        app:layout_constraintStart_toEndOf="@+id/textView18" />
 </androidx.constraintlayout.widget.ConstraintLayout>
