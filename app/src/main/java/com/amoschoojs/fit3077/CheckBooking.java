@@ -1,5 +1,6 @@
 package com.amoschoojs.fit3077;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +45,16 @@ public class CheckBooking extends AppCompatActivity {
             } catch (Exception e) {
               statusView.setText("No Booking Found");
             }
+          }
+        });
+    Button viewAll = findViewById(R.id.viewallbooking);
+    viewAll.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+
+            Intent switchActivityIntent = new Intent(getApplicationContext(), ViewBookings.class);
+            startActivity(switchActivityIntent);
           }
         });
   }

@@ -42,7 +42,7 @@ import models.UserPackage.User;
 import viewmodel.BookingViewModel;
 
 // TODO: add notification for user BookingID after booking made
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
+public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAdapterSTS.ViewHolder>
     implements Filterable {
 
   ArrayList<TestingFacility> testingFacilities;
@@ -92,7 +92,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
       };
 
-  public RecyclerViewAdapter(Application application) {
+  public RecyclerViewAdapterSTS(Application application) {
     bookingViewModel = new BookingViewModel(application);
   }
 
