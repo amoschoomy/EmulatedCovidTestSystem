@@ -45,7 +45,7 @@ public class UserRepository {
     for (int i = 0; i < bookingsArray.length(); i++) {
       JSONObject obj = bookingsArray.getJSONObject(i);
 
-      if (obj.getJSONObject("additionalInfo").has("url")) { // only show onsite booking
+      if (!(obj.getJSONObject("additionalInfo").has("url"))) { // only show onsite booking
         String bookingID = obj.getString("id");
         JSONObject object = obj.getJSONObject("testingSite");
         String testingSiteID = object.getString("id");

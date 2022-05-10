@@ -30,8 +30,8 @@ public class BookingViewModel extends AndroidViewModel {
     return bookingRepository.check(code, API_KEY, isPin);
   }
 
-  public void updateBooking(String API_KEY, String bookingID, RequestBody requestBody)
-      throws IOException {
-    bookingRepository.update(API_KEY, bookingID, requestBody);
+  public String updateBooking(String API_KEY, String bookingID, RequestBody requestBody)
+      throws IOException, JSONException {
+    return bookingRepository.update(API_KEY, bookingID, requestBody);
   }
 }

@@ -2,6 +2,7 @@ package repository;
 
 import android.app.Application;
 import android.os.StrictMode;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,7 +73,8 @@ public class BookingRepository {
     throw new Exception("No Booking Found");
   }
 
-  public void update(String API_KEY, String bookingID, RequestBody requestBody) throws IOException {
+  public String update(String API_KEY, String bookingID, RequestBody requestBody)
+      throws IOException, JSONException {
     OkHttpClient client = new OkHttpClient();
 
     // insert key here
@@ -89,5 +91,11 @@ public class BookingRepository {
     StrictMode.setThreadPolicy(policy);
 
     Response response = client.newCall(request).execute();
+    String output = response.body().string();
+    Log.d("myTag", output);
+    JSONObject jObj = new JSONObject(output);
+    String updatedAt = jObj.getString("updatedAt");
+    Log.d("myTag", updatedAt);
+    return updatedAt;
   }
 }
