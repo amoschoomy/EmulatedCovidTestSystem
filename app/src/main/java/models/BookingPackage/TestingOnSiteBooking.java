@@ -14,7 +14,15 @@ public class TestingOnSiteBooking implements Booking {
   private String notes;
   private String bookingID;
   private String updatedAt;
+  private String status = "INITIATED";
 
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
   public String getTestingSiteName() {
     return testingSiteName;
@@ -80,6 +88,16 @@ public class TestingOnSiteBooking implements Booking {
     this.notes = notes;
   }
 
+  public BookingMemento save() {
+    return new BookingMemento(testingSiteID, startTime, status);
+  }
+
+  public void undo(BookingMemento bookingMemento) {
+    startTime = bookingMemento.getStartTime();
+    testingSiteID = bookingMemento.getTestingSiteID();
+    status = bookingMemento.getStatus();
+  }
+
   @Override
   public RequestBody getRequestBody() throws JSONException {
     FormBody.Builder builder =
@@ -92,5 +110,5 @@ public class TestingOnSiteBooking implements Booking {
     return formBody;
   }
 
-  static class BookingMemento {}
+
 }

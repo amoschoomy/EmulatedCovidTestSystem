@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
+import models.BookingPackage.BookingCaretaker;
 import models.BookingPackage.TestingOnSiteBooking;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
@@ -29,6 +30,7 @@ public class RecyclerViewAdapterBooking
     extends RecyclerView.Adapter<RecyclerViewAdapterBooking.ViewHolder> {
   BookingViewModel bookingViewModel;
   ArrayList<Booking> bookings;
+  BookingCaretaker caretaker = new BookingCaretaker();
 
   public RecyclerViewAdapterBooking(Application application) {
     bookingViewModel = new BookingViewModel(application);
@@ -59,12 +61,18 @@ public class RecyclerViewAdapterBooking
     startTime.setText(booking.getStartTime());
     Button modifyButton = holder.itemView.findViewById(R.id.modifybutton);
     Button cancelButton = holder.itemView.findViewById(R.id.cancelbutton);
+    Button undoButton = holder.itemView.findViewById(R.id.undocard);
+
     try {
       String[] array =
           bookingViewModel.checkBooking(
               booking.getBookingID(),
               holder.itemView.getContext().getString(R.string.api_key),
               false);
+      booking.setStatus(array[1]);
+      if (booking.getStatus().equals("CANCELLED")) {
+        cancelButton.setEnabled(false);
+      }
       status.setText(array[1]);
     } catch (Exception e) {
       e.printStackTrace();
@@ -84,13 +92,16 @@ public class RecyclerViewAdapterBooking
                       FormBody.Builder builder = new FormBody.Builder().add("status", "CANCELLED");
                       RequestBody formBody = builder.build();
                       try {
+                        caretaker.save(booking);
                         String updatedAt =
                             bookingViewModel.updateBooking(
                                 holder.itemView.getContext().getString(R.string.api_key),
                                 booking.getBookingID(),
                                 formBody);
                         booking.setUpdatedAt(updatedAt);
+                        booking.setStatus("CANCELLED");
                         notifyDataSetChanged();
+                        cancelButton.setEnabled(false);
                       } catch (IOException | JSONException e) {
                         e.printStackTrace();
                       }
@@ -110,6 +121,27 @@ public class RecyclerViewAdapterBooking
             i.putExtra("key", booking.getBookingID());
             Log.d("myTag", booking.getBookingID());
             view.getContext().startActivity(i);
+          }
+        });
+    undoButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            try {
+              caretaker.revert(booking);
+              FormBody.Builder builder = new FormBody.Builder().add("status", booking.getStatus());
+              RequestBody formBody = builder.build();
+              String updatedAt =
+                  bookingViewModel.updateBooking(
+                      view.getContext().getString(R.string.api_key),
+                      booking.getBookingID(),
+                      formBody);
+              booking.setUpdatedAt(updatedAt);
+              notifyDataSetChanged();
+              cancelButton.setEnabled(true);
+            } catch (Exception e) {
+              Toast.makeText(view.getContext(), "No undo", Toast.LENGTH_SHORT).show();
+            }
           }
         });
   }
