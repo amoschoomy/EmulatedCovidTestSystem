@@ -4,16 +4,23 @@ import android.app.Application;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
 import models.BookingPackage.TestingOnSiteBooking;
+import models.LoginSystemPackage.LoginAuthentication;
+import models.UserPackage.User;
 import viewmodel.BookingViewModel;
+import viewmodel.UserViewModel;
 
 public class RecyclerViewAdapterRecep
         extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder> {
@@ -58,6 +65,33 @@ public class RecyclerViewAdapterRecep
             e.printStackTrace();
         }
         updatedAt.setText(booking.getUpdatedAt());
+
+        // set visibility of buttons
+        Button modifyBtn = holder.itemView.findViewById(R.id.modifyBtn);
+        Button cancelBtn = holder.itemView.findViewById(R.id.cancelBtn);
+        Button deleteBtn = holder.itemView.findViewById(R.id.deleteBtn);
+        Button processBtn = holder.itemView.findViewById(R.id.processBtn);
+
+        // get user + user model
+        LoginAuthentication loginAuthentication = null;
+        try {
+            loginAuthentication = LoginAuthentication.getInstance();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        User user = loginAuthentication.getUser();
+
+        if (user.getHealthcareWorker()) {
+            modifyBtn.setVisibility(View.GONE);
+            cancelBtn.setVisibility(View.GONE);
+            deleteBtn.setVisibility(View.GONE);
+        }
+
+        if (user.getReceptionist()) {
+            processBtn.setVisibility(View.GONE);
+        }
     }
 
     @Override

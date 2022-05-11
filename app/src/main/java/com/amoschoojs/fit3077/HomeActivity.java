@@ -46,8 +46,8 @@ public class HomeActivity extends AppCompatActivity {
           }
         });
 
-      // Only receptionist can go to admin interface
-      if (user.getReceptionist()) adminInterfaceButton.setVisibility(View.VISIBLE);
+      // Only receptionist and healthcare worker can go to admin interface
+      if (user.getReceptionist() || user.getHealthcareWorker()) adminInterfaceButton.setVisibility(View.VISIBLE);
       adminInterfaceButton.setOnClickListener(
               new View.OnClickListener() {
                   @Override

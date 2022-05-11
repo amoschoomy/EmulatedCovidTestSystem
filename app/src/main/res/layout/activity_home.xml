@@ -10,11 +10,13 @@
         android:id="@+id/onSiteTestingBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="36dp"
         android:text="On Site Testing"
         app:layout_constraintBottom_toTopOf="@+id/searchTestingSitesBtn"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.93" />
 
     <TextView
         android:id="@+id/textView3"
@@ -59,7 +61,7 @@
         app:layout_constraintHorizontal_bias="0.845"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.937"
+        app:layout_constraintVertical_bias="0.93"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
