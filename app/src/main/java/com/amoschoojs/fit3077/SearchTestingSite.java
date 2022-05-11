@@ -1,7 +1,6 @@
 package com.amoschoojs.fit3077;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,8 +22,10 @@ public class SearchTestingSite extends AppCompatActivity {
     setContentView(R.layout.activity_search_testing_site);
     RecyclerView recyclerView = findViewById(R.id.recyclerView2);
     Bundle extras = getIntent().getExtras();
-    String bookingID = extras.getString("key");
-    Log.d("myTag", bookingID);
+    String bookingID = null;
+    if (extras != null) {
+      bookingID = extras.getString("key");
+    }
     RecyclerViewAdapterSTS recyclerViewAdapter =
         new RecyclerViewAdapterSTS(getApplication(), bookingID, this);
     ArrayList<TestingFacility> testingFacilities;

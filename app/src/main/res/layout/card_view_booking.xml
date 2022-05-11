@@ -22,10 +22,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="23dp"
-            android:layout_marginTop="27dp"
             android:text="Testing Site:"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/testingsitecard"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView21"
@@ -33,55 +32,55 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="23dp"
             android:layout_marginTop="49dp"
-            android:layout_marginBottom="48dp"
+            android:layout_marginBottom="47dp"
             android:text="Start Time"
             app:layout_constraintBottom_toBottomOf="@+id/textView22"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/testingsitecard" />
+            app:layout_constraintTop_toTopOf="@+id/textView17" />
 
         <TextView
             android:id="@+id/textView22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="23dp"
+            android:layout_marginBottom="16dp"
             android:text="Status"
-            app:layout_constraintBottom_toBottomOf="@+id/statuscard"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/statuscard" />
+            app:layout_constraintBottom_toTopOf="@+id/textView19"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/testingsitecard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="28dp"
-            android:layout_marginEnd="3dp"
-            app:layout_constraintEnd_toEndOf="@+id/starttimecard"
+            app:layout_constraintStart_toEndOf="@+id/textView17"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/starttimecard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginBottom="23dp"
-            app:layout_constraintBottom_toTopOf="@+id/statuscard"
-            app:layout_constraintStart_toStartOf="@+id/statuscard" />
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toEndOf="@+id/textView21"
+            app:layout_constraintTop_toTopOf="@+id/textView21" />
 
         <TextView
             android:id="@+id/statuscard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="43dp"
-            android:layout_marginBottom="53dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView22" />
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/updatedAtcard"
+            app:layout_constraintEnd_toEndOf="@+id/updatedAtcard" />
 
         <Button
             android:id="@+id/modifybutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="6dp"
             android:text="Modify"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -90,10 +89,11 @@
             android:id="@+id/cancelbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="4dp"
             android:text="Cancel"
-            app:layout_constraintBottom_toBottomOf="@+id/statuscard"
-            app:layout_constraintStart_toStartOf="@+id/modifybutton"
-            app:layout_constraintTop_toBottomOf="@+id/textView21" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/modifybutton" />
 
         <TextView
             android:id="@+id/textView19"
@@ -109,9 +109,20 @@
             android:id="@+id/updatedAtcard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textView19"
-            app:layout_constraintStart_toStartOf="@+id/statuscard" />
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="19dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView19" />
+
+        <Button
+            android:id="@+id/undocard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="5dp"
+            android:text="undo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
