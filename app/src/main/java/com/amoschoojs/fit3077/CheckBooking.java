@@ -16,7 +16,6 @@ import java.io.IOException;
 import viewmodel.BookingViewModel;
 
 /** CheckBooking UI class */
-// TODO: check by BookingID
 public class CheckBooking extends AppCompatActivity {
 
   @Override
@@ -26,6 +25,7 @@ public class CheckBooking extends AppCompatActivity {
     BookingViewModel bookingViewModel = new BookingViewModel(getApplication());
     EditText pin = findViewById(R.id.bookingPinInput);
     Button check = findViewById(R.id.check);
+    Button actionButton = findViewById(R.id.actionbutton);
     check.setOnClickListener(
         new View.OnClickListener() {
           @Override
@@ -33,6 +33,7 @@ public class CheckBooking extends AppCompatActivity {
             TextView statusView = findViewById(R.id.bookingstatus);
             TextView tsView = findViewById(R.id.testingsitevieww);
             TextView startTimeView = findViewById(R.id.starttimeview);
+            TextView updatedTimeView = findViewById(R.id.updatedtimeview);
             boolean isPin = true;
             try {
               String pinText = pin.getText().toString();
@@ -44,7 +45,8 @@ public class CheckBooking extends AppCompatActivity {
               statusView.setText(array[1]);
               tsView.setText(array[2]);
               startTimeView.setText(array[3]);
-
+              updatedTimeView.setText(array[4]);
+              actionButton.setVisibility(View.VISIBLE);
             } catch (IOException e) {
               statusView.setText("No Booking Found");
               e.printStackTrace();
@@ -65,6 +67,12 @@ public class CheckBooking extends AppCompatActivity {
             Intent switchActivityIntent = new Intent(getApplicationContext(), ViewBookings.class);
             startActivity(switchActivityIntent);
           }
+        });
+
+    actionButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {}
         });
   }
 }

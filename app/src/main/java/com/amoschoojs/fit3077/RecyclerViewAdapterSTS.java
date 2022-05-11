@@ -1,5 +1,6 @@
 package com.amoschoojs.fit3077;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.DatePickerDialog;
 import android.app.NotificationManager;
@@ -39,15 +40,18 @@ import models.TestingFacilityPackage.TestingFacility;
 import models.UserPackage.Customer;
 import models.UserPackage.Receptionist;
 import models.UserPackage.User;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 import viewmodel.BookingViewModel;
 
-// TODO: add notification for user BookingID after booking made
 public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAdapterSTS.ViewHolder>
     implements Filterable {
 
   ArrayList<TestingFacility> testingFacilities;
   ArrayList<TestingFacility> testingFacilitiesFiltered;
   BookingViewModel bookingViewModel;
+  String bookingID;
+  Activity activity;
   // Filtering details
   private Filter exampleFilter =
       new Filter() {
@@ -92,8 +96,10 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
         }
       };
 
-  public RecyclerViewAdapterSTS(Application application) {
+  public RecyclerViewAdapterSTS(Application application, String bookingID, Activity activity) {
     bookingViewModel = new BookingViewModel(application);
+    this.bookingID = bookingID;
+    this.activity = activity;
   }
 
   @NonNull
@@ -168,14 +174,75 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
           && phone.length() > 0);
     }
 
+
     @Override
     public void onClick(View view) {
-      LoginAuthentication loginAuthentication = null;
-      try {
-        loginAuthentication = LoginAuthentication.getInstance();
-      } catch (IOException e) {
-        e.printStackTrace();
-      } catch (JSONException e) {
+      if (bookingID != null) { // modify logic
+        int pos = getAdapterPosition();
+
+        // get testing facility position of user click
+        TestingFacility testingFacility = testingFacilitiesFiltered.get(pos);
+        String testingFacilityID = testingFacility.getId();
+        Toast.makeText(view.getContext(), "selected testing facility", Toast.LENGTH_SHORT).show();
+        final Calendar calendar = Calendar.getInstance();
+
+        DatePickerDialog.OnDateSetListener dateSetListener =
+            new DatePickerDialog.OnDateSetListener() {
+              @Override
+              public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                TimePickerDialog.OnTimeSetListener timeSetListener =
+                    new TimePickerDialog.OnTimeSetListener() {
+                      @Override
+                      public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+                        String startTime = calendar.getTime().toInstant().toString();
+                        FormBody.Builder builder =
+                            new FormBody.Builder()
+                                .add("testingSiteId", testingFacilityID)
+                                .add("startTime", startTime);
+                        RequestBody formBody = builder.build();
+                        try {
+                          bookingViewModel.updateBooking(
+                              view.getContext().getString(R.string.api_key), bookingID, formBody);
+                          Toast.makeText(view.getContext(), "updated booking", Toast.LENGTH_SHORT)
+                              .show();
+                          activity.finish();
+                        } catch (IOException e) {
+                          e.printStackTrace();
+                        } catch (JSONException e) {
+                          e.printStackTrace();
+                        }
+                      }
+                    };
+                new TimePickerDialog(
+                        view.getContext(),
+                        timeSetListener,
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        false)
+                    .show();
+              }
+            };
+
+        new DatePickerDialog(
+                view.getContext(),
+                dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH))
+            .show();
+        //        ((Activity)(view.getContext())).finish();
+
+      } else {
+        LoginAuthentication loginAuthentication = null;
+        try {
+          loginAuthentication = LoginAuthentication.getInstance();
+        } catch (IOException | JSONException e) {
         e.printStackTrace();
       }
       int pos = getAdapterPosition();
@@ -499,6 +566,7 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
             .setNegativeButton(android.R.string.no, null)
             .setIcon(R.drawable.ic_launcher_background)
             .show();
+      }
       }
     }
   }

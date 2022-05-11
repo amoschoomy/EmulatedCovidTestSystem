@@ -92,5 +92,5 @@ public class TestingOnSiteBooking implements Booking {
     return formBody;
   }
 
-
+  static class BookingMemento {}
 }

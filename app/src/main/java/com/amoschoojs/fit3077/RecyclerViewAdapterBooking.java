@@ -1,6 +1,8 @@
 package com.amoschoojs.fit3077;
 
 import android.app.Application;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,6 +99,17 @@ public class RecyclerViewAdapterBooking
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(R.drawable.ic_launcher_background)
                 .show();
+          }
+        });
+
+    modifyButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            Intent i = new Intent(view.getContext(), SearchTestingSite.class);
+            i.putExtra("key", booking.getBookingID());
+            Log.d("myTag", booking.getBookingID());
+            view.getContext().startActivity(i);
           }
         });
   }

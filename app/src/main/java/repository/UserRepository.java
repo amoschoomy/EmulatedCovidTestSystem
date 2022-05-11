@@ -25,7 +25,6 @@ public class UserRepository {
 
   public LiveData<ArrayList<Booking>> getAllBookings(String userID, String API_KEY)
       throws IOException, JSONException {
-    // api call here //TODO: get all booking from API
     MutableLiveData<ArrayList<Booking>> bookings = new MutableLiveData<ArrayList<Booking>>();
     ArrayList<Booking> dummy = new ArrayList<>();
     String usersUrl = String.format("https://fit3077.com/api/v2/user/%s?fields=bookings", userID);

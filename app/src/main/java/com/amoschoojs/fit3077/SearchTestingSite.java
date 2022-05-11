@@ -1,6 +1,7 @@
 package com.amoschoojs.fit3077;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,10 +22,15 @@ public class SearchTestingSite extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_search_testing_site);
     RecyclerView recyclerView = findViewById(R.id.recyclerView2);
-    RecyclerViewAdapterSTS recyclerViewAdapter = new RecyclerViewAdapterSTS(getApplication());
+    Bundle extras = getIntent().getExtras();
+    String bookingID = extras.getString("key");
+    Log.d("myTag", bookingID);
+    RecyclerViewAdapterSTS recyclerViewAdapter =
+        new RecyclerViewAdapterSTS(getApplication(), bookingID, this);
     ArrayList<TestingFacility> testingFacilities;
     final String API_KEY = getString(R.string.api_key);
     TestingFacilityCollection testingFacilityCollection = TestingFacilityCollection.getInstance();
+
     try {
       testingFacilities = testingFacilityCollection.retrieveTestingFacilities(API_KEY);
       recyclerViewAdapter.setCars(testingFacilities);
