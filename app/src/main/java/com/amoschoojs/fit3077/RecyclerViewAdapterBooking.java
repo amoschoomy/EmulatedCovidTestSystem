@@ -60,8 +60,6 @@ public class RecyclerViewAdapterBooking
     TextView startTime = holder.itemView.findViewById(R.id.starttimecard);
     TextView status = holder.itemView.findViewById(R.id.statuscard);
     TextView updatedAt = holder.itemView.findViewById(R.id.updatedAtcard);
-    testingSiteName.setText(booking.getTestingSiteName());
-    startTime.setText(booking.getStartTime());
     Button modifyButton = holder.itemView.findViewById(R.id.modifybutton);
     Button cancelButton = holder.itemView.findViewById(R.id.cancelbutton);
     Button undoButton = holder.itemView.findViewById(R.id.undocard);
@@ -72,9 +70,12 @@ public class RecyclerViewAdapterBooking
               booking.getBookingID(),
               holder.itemView.getContext().getString(R.string.api_key),
               false);
-      Log.d("myTag", booking.getStatus() + "before");
       booking.setStatus(array[1]);
-      Log.d("myTag", booking.getStatus() + "after\n");
+      booking.setStartTime(array[3]);
+      booking.setTestingSiteName(array[2]);
+      booking.setUpdatedAt(array[4]);
+      testingSiteName.setText(booking.getTestingSiteName());
+      startTime.setText(booking.getStartTime());
       if (booking.getStatus().equals("CANCELLED")) {
         Log.d("myTag", "reached");
         cancelButton.setEnabled(false);
