@@ -74,12 +74,6 @@ public class RecyclerViewAdapterRecep
         }
         updatedAt.setText(booking.getUpdatedAt());
 
-        // set visibility of buttons
-        Button modifyBtn = holder.itemView.findViewById(R.id.modifyBtn);
-        Button cancelBtn = holder.itemView.findViewById(R.id.cancelBtn);
-        Button deleteBtn = holder.itemView.findViewById(R.id.deleteBtn);
-        Button processBtn = holder.itemView.findViewById(R.id.processBtn);
-
         // get user + user model
         LoginAuthentication loginAuthentication = null;
         try {
@@ -91,16 +85,27 @@ public class RecyclerViewAdapterRecep
         }
         User user = loginAuthentication.getUser();
 
+        // set visibility of buttons
+        Button modifyBtn = holder.itemView.findViewById(R.id.modifyBtn);
+        Button cancelBtn = holder.itemView.findViewById(R.id.cancelBtn);
+        Button deleteBtn = holder.itemView.findViewById(R.id.deleteBtn);
+        Button processBtn = holder.itemView.findViewById(R.id.processBtn);
+        Button undoBtn = holder.itemView.findViewById(R.id.undoBtn);
+
         if (user.getHealthcareWorker()) {
             modifyBtn.setVisibility(View.GONE);
             cancelBtn.setVisibility(View.GONE);
             deleteBtn.setVisibility(View.GONE);
+            undoBtn.setVisibility(View.GONE);
         }
 
         if (user.getReceptionist()) {
             processBtn.setVisibility(View.GONE);
         }
 
+        // TODO: Observer Pattern for modified/cancelled notification
+
+        // Process Booking
         processBtn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -140,6 +145,34 @@ public class RecyclerViewAdapterRecep
                                                 e.printStackTrace();
                                             }
                                             Toast.makeText(view.getContext(), "Booking Cancelled", Toast.LENGTH_LONG).show();
+                                        })
+                                .setNegativeButton(android.R.string.no, null)
+                                .setIcon(R.drawable.ic_launcher_background)
+                                .show();
+                    }
+                });
+
+        // Delete Booking
+        deleteBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog.Builder(view.getContext())
+                                .setTitle("Delete Booking?")
+                                .setMessage("Are you sure you want to delete a booking ?")
+                                .setPositiveButton(
+                                        android.R.string.yes,
+                                        (dialog, which) -> {
+                                            try {
+                                                String deleted =
+                                                        bookingViewModel.deleteBooking(
+                                                                holder.itemView.getContext().getString(R.string.api_key),
+                                                                booking.getBookingID());
+                                                notifyDataSetChanged();
+                                            } catch (IOException | JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            Toast.makeText(view.getContext(), "Booking Deleted", Toast.LENGTH_LONG).show();
                                         })
                                 .setNegativeButton(android.R.string.no, null)
                                 .setIcon(R.drawable.ic_launcher_background)

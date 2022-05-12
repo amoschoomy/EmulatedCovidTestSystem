@@ -99,4 +99,30 @@ public class BookingRepository {
     Log.d("myTag", updatedAt);
     return updatedAt;
   }
+
+  public String delete(String API_KEY, String bookingID)
+          throws IOException, JSONException {
+    OkHttpClient client = new OkHttpClient();
+
+    // insert key here
+    String usersUrl = String.format("https://fit3077.com/api/v2/booking/%s", bookingID);
+    Request request =
+            new Request.Builder()
+                    .url(usersUrl)
+                    .header("Authorization", API_KEY)
+                    .delete()
+                    .build();
+
+    // Have the response run in background or system will crash
+    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
+
+    Response response = client.newCall(request).execute();
+    String output = response.body().string();
+    Log.d("myTag", output);
+    JSONObject jObj = new JSONObject(output);
+    String updatedAt = jObj.getString("updatedAt");
+    Log.d("myTag", updatedAt);
+    return updatedAt;
+  }
 }

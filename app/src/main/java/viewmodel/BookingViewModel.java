@@ -34,4 +34,9 @@ public class BookingViewModel extends AndroidViewModel {
       throws IOException, JSONException {
     return bookingRepository.update(API_KEY, bookingID, requestBody);
   }
+
+  public String deleteBooking(String API_KEY, String bookingID)
+          throws IOException, JSONException {
+    return bookingRepository.delete(API_KEY, bookingID);
+  }
 }
