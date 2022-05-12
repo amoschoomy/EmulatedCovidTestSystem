@@ -27,13 +27,12 @@ import models.UserPackage.User;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import viewmodel.BookingViewModel;
-import viewmodel.UserViewModel;
 
 public class RecyclerViewAdapterRecep
         extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder> {
     BookingViewModel bookingViewModel;
     ArrayList<Booking> bookings;
-    BookingCaretaker caretaker = new BookingCaretaker();
+  BookingCaretaker caretaker = BookingCaretaker.getInstance();
 
     public RecyclerViewAdapterRecep(Application application) {
         bookingViewModel = new BookingViewModel(application);

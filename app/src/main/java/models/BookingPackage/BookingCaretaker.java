@@ -4,7 +4,19 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class BookingCaretaker {
+
+  private static BookingCaretaker instance;
   HashMap<Booking, Stack<Booking.BookingMemento>> bookingMementos = new HashMap<>();
+
+  private BookingCaretaker() {}
+
+  public static BookingCaretaker getInstance() {
+
+    if (instance == null) {
+      instance = new BookingCaretaker();
+    }
+    return instance;
+  }
 
   public void save(TestingOnSiteBooking booking) {
 

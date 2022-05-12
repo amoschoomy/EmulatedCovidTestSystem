@@ -2,7 +2,6 @@ package com.amoschoojs.fit3077;
 
 import android.app.Application;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ public class RecyclerViewAdapterBooking
     extends RecyclerView.Adapter<RecyclerViewAdapterBooking.ViewHolder> {
   BookingViewModel bookingViewModel;
   ArrayList<Booking> bookings;
-  BookingCaretaker caretaker = new BookingCaretaker();
+  BookingCaretaker caretaker = BookingCaretaker.getInstance();
 
   public RecyclerViewAdapterBooking(Application application) {
     bookingViewModel = new BookingViewModel(application);
@@ -119,7 +118,6 @@ public class RecyclerViewAdapterBooking
           public void onClick(View view) {
             Intent i = new Intent(view.getContext(), SearchTestingSite.class);
             i.putExtra("key", booking.getBookingID());
-            Log.d("myTag", booking.getBookingID());
             view.getContext().startActivity(i);
           }
         });
