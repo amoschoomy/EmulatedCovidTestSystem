@@ -1,13 +1,17 @@
 package com.amoschoojs.fit3077;
 
 import android.app.Application;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
@@ -16,9 +20,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
+import models.BookingPackage.BookingCaretaker;
 import models.BookingPackage.TestingOnSiteBooking;
 import models.LoginSystemPackage.LoginAuthentication;
 import models.UserPackage.User;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 import viewmodel.BookingViewModel;
 import viewmodel.UserViewModel;
 
@@ -26,6 +33,7 @@ public class RecyclerViewAdapterRecep
         extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder> {
     BookingViewModel bookingViewModel;
     ArrayList<Booking> bookings;
+    BookingCaretaker caretaker = new BookingCaretaker();
 
     public RecyclerViewAdapterRecep(Application application) {
         bookingViewModel = new BookingViewModel(application);
@@ -92,6 +100,54 @@ public class RecyclerViewAdapterRecep
         if (user.getReceptionist()) {
             processBtn.setVisibility(View.GONE);
         }
+
+        processBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(view.getContext(), OnSiteTestingActivity.class);
+                        i.putExtra("bookingId", booking.getBookingID());
+                        Log.d("myTag", booking.getBookingID());
+                        view.getContext().startActivity(i);
+                    }
+                });
+
+        // Cancel Booking
+        cancelBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog.Builder(view.getContext())
+                                .setTitle("Cancel Booking?")
+                                .setMessage("Are you sure you want to cancel a booking ?")
+                                .setPositiveButton(
+                                        android.R.string.yes,
+                                        (dialog, which) -> {
+                                            FormBody.Builder builder = new FormBody.Builder().add("status", "CANCELLED");
+                                            RequestBody formBody = builder.build();
+                                            try {
+                                                caretaker.save(booking);
+                                                String updatedAt =
+                                                        bookingViewModel.updateBooking(
+                                                                holder.itemView.getContext().getString(R.string.api_key),
+                                                                booking.getBookingID(),
+                                                                formBody);
+                                                booking.setUpdatedAt(updatedAt);
+                                                booking.setStatus("CANCELLED");
+                                                notifyDataSetChanged();
+                                                cancelBtn.setEnabled(false);
+                                            } catch (IOException | JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            Toast.makeText(view.getContext(), "Booking Cancelled", Toast.LENGTH_LONG).show();
+                                        })
+                                .setNegativeButton(android.R.string.no, null)
+                                .setIcon(R.drawable.ic_launcher_background)
+                                .show();
+                    }
+                });
+
+
     }
 
     @Override
