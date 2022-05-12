@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import models.LoginSystemPackage.LoginAuthentication;
 import models.UserPackage.User;
+import viewmodel.BookingViewModel;
 import viewmodel.UserViewModel;
 
 public class AdminBookingInterfaceActivity extends AppCompatActivity {
@@ -57,6 +58,22 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        BookingViewModel bookingViewModel = new BookingViewModel(getApplication());
+        try {
+            bookingViewModel
+                    .getBookings(API_KEY)
+                    .observe(
+                            this,
+                            newData -> {
+                                recyclerViewAdapter.setBookings(newData);
+                                recyclerViewAdapter.notifyDataSetChanged();
+                            });
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
 
     }

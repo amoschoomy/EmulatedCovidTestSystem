@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class HomeBooking implements Booking{
+public class HomeBooking extends Booking{
 
   private String customerID;
   private String testingSiteID;
@@ -15,10 +15,7 @@ public class HomeBooking implements Booking{
   private String testingURL;
 
   public HomeBooking(String customerID, String testingSiteID, String startTime, String notes) {
-    this.customerID = customerID;
-    this.testingSiteID = testingSiteID;
-    this.startTime = startTime;
-    this.notes = notes;
+      super(customerID,testingSiteID,startTime,notes);
   }
 
   public RequestBody getRequestBody() throws JSONException {

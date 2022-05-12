@@ -52,27 +52,6 @@ public class RecyclerViewAdapterRecep
         this.bookings = bookings;
     }
 
-    public void notifyObserver(TestingFacility testingFacility1, TestingFacility testingFacility2, View view) {
-        ArrayList<String> adminsInFac1 = testingFacility1.getAdmin();
-        ArrayList<String> adminsInFac2 = testingFacility2.getAdmin();
-
-        Log.d("myTag", adminsInFac1.get(0));
-        Log.d("myTag", adminsInFac2.get(0));
-
-        String notification = "A User from " + testingFacility1.getName() + " has switch to " + testingFacility2.getName();
-
-        for (String admin:adminsInFac1) {
-            // user view model get user from userid
-            // user update notification
-        }
-
-        for (String admin:adminsInFac2) {
-            // user view model get user from userid
-            // user update notification
-        }
-
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -146,7 +125,7 @@ public class RecyclerViewAdapterRecep
                     }
                 });
 
-        // Modify Booking, remember to caretaker.save(booking)
+        // TODO: Modify Booking, remember to caretaker.save(booking)
 
         // Cancel Booking
         cancelBtn.setOnClickListener(
@@ -177,7 +156,7 @@ public class RecyclerViewAdapterRecep
                                                 String testingSiteId = booking.getTestingSiteID();
                                                 TestingFacility testingSite1 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
                                                 TestingFacility testingSite2 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
-                                                notifyObserver(testingSite1,testingSite2, view);
+//                                                notifyObserver(testingSite1,testingSite2, view);
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -189,7 +168,7 @@ public class RecyclerViewAdapterRecep
                     }
                 });
 
-        // Undo Cancel Booking
+        // TODO: Undo Cancel Booking
 
         // Delete Booking
         deleteBtn.setOnClickListener(

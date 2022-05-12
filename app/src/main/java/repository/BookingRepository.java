@@ -4,13 +4,19 @@ import android.app.Application;
 import android.os.StrictMode;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
+import models.BookingPackage.HomeBooking;
+import models.BookingPackage.TestingOnSiteBooking;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -124,5 +130,61 @@ public class BookingRepository {
     String updatedAt = jObj.getString("updatedAt");
     Log.d("myTag", updatedAt);
     return updatedAt;
+  }
+
+  public LiveData<ArrayList<Booking>> getBookings(String API_KEY) throws IOException, JSONException {
+    MutableLiveData<ArrayList<Booking>> bookings = new MutableLiveData<ArrayList<Booking>>();
+    ArrayList<Booking> dummy = new ArrayList<>();
+    String usersUrl = String.format("https://fit3077.com/api/v2/booking");
+
+    Request request =
+            new Request.Builder().url(usersUrl).header("Authorization", API_KEY).get().build();
+    // Have the response run in background or system will crash
+    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
+    OkHttpClient client = new OkHttpClient();
+    Response response = client.newCall(request).execute();
+
+    assert response.body() != null;
+    String output = response.body().string();
+    JSONArray jsonArray = new JSONArray(output);
+    for (int i = 0; i < jsonArray.length(); i++) {
+      JSONObject obj = jsonArray.getJSONObject(i);
+      if (!(obj.getJSONObject("additionalInfo").has("url"))) {
+        String bookingID = obj.getString("id");
+        JSONObject customer = obj.getJSONObject("customer");
+        String customerId = customer.getString("id");
+        JSONObject object = obj.getJSONObject("testingSite");
+        String testingSiteID = object.getString("id");
+        String testingSiteName = object.getString("name");
+        String updatedTime = obj.getString("updatedAt");
+        String startTime = obj.getString("startTime");
+
+        TestingOnSiteBooking b = new TestingOnSiteBooking(customerId, testingSiteID, startTime, null);
+        b.setBookingID(bookingID);
+        b.setUpdatedAt(updatedTime);
+        b.setTestingSiteName(testingSiteName);
+        dummy.add(b);
+      } else {
+        String bookingID = obj.getString("id");
+        JSONObject customer = obj.getJSONObject("customer");
+        String customerId = customer.getString("id");
+        JSONObject object = obj.getJSONObject("testingSite");
+        String testingSiteID = object.getString("id");
+        String testingSiteName = object.getString("name");
+        String updatedTime = obj.getString("updatedAt");
+        String startTime = obj.getString("startTime");
+
+        HomeBooking b = new HomeBooking(customerId, testingSiteID, startTime, null);
+        b.setBookingID(bookingID);
+        b.setUpdatedAt(updatedTime);
+        b.setTestingSiteName(testingSiteName);
+        dummy.add(b);
+      }
+    }
+
+
+    bookings.setValue(dummy);
+    return bookings;
   }
 }
