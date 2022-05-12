@@ -1,8 +1,13 @@
 package models.UserPackage;
 
+//import androidx.databinding.BaseObservable;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class User {
+import java.util.Observable;
+
+public abstract class User extends Observable {
 
     private String userId;
     private String givenName;
@@ -13,6 +18,7 @@ public abstract class User {
     private Boolean isReceptionist;
     private Boolean isHealthcareWorker;
     private JSONObject additionalInfo;
+    private String notification;
 
     /**
      * Creates user object
@@ -56,5 +62,17 @@ public abstract class User {
     public Boolean getHealthcareWorker() {
     return isHealthcareWorker;
   }
+
+    public String getNotification() throws JSONException {
+        return additionalInfo.getString("notification");
+    }
+
+    public void setNotification(String notification) {
+        this.notification = notification;
+        setChanged();
+        notifyObservers(notification);
+    }
+
+
 
 }

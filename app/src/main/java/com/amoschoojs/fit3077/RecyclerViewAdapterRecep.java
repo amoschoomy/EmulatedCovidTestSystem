@@ -1,6 +1,8 @@
 package com.amoschoojs.fit3077;
 
 import android.app.Application;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
@@ -49,12 +52,24 @@ public class RecyclerViewAdapterRecep
         this.bookings = bookings;
     }
 
-    public void notifyObserver(TestingFacility testingFacility1, TestingFacility testingFacility2) {
+    public void notifyObserver(TestingFacility testingFacility1, TestingFacility testingFacility2, View view) {
         ArrayList<String> adminsInFac1 = testingFacility1.getAdmin();
         ArrayList<String> adminsInFac2 = testingFacility2.getAdmin();
 
         Log.d("myTag", adminsInFac1.get(0));
         Log.d("myTag", adminsInFac2.get(0));
+
+        String notification = "A User from " + testingFacility1.getName() + " has switch to " + testingFacility2.getName();
+
+        for (String admin:adminsInFac1) {
+            // user view model get user from userid
+            // user update notification
+        }
+
+        for (String admin:adminsInFac2) {
+            // user view model get user from userid
+            // user update notification
+        }
 
     }
 
@@ -162,7 +177,7 @@ public class RecyclerViewAdapterRecep
                                                 String testingSiteId = booking.getTestingSiteID();
                                                 TestingFacility testingSite1 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
                                                 TestingFacility testingSite2 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
-                                                notifyObserver(testingSite1,testingSite2);
+                                                notifyObserver(testingSite1,testingSite2, view);
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
                                             }
