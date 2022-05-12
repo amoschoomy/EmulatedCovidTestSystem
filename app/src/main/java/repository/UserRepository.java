@@ -2,9 +2,12 @@ package repository;
 
 import android.app.Application;
 import android.os.StrictMode;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
 import models.BookingPackage.TestingOnSiteBooking;
+import models.UserPackage.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -60,5 +64,28 @@ public class UserRepository {
     }
     bookings.setValue(dummy);
     return bookings;
+  }
+
+  public String getUser(String API_KEY, String userId)
+          throws IOException, JSONException {
+    OkHttpClient client = new OkHttpClient();
+
+    // insert key here
+    String usersUrl = String.format("https://fit3077.com/api/v2/user/%s", userId);
+    Request request =
+            new Request.Builder()
+                    .url(usersUrl)
+                    .header("Authorization", API_KEY)
+                    .get()
+                    .build();
+
+    // Have the response run in background or system will crash
+    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
+
+    Response response = client.newCall(request).execute();
+    String output = response.body().string();
+
+    return output;
   }
 }

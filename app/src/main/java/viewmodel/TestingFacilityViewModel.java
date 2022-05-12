@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -22,6 +24,8 @@ public class TestingFacilityViewModel extends AndroidViewModel {
     }
 
     public TestingFacility getTestingFacility( String API_KEY, String testingFacilityID) throws JSONException, IOException {
-        return testingFacilityRepository.getTestingFacility(API_KEY, testingFacilityID);
+        String testingFacilityStr = testingFacilityRepository.getTestingFacility(API_KEY, testingFacilityID);
+        TestingFacility testingFacility = new Gson().fromJson(testingFacilityStr, TestingFacility.class);
+        return testingFacility;
     }
 }

@@ -19,7 +19,7 @@ public class TestingFacilityRepository {
 
     public TestingFacilityRepository(Application application) {}
 
-    public TestingFacility getTestingFacility(String API_KEY, String testingID)
+    public String getTestingFacility(String API_KEY, String testingID)
             throws IOException, JSONException {
         OkHttpClient client = new OkHttpClient();
 
@@ -38,10 +38,7 @@ public class TestingFacilityRepository {
 
         Response response = client.newCall(request).execute();
         String output = response.body().string();
-        Log.d("myTag", "output TFP");
-        Log.d("myTag", output);
-//        JSONObject jObj = new JSONObject(output);
-        TestingFacility testingFacility = new Gson().fromJson(output, TestingFacility.class);
-        return testingFacility;
+
+        return output;
     }
 }
