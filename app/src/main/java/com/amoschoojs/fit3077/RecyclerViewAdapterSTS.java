@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
+import models.BookingPackage.BookingCaretaker;
 import models.BookingPackage.HomeBooking;
 import models.BookingPackage.TestingOnSiteBooking;
 import models.ExceptionPackage.InvalidCredentialsException;
@@ -52,6 +53,7 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
   BookingViewModel bookingViewModel;
   String bookingID;
   Activity activity;
+  BookingCaretaker bookingCaretaker = BookingCaretaker.getInstance();
   // Filtering details
   private Filter exampleFilter =
       new Filter() {
