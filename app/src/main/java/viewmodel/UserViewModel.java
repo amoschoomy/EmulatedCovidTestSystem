@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
@@ -19,15 +19,24 @@ import repository.UserRepository;
 
 public class UserViewModel extends AndroidViewModel {
   private final UserRepository userRepository;
+  private MutableLiveData<ArrayList<Booking>> bookings;
 
   public UserViewModel(@NonNull Application application) {
     super(application);
     userRepository = new UserRepository(application);
   }
 
-  public LiveData<ArrayList<Booking>> getAllBookings(String userID, String API_KEY)
+  public MutableLiveData<ArrayList<Booking>> retrieveBookings(String userID, String API_KEY)
       throws JSONException, IOException {
-    return userRepository.getAllBookings(userID, API_KEY);
+    if (bookings == null) {
+      bookings = getAllBookings(userID, API_KEY);
+    }
+    return bookings;
+  }
+
+  private MutableLiveData<ArrayList<Booking>> getAllBookings(String userID, String API_KEY)
+      throws JSONException, IOException {
+    return (MutableLiveData<ArrayList<Booking>>) userRepository.getAllBookings(userID, API_KEY);
   }
 
   public User getUser(String API_KEY, String userID) throws JSONException, IOException {

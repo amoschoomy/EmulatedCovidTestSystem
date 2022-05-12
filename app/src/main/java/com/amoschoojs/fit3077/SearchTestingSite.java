@@ -8,11 +8,15 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
+import models.BookingPackage.TestingOnSiteBooking;
 import models.TestingFacilityPackage.TestingFacility;
 import models.TestingFacilityPackage.TestingFacilityCollection;
+import viewmodel.UserViewModel;
 
 public class SearchTestingSite extends AppCompatActivity {
 
@@ -22,12 +26,16 @@ public class SearchTestingSite extends AppCompatActivity {
     setContentView(R.layout.activity_search_testing_site);
     RecyclerView recyclerView = findViewById(R.id.recyclerView2);
     Bundle extras = getIntent().getExtras();
-    String bookingID = null;
+    UserViewModel userViewModel = new UserViewModel(getApplication());
+    String bookingJSON = null;
     if (extras != null) {
-      bookingID = extras.getString("key");
+      bookingJSON = extras.getString("key");
     }
+
+    Gson gson = new Gson();
+    TestingOnSiteBooking ob = gson.fromJson(bookingJSON, TestingOnSiteBooking.class);
     RecyclerViewAdapterSTS recyclerViewAdapter =
-        new RecyclerViewAdapterSTS(getApplication(), bookingID, this);
+        new RecyclerViewAdapterSTS(getApplication(), ob, this);
     ArrayList<TestingFacility> testingFacilities;
     final String API_KEY = getString(R.string.api_key);
     TestingFacilityCollection testingFacilityCollection = TestingFacilityCollection.getInstance();

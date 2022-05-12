@@ -89,13 +89,14 @@ public class TestingOnSiteBooking implements Booking {
   }
 
   public BookingMemento save() {
-    return new BookingMemento(testingSiteID, startTime, status);
+    return new BookingMemento(testingSiteID, startTime, status, testingSiteName);
   }
 
   public void undo(BookingMemento bookingMemento) {
     startTime = bookingMemento.getStartTime();
     testingSiteID = bookingMemento.getTestingSiteID();
     status = bookingMemento.getStatus();
+    testingSiteName = bookingMemento.getTestingSiteName();
   }
 
   @Override

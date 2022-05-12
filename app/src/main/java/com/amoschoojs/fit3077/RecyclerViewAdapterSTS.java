@@ -51,7 +51,7 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
   ArrayList<TestingFacility> testingFacilities;
   ArrayList<TestingFacility> testingFacilitiesFiltered;
   BookingViewModel bookingViewModel;
-  String bookingID;
+  TestingOnSiteBooking booking;
   Activity activity;
   BookingCaretaker bookingCaretaker = BookingCaretaker.getInstance();
   // Filtering details
@@ -98,9 +98,10 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
         }
       };
 
-  public RecyclerViewAdapterSTS(Application application, String bookingID, Activity activity) {
+  public RecyclerViewAdapterSTS(
+      Application application, TestingOnSiteBooking booking, Activity activity) {
     bookingViewModel = new BookingViewModel(application);
-    this.bookingID = bookingID;
+    this.booking = booking;
     this.activity = activity;
   }
 
@@ -108,7 +109,6 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
-
     return new ViewHolder(v) {};
   }
 
@@ -179,7 +179,7 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
 
     @Override
     public void onClick(View view) {
-      if (bookingID != null) { // modify logic
+      if (booking != null) { // modify logic
         int pos = getAdapterPosition();
 
         // get testing facility position of user click
@@ -209,10 +209,18 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
                                 .add("startTime", startTime);
                         RequestBody formBody = builder.build();
                         try {
-                          bookingViewModel.updateBooking(
-                              view.getContext().getString(R.string.api_key), bookingID, formBody);
+                          bookingCaretaker.save(booking);
+                          booking.setStartTime(startTime);
+                          booking.setTestingSiteID(testingFacilityID);
+                          String updatedTime =
+                              bookingViewModel.updateBooking(
+                                  view.getContext().getString(R.string.api_key),
+                                  booking.getBookingID(),
+                                  formBody);
                           Toast.makeText(view.getContext(), "updated booking", Toast.LENGTH_SHORT)
                               .show();
+                          booking.setUpdatedAt(updatedTime);
+
                           activity.finish();
                         } catch (IOException e) {
                           e.printStackTrace();

@@ -1,12 +1,10 @@
 package com.amoschoojs.fit3077;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import org.json.JSONException;
 
@@ -47,14 +45,14 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
 
         // populate recyclerview
         try {
-            userViewModel
-                    .getAllBookings(user.getUserId(), API_KEY)
-                    .observe(
-                            this,
-                            newData -> {
-                                recyclerViewAdapter.setBookings(newData);
-                                recyclerViewAdapter.notifyDataSetChanged();
-                            });
+      userViewModel
+          .retrieveBookings(user.getUserId(), API_KEY)
+          .observe(
+              this,
+              newData -> {
+                recyclerViewAdapter.setBookings(newData);
+                recyclerViewAdapter.notifyDataSetChanged();
+              });
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {

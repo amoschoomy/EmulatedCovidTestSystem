@@ -2,12 +2,9 @@ package repository;
 
 import android.app.Application;
 import android.os.StrictMode;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +15,6 @@ import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
 import models.BookingPackage.TestingOnSiteBooking;
-import models.UserPackage.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -27,9 +23,10 @@ public class UserRepository {
 
   public UserRepository(Application application) {}
 
+  MutableLiveData<ArrayList<Booking>> bookings = new MutableLiveData<ArrayList<Booking>>();
+
   public LiveData<ArrayList<Booking>> getAllBookings(String userID, String API_KEY)
       throws IOException, JSONException {
-    MutableLiveData<ArrayList<Booking>> bookings = new MutableLiveData<ArrayList<Booking>>();
     ArrayList<Booking> dummy = new ArrayList<>();
     String usersUrl = String.format("https://fit3077.com/api/v2/user/%s?fields=bookings", userID);
 

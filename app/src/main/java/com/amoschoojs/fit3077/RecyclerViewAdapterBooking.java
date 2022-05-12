@@ -2,6 +2,7 @@ package com.amoschoojs.fit3077;
 
 import android.app.Application;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 
@@ -35,6 +38,7 @@ public class RecyclerViewAdapterBooking
     bookingViewModel = new BookingViewModel(application);
   }
 
+
   public void setBookings(ArrayList<Booking> bookings) {
     this.bookings = bookings;
   }
@@ -51,7 +55,7 @@ public class RecyclerViewAdapterBooking
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    TestingOnSiteBooking booking = (TestingOnSiteBooking) bookings.get(holder.getAdapterPosition());
+    TestingOnSiteBooking booking = (TestingOnSiteBooking) bookings.get(position);
     TextView testingSiteName = holder.itemView.findViewById(R.id.testingsitecard);
     TextView startTime = holder.itemView.findViewById(R.id.starttimecard);
     TextView status = holder.itemView.findViewById(R.id.statuscard);
@@ -68,8 +72,11 @@ public class RecyclerViewAdapterBooking
               booking.getBookingID(),
               holder.itemView.getContext().getString(R.string.api_key),
               false);
+      Log.d("myTag", booking.getStatus() + "before");
       booking.setStatus(array[1]);
+      Log.d("myTag", booking.getStatus() + "after\n");
       if (booking.getStatus().equals("CANCELLED")) {
+        Log.d("myTag", "reached");
         cancelButton.setEnabled(false);
       }
       status.setText(array[1]);
@@ -117,7 +124,10 @@ public class RecyclerViewAdapterBooking
           @Override
           public void onClick(View view) {
             Intent i = new Intent(view.getContext(), SearchTestingSite.class);
-            i.putExtra("key", booking.getBookingID());
+            Gson gson = new Gson();
+            String myJson = gson.toJson(booking);
+            i.putExtra("key", myJson);
+            //            i.putExtra("key", booking.getBookingID());
             view.getContext().startActivity(i);
           }
         });
@@ -127,13 +137,18 @@ public class RecyclerViewAdapterBooking
           public void onClick(View view) {
             try {
               caretaker.revert(booking);
-              FormBody.Builder builder = new FormBody.Builder().add("status", booking.getStatus());
+              FormBody.Builder builder =
+                  new FormBody.Builder()
+                      .add("status", booking.getStatus())
+                      .add("testingSiteId", booking.getTestingSiteID())
+                      .add("startTime", booking.getStartTime());
               RequestBody formBody = builder.build();
               String updatedAt =
                   bookingViewModel.updateBooking(
                       view.getContext().getString(R.string.api_key),
                       booking.getBookingID(),
                       formBody);
+
               booking.setUpdatedAt(updatedAt);
               notifyDataSetChanged();
               cancelButton.setEnabled(true);

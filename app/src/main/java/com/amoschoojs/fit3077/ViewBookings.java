@@ -16,11 +16,15 @@ import viewmodel.UserViewModel;
 
 public class ViewBookings extends AppCompatActivity {
 
+  UserViewModel userViewModel;
+  RecyclerView recyclerView;
+  RecyclerViewAdapterBooking recyclerViewAdapter;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_view_bookings);
-    UserViewModel userViewModel = new UserViewModel(getApplication());
+    userViewModel = new UserViewModel(getApplication());
 
     LoginAuthentication loginAuthentication = null;
     try {
@@ -31,9 +35,8 @@ public class ViewBookings extends AppCompatActivity {
       e.printStackTrace();
     }
     User user = loginAuthentication.getUser();
-    RecyclerView recyclerView = findViewById(R.id.recyclerViewbooking);
-    RecyclerViewAdapterBooking recyclerViewAdapter =
-        new RecyclerViewAdapterBooking(getApplication());
+    recyclerView = findViewById(R.id.recyclerViewbooking);
+    recyclerViewAdapter = new RecyclerViewAdapterBooking(getApplication());
     final String API_KEY = getString(R.string.api_key);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     recyclerView.setLayoutManager(layoutManager);
@@ -41,7 +44,7 @@ public class ViewBookings extends AppCompatActivity {
 
     try {
       userViewModel
-          .getAllBookings(user.getUserId(), API_KEY)
+          .retrieveBookings(user.getUserId(), API_KEY)
           .observe(
               this,
               newData -> {
@@ -53,5 +56,35 @@ public class ViewBookings extends AppCompatActivity {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  protected void onResume() {
+    try {
+      final String API_KEY = getString(R.string.api_key);
+      LoginAuthentication loginAuthentication = null;
+      try {
+        loginAuthentication = LoginAuthentication.getInstance();
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (JSONException e) {
+        e.printStackTrace();
+      }
+      User user = loginAuthentication.getUser();
+      userViewModel
+          .retrieveBookings(user.getUserId(), API_KEY)
+          .observe(
+              this,
+              newData -> {
+                recyclerViewAdapter.setBookings(newData);
+                recyclerViewAdapter.notifyDataSetChanged();
+              });
+    } catch (JSONException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    super.onResume();
   }
 }
