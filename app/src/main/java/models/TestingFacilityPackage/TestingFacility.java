@@ -58,6 +58,11 @@ public class TestingFacility implements TestingFacilityInterface {
   public String getWaitingTimes() {
     return additionalInfo.getWaitingTime();
   }
+
+  public ArrayList<String> getAdmin() {
+    return additionalInfo.getAdmin();
+  }
+
   private ArrayList<Booking> bookings;
   private Address address;
   private AdditionalInfo additionalInfo;

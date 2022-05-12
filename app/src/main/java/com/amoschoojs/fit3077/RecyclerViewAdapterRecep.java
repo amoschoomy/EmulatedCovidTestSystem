@@ -23,29 +23,44 @@ import models.BookingPackage.Booking;
 import models.BookingPackage.BookingCaretaker;
 import models.BookingPackage.TestingOnSiteBooking;
 import models.LoginSystemPackage.LoginAuthentication;
+import models.TestingFacilityPackage.TestingFacility;
 import models.UserPackage.User;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import viewmodel.BookingViewModel;
+import viewmodel.TestingFacilityViewModel;
+import viewmodel.UserViewModel;
 
 public class RecyclerViewAdapterRecep
         extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder> {
     BookingViewModel bookingViewModel;
+    TestingFacilityViewModel testingFacilityViewModel;
+    UserViewModel userViewModel;
     ArrayList<Booking> bookings;
-  BookingCaretaker caretaker = BookingCaretaker.getInstance();
+    BookingCaretaker caretaker = BookingCaretaker.getInstance();
 
     public RecyclerViewAdapterRecep(Application application) {
         bookingViewModel = new BookingViewModel(application);
+        testingFacilityViewModel = new TestingFacilityViewModel(application);
+        userViewModel = new UserViewModel(application);
     }
 
     public void setBookings(ArrayList<Booking> bookings) {
         this.bookings = bookings;
     }
 
+    public void notifyObserver(TestingFacility testingFacility1, TestingFacility testingFacility2) {
+        ArrayList<String> adminsInFac1 = testingFacility1.getAdmin();
+        ArrayList<String> adminsInFac2 = testingFacility2.getAdmin();
+
+        Log.d("myTag", adminsInFac1.get(0));
+        Log.d("myTag", adminsInFac2.get(0));
+
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View v =
                 LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_receptionist, parent, false);
 
@@ -116,6 +131,8 @@ public class RecyclerViewAdapterRecep
                     }
                 });
 
+        // Modify Booking, remember to caretaker.save(booking)
+
         // Cancel Booking
         cancelBtn.setOnClickListener(
                 new View.OnClickListener() {
@@ -131,6 +148,7 @@ public class RecyclerViewAdapterRecep
                                             RequestBody formBody = builder.build();
                                             try {
                                                 caretaker.save(booking);
+                                                String site1id = booking.getTestingSiteID();
                                                 String updatedAt =
                                                         bookingViewModel.updateBooking(
                                                                 holder.itemView.getContext().getString(R.string.api_key),
@@ -140,6 +158,11 @@ public class RecyclerViewAdapterRecep
                                                 booking.setStatus("CANCELLED");
                                                 notifyDataSetChanged();
                                                 cancelBtn.setEnabled(false);
+
+                                                String testingSiteId = booking.getTestingSiteID();
+                                                TestingFacility testingSite1 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
+                                                TestingFacility testingSite2 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
+                                                notifyObserver(testingSite1,testingSite2);
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -150,6 +173,8 @@ public class RecyclerViewAdapterRecep
                                 .show();
                     }
                 });
+
+        // Undo Cancel Booking
 
         // Delete Booking
         deleteBtn.setOnClickListener(

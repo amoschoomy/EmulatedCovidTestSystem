@@ -1,5 +1,7 @@
 package models.TestingFacilityPackage;
 
+import java.util.ArrayList;
+
 /** Serialise JSON to AddtionalInfo class */
 public class AdditionalInfo {
   private TestingFacilityType testingFacilityType;
@@ -7,6 +9,7 @@ public class AdditionalInfo {
   private String closingTime;
   private boolean onSiteBooking;
   private String waitingTime;
+  private ArrayList<String> admin;
 
   public TestingFacilityType getTestingFacilityType() {
     return testingFacilityType;
@@ -36,6 +39,8 @@ public class AdditionalInfo {
         + ", waitingTime='"
         + waitingTime
         + '\''
+        + ", admin="
+        + admin
         + '}';
   }
 
@@ -45,5 +50,9 @@ public class AdditionalInfo {
 
   public String getWaitingTime() {
     return waitingTime;
+  }
+
+  public ArrayList<String> getAdmin() {
+    return admin;
   }
 }
