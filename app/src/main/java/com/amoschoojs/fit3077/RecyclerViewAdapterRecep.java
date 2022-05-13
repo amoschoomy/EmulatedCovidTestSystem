@@ -258,7 +258,10 @@ public class RecyclerViewAdapterRecep
                                                     deleteBtn.setEnabled(false);
                                                     notifyDataSetChanged();
                                                     Toast.makeText(view.getContext(), "Booking Deleted", Toast.LENGTH_LONG).show();
-                                                } else {
+                                                } else if (deleted.equals("409")){
+                                                    Toast.makeText(view.getContext(), "A booking cannot be deleted if it has any associated COVID tests.", Toast.LENGTH_LONG).show();
+                                                }
+                                                else {
                                                     Toast.makeText(view.getContext(), "Failed to delete", Toast.LENGTH_LONG).show();
                                                 }
 
