@@ -23,6 +23,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import models.BookingPackage.Booking;
 import models.BookingPackage.BookingCaretaker;
@@ -37,17 +39,15 @@ import viewmodel.TestingFacilityViewModel;
 import viewmodel.UserViewModel;
 
 public class RecyclerViewAdapterRecep
-        extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder> {
+        extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder>{
     BookingViewModel bookingViewModel;
     TestingFacilityViewModel testingFacilityViewModel;
-    UserViewModel userViewModel;
     ArrayList<Booking> bookings;
     BookingCaretaker caretaker = BookingCaretaker.getInstance();
 
-    public RecyclerViewAdapterRecep(Application application) {
-        bookingViewModel = new BookingViewModel(application);
+    public RecyclerViewAdapterRecep(Application application, BookingViewModel bookingViewModel) {
+        this.bookingViewModel = bookingViewModel;
         testingFacilityViewModel = new TestingFacilityViewModel(application);
-        userViewModel = new UserViewModel(application);
     }
 
     public void setBookings(ArrayList<Booking> bookings) {
@@ -63,6 +63,30 @@ public class RecyclerViewAdapterRecep
         return new RecyclerViewAdapterRecep.ViewHolder(v) {};
     }
 
+//    public void notifyObserver(TestingFacility testingFacility1, TestingFacility testingFacility2, View view) throws JSONException, IOException {
+//        ArrayList<String> adminsInFac1 = testingFacility1.getAdmin();
+//        ArrayList<String> adminsInFac2 = testingFacility2.getAdmin();
+//
+//        Log.d("myTag", adminsInFac1.get(0));
+//        Log.d("myTag", adminsInFac2.get(0));
+//
+//        String notification = "A User from " + testingFacility1.getName() + " has switch to " + testingFacility2.getName();
+//
+//        for (String admin:adminsInFac1) {
+//            // user view model get user from userid
+//            User user = userViewModel.getUser(view.getContext().getString(R.string.api_key),admin);
+//            // user update notification
+//            user.setNotification(notification);
+//        }
+//
+//        for (String admin:adminsInFac2) {
+//            // user view model get user from userid
+//            User user = userViewModel.getUser(view.getContext().getString(R.string.api_key),admin);
+//            // user update notification
+//            user.setNotification(notification);
+//        }
+//
+//    }
 
 
 
@@ -80,20 +104,6 @@ public class RecyclerViewAdapterRecep
         Button processBtn = holder.itemView.findViewById(R.id.processBtn);
         Button undoBtn = holder.itemView.findViewById(R.id.undoBtn);
 
-//        testingSiteName.setText(booking.getTestingSiteName());
-//        startTime.setText(booking.getStartTime());
-//        try {
-//            String[] array =
-//                    bookingViewModel.checkBooking(
-//                            booking.getBookingID(),
-//                            holder.itemView.getContext().getString(R.string.api_key),
-//                            false);
-//            status.setText(array[1]);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        updatedAt.setText(booking.getUpdatedAt());
-
         try {
             String[] array =
                     bookingViewModel.checkBooking(
@@ -106,10 +116,10 @@ public class RecyclerViewAdapterRecep
             booking.setUpdatedAt(array[4]);
             testingSiteName.setText(booking.getTestingSiteName());
             startTime.setText(booking.getStartTime());
-            if (booking.getStatus().equals("CANCELLED")) {
-                Log.d("myTag", "reached");
-                cancelBtn.setEnabled(false);
-            }
+//            if (booking.getStatus().equals("CANCELLED")) {
+//                Log.d("myTag", "reached");
+//                cancelBtn.setEnabled(false);
+//            }
             status.setText(array[1]);
         } catch (Exception e) {
             e.printStackTrace();
@@ -128,8 +138,6 @@ public class RecyclerViewAdapterRecep
         User user = loginAuthentication.getUser();
 
         // set visibility of buttons
-
-
         if (user.getHealthcareWorker()) {
             modifyBtn.setVisibility(View.GONE);
             cancelBtn.setVisibility(View.GONE);
@@ -191,12 +199,12 @@ public class RecyclerViewAdapterRecep
                                                 booking.setUpdatedAt(updatedAt);
                                                 booking.setStatus("CANCELLED");
                                                 notifyDataSetChanged();
-                                                cancelBtn.setEnabled(false);
+//                                                cancelBtn.setEnabled(false);
 
                                                 // notification
-                                                String testingSiteId = booking.getTestingSiteID();
-                                                TestingFacility testingSite1 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
-                                                TestingFacility testingSite2 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
+//                                                String testingSiteId = booking.getTestingSiteID();
+//                                                TestingFacility testingSite1 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
+//                                                TestingFacility testingSite2 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
 //                                                notifyObserver(testingSite1,testingSite2, view);
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
@@ -230,7 +238,7 @@ public class RecyclerViewAdapterRecep
 
                             booking.setUpdatedAt(updatedAt);
                             notifyDataSetChanged();
-                            cancelBtn.setEnabled(true);
+//                            cancelBtn.setEnabled(true);
                         } catch (Exception e) {
                             Toast.makeText(view.getContext(), "No undo", Toast.LENGTH_SHORT).show();
                         }
@@ -249,13 +257,14 @@ public class RecyclerViewAdapterRecep
                                         android.R.string.yes,
                                         (dialog, which) -> {
                                             try {
-//                                                booking.setStatus("DELETED");
+                                                int pos = holder.getAdapterPosition();
                                                 String deleted =
                                                         bookingViewModel.deleteBooking(
                                                                 holder.itemView.getContext().getString(R.string.api_key),
                                                                 booking.getBookingID());
                                                 if (deleted.equals("204")){
-                                                    deleteBtn.setEnabled(false);
+                                                    bookings.remove(pos);
+//                                                    notifyItemRemoved(pos);
                                                     notifyDataSetChanged();
                                                     Toast.makeText(view.getContext(), "Booking Deleted", Toast.LENGTH_LONG).show();
                                                 } else if (deleted.equals("409")){

@@ -9,12 +9,16 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
+import models.UserPackage.HealthcareWorkerFactory;
+import models.UserPackage.ReceptionistFactory;
 import models.UserPackage.User;
+import models.UserPackage.UserFactory;
 import repository.UserRepository;
 
 public class UserViewModel extends AndroidViewModel {
@@ -39,8 +43,24 @@ public class UserViewModel extends AndroidViewModel {
     return (MutableLiveData<ArrayList<Booking>>) userRepository.getAllBookings(userID, API_KEY);
   }
 
-  public User getUser(String API_KEY, String userID) throws JSONException, IOException {
-    String userStr = userRepository.getUser(API_KEY,userID);
-    return new Gson().fromJson(userStr, User.class);
-  }
+//  public User getUser(String API_KEY, String userID) throws JSONException, IOException {
+//    String userStr = userRepository.getUser(API_KEY,userID);
+//    JSONObject jsonObject = new JSONObject(userStr);
+//    String id = jsonObject.getString("id");
+//    String givenName = jsonObject.getString("givenName");
+//    String familyName = jsonObject.getString("familyName");
+//    String userName = jsonObject.getString("userName");
+//    String phoneNumber = jsonObject.getString("phoneNumber");
+//    Boolean isCustomer = jsonObject.getBoolean("isCustomer");
+//    Boolean isReceptionist = jsonObject.getBoolean("isReceptionist");
+//    Boolean isHealthcareWorker = jsonObject.getBoolean("isHealthcareWorker");
+//    JSONObject additionalInfo = jsonObject.getJSONObject("additionalInfo");
+//    User user;
+//    UserFactory uf;
+//    if (isReceptionist) uf = new ReceptionistFactory();
+//    else uf = new HealthcareWorkerFactory();
+//    user = uf.createSpecificUser(id,givenName,familyName,userName,phoneNumber,isCustomer,isReceptionist,isHealthcareWorker,additionalInfo);
+//    return user;
+//
+//  }
 }

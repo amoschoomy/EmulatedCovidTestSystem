@@ -85,4 +85,30 @@ public class UserRepository {
 
     return output;
   }
+//
+//  public String getNotification(String API_KEY, String userId)
+//          throws IOException, JSONException {
+//    OkHttpClient client = new OkHttpClient();
+//
+//    // insert key here
+//    String usersUrl = String.format("https://fit3077.com/api/v2/user/%s", userId);
+//    Request request =
+//            new Request.Builder()
+//                    .url(usersUrl)
+//                    .header("Authorization", API_KEY)
+//                    .get()
+//                    .build();
+//
+//    // Have the response run in background or system will crash
+//    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//    StrictMode.setThreadPolicy(policy);
+//
+//    Response response = client.newCall(request).execute();
+//    String output = response.body().string();
+//
+//    JSONObject jsonObject = new JSONObject(output);
+//    JSONObject additionalInfo = jsonObject.getJSONObject("additionalInfo");
+//
+//    return additionalInfo.getString("notification");
+//  }
 }

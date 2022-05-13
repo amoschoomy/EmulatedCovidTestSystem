@@ -26,7 +26,7 @@ public class BookingRepository {
 
   public BookingRepository(Application application) {}
 
-
+  MutableLiveData<ArrayList<Booking>> bookings = new MutableLiveData<ArrayList<Booking>>();
 
   public String[] create(Booking booking, String API_KEY) throws IOException, JSONException {
     String usersUrl = "https://fit3077.com/api/v2/booking";
@@ -130,7 +130,6 @@ public class BookingRepository {
   }
 
   public LiveData<ArrayList<Booking>> getBookings(String API_KEY) throws IOException, JSONException {
-    MutableLiveData<ArrayList<Booking>> bookings = new MutableLiveData<ArrayList<Booking>>();
     ArrayList<Booking> dummy = new ArrayList<>();
     String usersUrl = String.format("https://fit3077.com/api/v2/booking");
 
