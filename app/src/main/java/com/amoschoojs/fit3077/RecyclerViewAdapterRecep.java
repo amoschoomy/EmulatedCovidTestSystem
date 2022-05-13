@@ -73,14 +73,43 @@ public class RecyclerViewAdapterRecep
         TextView startTime = holder.itemView.findViewById(R.id.startTimeInput);
         TextView status = holder.itemView.findViewById(R.id.statusInput);
         TextView updatedAt = holder.itemView.findViewById(R.id.updateInput);
-        testingSiteName.setText(booking.getTestingSiteName());
-        startTime.setText(booking.getStartTime());
+
+        Button modifyBtn = holder.itemView.findViewById(R.id.modifyBtn);
+        Button cancelBtn = holder.itemView.findViewById(R.id.cancelBtn);
+        Button deleteBtn = holder.itemView.findViewById(R.id.deleteBtn);
+        Button processBtn = holder.itemView.findViewById(R.id.processBtn);
+        Button undoBtn = holder.itemView.findViewById(R.id.undoBtn);
+
+//        testingSiteName.setText(booking.getTestingSiteName());
+//        startTime.setText(booking.getStartTime());
+//        try {
+//            String[] array =
+//                    bookingViewModel.checkBooking(
+//                            booking.getBookingID(),
+//                            holder.itemView.getContext().getString(R.string.api_key),
+//                            false);
+//            status.setText(array[1]);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        updatedAt.setText(booking.getUpdatedAt());
+
         try {
             String[] array =
                     bookingViewModel.checkBooking(
                             booking.getBookingID(),
                             holder.itemView.getContext().getString(R.string.api_key),
                             false);
+            booking.setStatus(array[1]);
+            booking.setStartTime(array[3]);
+            booking.setTestingSiteName(array[2]);
+            booking.setUpdatedAt(array[4]);
+            testingSiteName.setText(booking.getTestingSiteName());
+            startTime.setText(booking.getStartTime());
+            if (booking.getStatus().equals("CANCELLED")) {
+                Log.d("myTag", "reached");
+                cancelBtn.setEnabled(false);
+            }
             status.setText(array[1]);
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,11 +128,7 @@ public class RecyclerViewAdapterRecep
         User user = loginAuthentication.getUser();
 
         // set visibility of buttons
-        Button modifyBtn = holder.itemView.findViewById(R.id.modifyBtn);
-        Button cancelBtn = holder.itemView.findViewById(R.id.cancelBtn);
-        Button deleteBtn = holder.itemView.findViewById(R.id.deleteBtn);
-        Button processBtn = holder.itemView.findViewById(R.id.processBtn);
-        Button undoBtn = holder.itemView.findViewById(R.id.undoBtn);
+
 
         if (user.getHealthcareWorker()) {
             modifyBtn.setVisibility(View.GONE);

@@ -81,6 +81,7 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
 
     }
 
+    // Need this to update when Booking is Processed
     @Override
     protected void onResume() {
         super.onResume();
