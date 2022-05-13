@@ -17,6 +17,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -61,9 +63,12 @@ public class RecyclerViewAdapterRecep
         return new RecyclerViewAdapterRecep.ViewHolder(v) {};
     }
 
+
+
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TestingOnSiteBooking booking = (TestingOnSiteBooking) bookings.get(holder.getAdapterPosition());
+        Booking booking = bookings.get(holder.getAdapterPosition());
         TextView testingSiteName = holder.itemView.findViewById(R.id.testingsiteinput);
         TextView startTime = holder.itemView.findViewById(R.id.startTimeInput);
         TextView status = holder.itemView.findViewById(R.id.statusInput);
@@ -111,13 +116,12 @@ public class RecyclerViewAdapterRecep
             processBtn.setVisibility(View.GONE);
         }
 
-        // TODO: Observer Pattern for modified/cancelled notification
-
         // Process Booking
         processBtn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        caretaker.save(booking);
                         Intent i = new Intent(view.getContext(), OnSiteTestingActivity.class);
                         i.putExtra("bookingId", booking.getBookingID());
                         Log.d("myTag", booking.getBookingID());
@@ -125,7 +129,19 @@ public class RecyclerViewAdapterRecep
                     }
                 });
 
-        // TODO: Modify Booking, remember to caretaker.save(booking)
+        // Modify Booking
+        modifyBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        caretaker.save(booking);
+                        Intent i = new Intent(view.getContext(), SearchTestingSite.class);
+                        Gson gson = new Gson();
+                        String myJson = gson.toJson(booking);
+                        i.putExtra("key", myJson);
+                        view.getContext().startActivity(i);
+                    }
+                });
 
         // Cancel Booking
         cancelBtn.setOnClickListener(
@@ -142,7 +158,6 @@ public class RecyclerViewAdapterRecep
                                             RequestBody formBody = builder.build();
                                             try {
                                                 caretaker.save(booking);
-                                                String site1id = booking.getTestingSiteID();
                                                 String updatedAt =
                                                         bookingViewModel.updateBooking(
                                                                 holder.itemView.getContext().getString(R.string.api_key),
@@ -153,6 +168,7 @@ public class RecyclerViewAdapterRecep
                                                 notifyDataSetChanged();
                                                 cancelBtn.setEnabled(false);
 
+                                                // notification
                                                 String testingSiteId = booking.getTestingSiteID();
                                                 TestingFacility testingSite1 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
                                                 TestingFacility testingSite2 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
@@ -168,7 +184,33 @@ public class RecyclerViewAdapterRecep
                     }
                 });
 
-        // TODO: Undo Cancel Booking
+        // Undo Cancel/Modify Booking
+        undoBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            caretaker.revert(booking);
+                            FormBody.Builder builder =
+                                    new FormBody.Builder()
+                                            .add("status", booking.getStatus())
+                                            .add("testingSiteId", booking.getTestingSiteID())
+                                            .add("startTime", booking.getStartTime());
+                            RequestBody formBody = builder.build();
+                            String updatedAt =
+                                    bookingViewModel.updateBooking(
+                                            view.getContext().getString(R.string.api_key),
+                                            booking.getBookingID(),
+                                            formBody);
+
+                            booking.setUpdatedAt(updatedAt);
+                            notifyDataSetChanged();
+                            cancelBtn.setEnabled(true);
+                        } catch (Exception e) {
+                            Toast.makeText(view.getContext(), "No undo", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
         // Delete Booking
         deleteBtn.setOnClickListener(
@@ -182,15 +224,23 @@ public class RecyclerViewAdapterRecep
                                         android.R.string.yes,
                                         (dialog, which) -> {
                                             try {
+//                                                booking.setStatus("DELETED");
                                                 String deleted =
                                                         bookingViewModel.deleteBooking(
                                                                 holder.itemView.getContext().getString(R.string.api_key),
                                                                 booking.getBookingID());
-                                                notifyDataSetChanged();
+                                                if (deleted.equals("204")){
+                                                    deleteBtn.setEnabled(false);
+                                                    notifyDataSetChanged();
+                                                    Toast.makeText(view.getContext(), "Booking Deleted", Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    Toast.makeText(view.getContext(), "Failed to delete", Toast.LENGTH_LONG).show();
+                                                }
+
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
                                             }
-                                            Toast.makeText(view.getContext(), "Booking Deleted", Toast.LENGTH_LONG).show();
+
                                         })
                                 .setNegativeButton(android.R.string.no, null)
                                 .setIcon(R.drawable.ic_launcher_background)

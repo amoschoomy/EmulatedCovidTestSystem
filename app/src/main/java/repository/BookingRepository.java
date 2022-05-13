@@ -124,12 +124,8 @@ public class BookingRepository {
     StrictMode.setThreadPolicy(policy);
 
     Response response = client.newCall(request).execute();
-    String output = response.body().string();
-    Log.d("myTag", output);
-    JSONObject jObj = new JSONObject(output);
-    String updatedAt = jObj.getString("updatedAt");
-    Log.d("myTag", updatedAt);
-    return updatedAt;
+    String output = String.valueOf(response.code());
+    return output;
   }
 
   public LiveData<ArrayList<Booking>> getBookings(String API_KEY) throws IOException, JSONException {

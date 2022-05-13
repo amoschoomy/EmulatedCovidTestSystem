@@ -17,6 +17,9 @@ import viewmodel.UserViewModel;
 
 public class AdminBookingInterfaceActivity extends AppCompatActivity {
 
+    RecyclerViewAdapterRecep recyclerViewAdapter =
+            new RecyclerViewAdapterRecep(getApplication());;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +41,8 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
 
         // set recyclerview adapter
         RecyclerView recyclerView = findViewById(R.id.recyclerViewAdmin);
-        RecyclerViewAdapterRecep recyclerViewAdapter =
-                new RecyclerViewAdapterRecep(getApplication());
+//        RecyclerViewAdapterRecep recyclerViewAdapter =
+//                new RecyclerViewAdapterRecep(getApplication());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
@@ -75,6 +78,17 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewAdmin);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(recyclerViewAdapter);
 
     }
 }
