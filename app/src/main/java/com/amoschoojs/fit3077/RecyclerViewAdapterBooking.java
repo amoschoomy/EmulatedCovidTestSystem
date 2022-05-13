@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import models.BookingPackage.Booking;
 import models.BookingPackage.BookingCaretaker;
 import models.BookingPackage.TestingOnSiteBooking;
+import models.ExceptionPackage.InvalidUndoException;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import viewmodel.BookingViewModel;
@@ -156,8 +157,10 @@ public class RecyclerViewAdapterBooking
               notifyDataSetChanged();
               cancelButton.setEnabled(true);
               modifyButton.setEnabled(true);
+            } catch (InvalidUndoException e) {
+              Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-              Toast.makeText(view.getContext(), "No undo", Toast.LENGTH_SHORT).show();
+              Toast.makeText(view.getContext(), "Undo failed", Toast.LENGTH_SHORT).show();
             }
           }
         });

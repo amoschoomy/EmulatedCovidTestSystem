@@ -2,6 +2,9 @@ package models.BookingPackage;
 
 import org.json.JSONException;
 
+import java.time.Instant;
+
+import models.ExceptionPackage.InvalidUndoException;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
@@ -105,14 +108,16 @@ public abstract class Booking {
     return new BookingMemento(testingSiteID, startTime, status, testingSiteName);
   }
 
-  public void undo(BookingMemento bookingMemento) {
+  public void undo(BookingMemento bookingMemento) throws InvalidUndoException {
+    if (Instant.now().isAfter(Instant.parse(bookingMemento.getStartTime()))) {
+      throw new InvalidUndoException("Undo is Invalid because the previous booking date is over");
+    } else {
     startTime = bookingMemento.getStartTime();
     testingSiteID = bookingMemento.getTestingSiteID();
     status = bookingMemento.getStatus();
     testingSiteName = bookingMemento.getTestingSiteName();
   }
-
-
+  }
 
   class BookingMemento {
     private String testingSiteID;

@@ -1,9 +1,9 @@
 package models.BookingPackage;
 
-import android.util.Log;
-
 import java.util.HashMap;
 import java.util.Stack;
+
+import models.ExceptionPackage.InvalidUndoException;
 
 public class BookingCaretaker {
 
@@ -39,11 +39,10 @@ public class BookingCaretaker {
       if (!mementos.empty()) {
         booking.undo(mementos.pop());
       } else {
-        throw new Exception("No undo");
+        throw new InvalidUndoException("No undo");
       }
     } else {
-      Log.d("myTag", "no stack?!");
-      throw new Exception("No undo");
+      throw new InvalidUndoException("No undo");
     }
   }
 }
