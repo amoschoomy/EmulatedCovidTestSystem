@@ -72,9 +72,10 @@ public class BookingRepository {
         String bookingID = obj.getString("id");
         JSONObject object = obj.getJSONObject("testingSite");
         String testingSiteName = object.getString("name");
+        String testingSiteID = object.getString("id");
         String startTime = obj.getString("startTime");
         String updatedTime = obj.getString("updatedAt");
-        return new String[] {bookingID, B, testingSiteName, startTime, updatedTime};
+        return new String[] {bookingID, B, testingSiteName, startTime, updatedTime, testingSiteID};
       }
     }
     throw new Exception("No Booking Found");

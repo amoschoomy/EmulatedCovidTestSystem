@@ -2,7 +2,6 @@ package com.amoschoojs.fit3077;
 
 import android.app.Application;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,10 +73,13 @@ public class RecyclerViewAdapterBooking
       booking.setStartTime(array[3]);
       booking.setTestingSiteName(array[2]);
       booking.setUpdatedAt(array[4]);
+      booking.setTestingSiteID(array[5]);
       testingSiteName.setText(booking.getTestingSiteName());
       startTime.setText(booking.getStartTime());
       if (booking.getStatus().equals("CANCELLED")) {
-        Log.d("myTag", "reached");
+        cancelButton.setEnabled(false);
+      } else if (booking.getStatus().equals("PROCESSED")) {
+        modifyButton.setEnabled(false);
         cancelButton.setEnabled(false);
       }
       status.setText(array[1]);
@@ -109,6 +111,7 @@ public class RecyclerViewAdapterBooking
                         booking.setStatus("CANCELLED");
                         notifyDataSetChanged();
                         cancelButton.setEnabled(false);
+                        modifyButton.setEnabled(false);
                       } catch (IOException | JSONException e) {
                         e.printStackTrace();
                       }
@@ -128,7 +131,6 @@ public class RecyclerViewAdapterBooking
             Gson gson = new Gson();
             String myJson = gson.toJson(booking);
             i.putExtra("key", myJson);
-            //            i.putExtra("key", booking.getBookingID());
             view.getContext().startActivity(i);
           }
         });
@@ -153,6 +155,7 @@ public class RecyclerViewAdapterBooking
               booking.setUpdatedAt(updatedAt);
               notifyDataSetChanged();
               cancelButton.setEnabled(true);
+              modifyButton.setEnabled(true);
             } catch (Exception e) {
               Toast.makeText(view.getContext(), "No undo", Toast.LENGTH_SHORT).show();
             }

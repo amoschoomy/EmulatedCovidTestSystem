@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
@@ -202,30 +203,38 @@ public class RecyclerViewAdapterSTS extends RecyclerView.Adapter<RecyclerViewAda
                       public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
-                        String startTime = calendar.getTime().toInstant().toString();
-                        FormBody.Builder builder =
-                            new FormBody.Builder()
-                                .add("testingSiteId", testingFacilityID)
-                                .add("startTime", startTime);
-                        RequestBody formBody = builder.build();
-                        try {
-                          bookingCaretaker.save(booking);
-                          booking.setStartTime(startTime);
-                          booking.setTestingSiteID(testingFacilityID);
-                          String updatedTime =
-                              bookingViewModel.updateBooking(
-                                  view.getContext().getString(R.string.api_key),
-                                  booking.getBookingID(),
-                                  formBody);
-                          Toast.makeText(view.getContext(), "updated booking", Toast.LENGTH_SHORT)
+                        if (Instant.now().isAfter(calendar.getTime().toInstant())) {
+                          Toast.makeText(
+                                  view.getContext(),
+                                  "Sorry choose a date later than today",
+                                  Toast.LENGTH_SHORT)
                               .show();
-                          booking.setUpdatedAt(updatedTime);
+                        } else {
+                          String startTime = calendar.getTime().toInstant().toString();
+                          FormBody.Builder builder =
+                              new FormBody.Builder()
+                                  .add("testingSiteId", testingFacilityID)
+                                  .add("startTime", startTime);
+                          RequestBody formBody = builder.build();
+                          try {
+                            bookingCaretaker.save(booking);
+                            booking.setStartTime(startTime);
+                            booking.setTestingSiteID(testingFacilityID);
+                            String updatedTime =
+                                bookingViewModel.updateBooking(
+                                    view.getContext().getString(R.string.api_key),
+                                    booking.getBookingID(),
+                                    formBody);
+                            Toast.makeText(view.getContext(), "updated booking", Toast.LENGTH_SHORT)
+                                .show();
+                            booking.setUpdatedAt(updatedTime);
 
-                          activity.finish();
-                        } catch (IOException e) {
-                          e.printStackTrace();
-                        } catch (JSONException e) {
-                          e.printStackTrace();
+                            activity.finish();
+                          } catch (IOException e) {
+                            e.printStackTrace();
+                          } catch (JSONException e) {
+                            e.printStackTrace();
+                          }
                         }
                       }
                     };
