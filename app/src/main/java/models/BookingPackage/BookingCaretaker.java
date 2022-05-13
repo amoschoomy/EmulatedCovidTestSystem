@@ -20,7 +20,7 @@ public class BookingCaretaker {
     return instance;
   }
 
-  public void save(TestingOnSiteBooking booking) {
+  public void save(Booking booking) {
 
     if (bookingMementos.containsKey(booking.getBookingID())) {
       Stack<Booking.BookingMemento> mementos = bookingMementos.get(booking.getBookingID());
@@ -33,7 +33,7 @@ public class BookingCaretaker {
     }
   }
 
-  public void revert(TestingOnSiteBooking booking) throws Exception {
+  public void revert(Booking booking) throws Exception {
     if (bookingMementos.containsKey(booking.getBookingID())) {
       Stack<Booking.BookingMemento> mementos = bookingMementos.get(booking.getBookingID());
       if (!mementos.empty()) {
