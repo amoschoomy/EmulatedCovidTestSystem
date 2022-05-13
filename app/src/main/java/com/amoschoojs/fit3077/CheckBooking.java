@@ -6,12 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import org.json.JSONException;
-
-import java.io.IOException;
 
 import viewmodel.BookingViewModel;
 
@@ -25,7 +22,6 @@ public class CheckBooking extends AppCompatActivity {
     BookingViewModel bookingViewModel = new BookingViewModel(getApplication());
     EditText pin = findViewById(R.id.bookingPinInput);
     Button check = findViewById(R.id.check);
-    Button actionButton = findViewById(R.id.actionbutton);
     check.setOnClickListener(
         new View.OnClickListener() {
           @Override
@@ -46,15 +42,17 @@ public class CheckBooking extends AppCompatActivity {
               tsView.setText(array[2]);
               startTimeView.setText(array[3]);
               updatedTimeView.setText(array[4]);
-              actionButton.setVisibility(View.VISIBLE);
-            } catch (IOException e) {
-              statusView.setText("No Booking Found");
-              e.printStackTrace();
-            } catch (JSONException e) {
-              statusView.setText("No Booking Found");
-              e.printStackTrace();
+              Toast.makeText(
+                      CheckBooking.this,
+                      "To make changes to your booking, please view all your bookings",
+                      Toast.LENGTH_LONG)
+                  .show();
             } catch (Exception e) {
               statusView.setText("No Booking Found");
+              tsView.setText("");
+              startTimeView.setText("");
+              updatedTimeView.setText("");
+              e.printStackTrace();
             }
           }
         });
@@ -67,12 +65,6 @@ public class CheckBooking extends AppCompatActivity {
             Intent switchActivityIntent = new Intent(getApplicationContext(), ViewBookings.class);
             startActivity(switchActivityIntent);
           }
-        });
-
-    actionButton.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {}
         });
   }
 }
