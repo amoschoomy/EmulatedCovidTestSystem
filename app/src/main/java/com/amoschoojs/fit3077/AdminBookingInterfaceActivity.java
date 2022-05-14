@@ -65,7 +65,6 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
                     .observe(
                             this,
                             newData -> {
-                                sendNotification();
                                 recyclerViewAdapter.setBookings(newData);
                                 recyclerViewAdapter.notifyDataSetChanged();
                             });
@@ -77,21 +76,6 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
 
     }
 
-    private void sendNotification() {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(
-                        this, "BOOKING CONFIRM")
-                        .setContentTitle("Booking Notification")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentText("test")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        Toast.makeText(this, "test", Toast.LENGTH_LONG)
-                .show();
-        NotificationManager notificationManager =
-                (NotificationManager)
-                        this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build());
-    }
 
     // Need this to update when Booking is Processed
     @Override

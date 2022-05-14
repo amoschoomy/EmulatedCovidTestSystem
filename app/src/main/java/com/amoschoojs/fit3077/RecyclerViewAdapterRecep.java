@@ -63,31 +63,6 @@ public class RecyclerViewAdapterRecep
         return new RecyclerViewAdapterRecep.ViewHolder(v) {};
     }
 
-//    public void notifyObserver(TestingFacility testingFacility1, TestingFacility testingFacility2, View view) throws JSONException, IOException {
-//        ArrayList<String> adminsInFac1 = testingFacility1.getAdmin();
-//        ArrayList<String> adminsInFac2 = testingFacility2.getAdmin();
-//
-//        Log.d("myTag", adminsInFac1.get(0));
-//        Log.d("myTag", adminsInFac2.get(0));
-//
-//        String notification = "A User from " + testingFacility1.getName() + " has switch to " + testingFacility2.getName();
-//
-//        for (String admin:adminsInFac1) {
-//            // user view model get user from userid
-//            User user = userViewModel.getUser(view.getContext().getString(R.string.api_key),admin);
-//            // user update notification
-//            user.setNotification(notification);
-//        }
-//
-//        for (String admin:adminsInFac2) {
-//            // user view model get user from userid
-//            User user = userViewModel.getUser(view.getContext().getString(R.string.api_key),admin);
-//            // user update notification
-//            user.setNotification(notification);
-//        }
-//
-//    }
-
 
 
     @Override
@@ -159,6 +134,7 @@ public class RecyclerViewAdapterRecep
                         i.putExtra("bookingId", booking.getBookingID());
                         Log.d("myTag", booking.getBookingID());
                         view.getContext().startActivity(i);
+                        sendNotification(view);
                     }
                 });
 
@@ -173,6 +149,7 @@ public class RecyclerViewAdapterRecep
                         String myJson = gson.toJson(booking);
                         i.putExtra("key", myJson);
                         view.getContext().startActivity(i);
+                        sendNotification(view);
                     }
                 });
 
@@ -202,10 +179,8 @@ public class RecyclerViewAdapterRecep
 //                                                cancelBtn.setEnabled(false);
 
                                                 // notification
-//                                                String testingSiteId = booking.getTestingSiteID();
-//                                                TestingFacility testingSite1 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
-//                                                TestingFacility testingSite2 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key), testingSiteId);
-//                                                notifyObserver(testingSite1,testingSite2, view);
+                                                sendNotification(view);
+
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -238,6 +213,7 @@ public class RecyclerViewAdapterRecep
 
                             booking.setUpdatedAt(updatedAt);
                             notifyDataSetChanged();
+                            sendNotification(view);
 //                            cancelBtn.setEnabled(true);
                         } catch (Exception e) {
                             Toast.makeText(view.getContext(), "No undo", Toast.LENGTH_SHORT).show();
@@ -266,6 +242,8 @@ public class RecyclerViewAdapterRecep
                                                     bookings.remove(pos);
 //                                                    notifyItemRemoved(pos);
                                                     notifyDataSetChanged();
+                                                    sendNotification(view);
+
                                                     Toast.makeText(view.getContext(), "Booking Deleted", Toast.LENGTH_LONG).show();
                                                 } else if (deleted.equals("409")){
                                                     Toast.makeText(view.getContext(), "A booking cannot be deleted if it has any associated COVID tests.", Toast.LENGTH_LONG).show();
@@ -286,6 +264,13 @@ public class RecyclerViewAdapterRecep
                 });
 
 
+    }
+
+    private void sendNotification(View view){
+        Intent intent = new Intent();
+        intent.setAction("com.amoschoojs.fit3077.mynotification");
+        intent.putExtra("key", "hello from recycler");
+        view.getContext().sendBroadcast(intent);
     }
 
     @Override
