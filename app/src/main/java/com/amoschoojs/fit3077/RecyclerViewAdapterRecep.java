@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -41,13 +43,23 @@ import viewmodel.UserViewModel;
 public class RecyclerViewAdapterRecep
         extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder>{
     BookingViewModel bookingViewModel;
-    TestingFacilityViewModel testingFacilityViewModel;
+//    TestingFacilityViewModel testingFacilityViewModel;
     ArrayList<Booking> bookings;
     BookingCaretaker caretaker = BookingCaretaker.getInstance();
+//    LiveData<String> myNotification;
 
     public RecyclerViewAdapterRecep(Application application, BookingViewModel bookingViewModel) {
         this.bookingViewModel = bookingViewModel;
-        testingFacilityViewModel = new TestingFacilityViewModel(application);
+//        testingFacilityViewModel = new TestingFacilityViewModel(application);
+//        myNotification.observe(
+//                (LifecycleOwner) this, newData -> {
+//                    testfunction();
+//                    notifyDataSetChanged();
+//                });
+    }
+
+    public void testfunction() {
+        int testi = 2;
     }
 
     public void setBookings(ArrayList<Booking> bookings) {
@@ -134,7 +146,8 @@ public class RecyclerViewAdapterRecep
                         i.putExtra("bookingId", booking.getBookingID());
                         Log.d("myTag", booking.getBookingID());
                         view.getContext().startActivity(i);
-                        sendNotification(view);
+//                        sendNotification(view);
+                        bookingViewModel.setNotification("this is a pen");
                     }
                 });
 
@@ -149,7 +162,8 @@ public class RecyclerViewAdapterRecep
                         String myJson = gson.toJson(booking);
                         i.putExtra("key", myJson);
                         view.getContext().startActivity(i);
-                        sendNotification(view);
+                        bookingViewModel.setNotification("this is a pen");
+//                        sendNotification(view);
                     }
                 });
 
@@ -179,7 +193,8 @@ public class RecyclerViewAdapterRecep
 //                                                cancelBtn.setEnabled(false);
 
                                                 // notification
-                                                sendNotification(view);
+//                                                sendNotification(view);
+                                                bookingViewModel.setNotification("this is a pen");
 
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
@@ -213,7 +228,8 @@ public class RecyclerViewAdapterRecep
 
                             booking.setUpdatedAt(updatedAt);
                             notifyDataSetChanged();
-                            sendNotification(view);
+                            bookingViewModel.setNotification("this is a pen");
+//                            sendNotification(view);
 //                            cancelBtn.setEnabled(true);
                         } catch (Exception e) {
                             Toast.makeText(view.getContext(), "No undo", Toast.LENGTH_SHORT).show();
@@ -242,7 +258,8 @@ public class RecyclerViewAdapterRecep
                                                     bookings.remove(pos);
 //                                                    notifyItemRemoved(pos);
                                                     notifyDataSetChanged();
-                                                    sendNotification(view);
+//                                                    sendNotification(view);
+                                                    bookingViewModel.setNotification("this is a pen");
 
                                                     Toast.makeText(view.getContext(), "Booking Deleted", Toast.LENGTH_LONG).show();
                                                 } else if (deleted.equals("409")){
@@ -266,12 +283,12 @@ public class RecyclerViewAdapterRecep
 
     }
 
-    private void sendNotification(View view){
-        Intent intent = new Intent();
-        intent.setAction("com.amoschoojs.fit3077.mynotification");
-        intent.putExtra("key", "hello from recycler");
-        view.getContext().sendBroadcast(intent);
-    }
+//    private void sendNotification(View view){
+//        Intent intent = new Intent();
+//        intent.setAction("com.amoschoojs.fit3077.mynotification");
+//        intent.putExtra("key", "hello from recycler");
+//        view.getContext().sendBroadcast(intent);
+//    }
 
     @Override
     public int getItemCount() {

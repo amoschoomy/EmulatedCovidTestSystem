@@ -6,17 +6,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import models.BookingPackage.Booking;
 import models.LoginSystemPackage.LoginAuthentication;
 import models.UserPackage.User;
 import viewmodel.BookingViewModel;
@@ -27,6 +32,7 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
     RecyclerViewAdapterRecep recyclerViewAdapter;
     BookingViewModel bookingViewModel;
     UserViewModel userViewModel;
+    LiveData<String> myNotification;
 //    RecyclerView recyclerView;
 
     @Override
@@ -39,16 +45,16 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
         bookingViewModel = new BookingViewModel(getApplication());
 
         // get user + user model
-        userViewModel = new UserViewModel(getApplication());
-        LoginAuthentication loginAuthentication = null;
-        try {
-            loginAuthentication = LoginAuthentication.getInstance();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        User user = loginAuthentication.getUser();
+//        userViewModel = new UserViewModel(getApplication());
+//        LoginAuthentication loginAuthentication = null;
+//        try {
+//            loginAuthentication = LoginAuthentication.getInstance();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        User user = loginAuthentication.getUser();
 
         // set recyclerview adapter
         RecyclerView recyclerView = findViewById(R.id.recyclerViewAdmin);
@@ -73,6 +79,28 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+
+        bookingViewModel
+                .getNotification()
+                .observe(
+                        this,
+                        newData -> {
+                            sendNotification();
+                        });
+    }
+
+    public void sendNotification() {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(
+                        this, "BOOKING CONFIRM")
+                        .setContentTitle("Booking Notification")
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentText("test notification here")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        NotificationManager notificationManager =
+                (NotificationManager)
+                        this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, builder.build());
 
     }
 
@@ -104,7 +132,5 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
         super.onResume();
 
     }
-
-
 
 }

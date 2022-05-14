@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import org.json.JSONException;
@@ -19,6 +20,7 @@ public class BookingViewModel extends AndroidViewModel {
 
   private final BookingRepository bookingRepository;
   private MutableLiveData<ArrayList<Booking>> bookings;
+  private MutableLiveData<String> notification;
 
   public BookingViewModel(@NonNull Application application) {
     super(application);
@@ -55,5 +57,17 @@ public class BookingViewModel extends AndroidViewModel {
   private MutableLiveData<ArrayList<Booking>> inGetBookings(String API_KEY)
           throws JSONException, IOException {
     return (MutableLiveData<ArrayList<Booking>>) bookingRepository.getBookings(API_KEY);
+  }
+
+  public MutableLiveData<String> getNotification() {
+    if (notification == null) {
+      notification = new MutableLiveData<String>("empty");
+    }
+    return notification;
+
+  }
+
+  public void setNotification(String test) {
+    notification.setValue(test);
   }
 }
