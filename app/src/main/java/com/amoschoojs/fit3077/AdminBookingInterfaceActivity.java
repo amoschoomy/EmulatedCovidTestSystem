@@ -4,6 +4,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -44,17 +46,8 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
 
         bookingViewModel = new BookingViewModel(getApplication());
 
-        // get user + user model
+        // get user model
         userViewModel = new UserViewModel(getApplication());
-//        LoginAuthentication loginAuthentication = null;
-//        try {
-//            loginAuthentication = LoginAuthentication.getInstance();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        User user = loginAuthentication.getUser();
 
         // set recyclerview adapter
         RecyclerView recyclerView = findViewById(R.id.recyclerViewAdmin);
@@ -79,6 +72,31 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+
+        LifecycleOwner currView = this;
+        Log.d("myTag", String.valueOf(currView));
+
+        Button refreshBtn = findViewById(R.id.refreshBtn);
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Log.d("myTag", String.valueOf(view.getContext()));
+                    bookingViewModel
+                            .getBookings(API_KEY)
+                            .observe(
+                                    (LifecycleOwner) view.getContext(),
+                                    newData -> {
+                                        recyclerViewAdapter.setBookings(newData);
+                                        recyclerViewAdapter.notifyDataSetChanged();
+                                    });
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
 
     }
 

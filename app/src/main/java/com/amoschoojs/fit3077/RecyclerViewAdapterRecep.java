@@ -43,15 +43,13 @@ import viewmodel.UserViewModel;
 public class RecyclerViewAdapterRecep
         extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder>{
     BookingViewModel bookingViewModel;
-    UserViewModel userViewModel;
-//    TestingFacilityViewModel testingFacilityViewModel;
+//    UserViewModel userViewModel;
     ArrayList<Booking> bookings;
     BookingCaretaker caretaker = BookingCaretaker.getInstance();
 
     public RecyclerViewAdapterRecep(Application application, BookingViewModel bookingViewModel, UserViewModel userViewModel) {
         this.bookingViewModel = bookingViewModel;
-        this.userViewModel = userViewModel;
-//        testingFacilityViewModel = new TestingFacilityViewModel(application);
+//        this.userViewModel = userViewModel;
     }
 
 
@@ -96,10 +94,7 @@ public class RecyclerViewAdapterRecep
             booking.setUpdatedAt(array[4]);
             testingSiteName.setText(booking.getTestingSiteName());
             startTime.setText(booking.getStartTime());
-//            if (booking.getStatus().equals("CANCELLED")) {
-//                Log.d("myTag", "reached");
-//                cancelBtn.setEnabled(false);
-//            }
+
             status.setText(array[1]);
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,7 +117,7 @@ public class RecyclerViewAdapterRecep
             modifyBtn.setVisibility(View.GONE);
             cancelBtn.setVisibility(View.GONE);
             deleteBtn.setVisibility(View.GONE);
-            undoBtn.setVisibility(View.GONE);
+//            undoBtn.setVisibility(View.GONE);
         }
 
         if (user.getReceptionist()) {
@@ -139,7 +134,6 @@ public class RecyclerViewAdapterRecep
                         i.putExtra("bookingId", booking.getBookingID());
                         Log.d("myTag", booking.getBookingID());
                         view.getContext().startActivity(i);
-//                        sendNotification(view);
                     }
                 });
 
@@ -148,13 +142,16 @@ public class RecyclerViewAdapterRecep
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        caretaker.save(booking);
-                        Intent i = new Intent(view.getContext(), SearchTestingSite.class);
-                        Gson gson = new Gson();
-                        String myJson = gson.toJson(booking);
-                        i.putExtra("key", myJson);
-                        view.getContext().startActivity(i);
-//                        sendNotification(view);
+                        if (booking.getStatus().equals("PROCESSED")) {
+                            Toast.makeText(view.getContext(), "This booking cannot be modified", Toast.LENGTH_LONG).show();
+                        } else {
+                            caretaker.save(booking);
+                            Intent i = new Intent(view.getContext(), SearchTestingSite.class);
+                            Gson gson = new Gson();
+                            String myJson = gson.toJson(booking);
+                            i.putExtra("key", myJson);
+                            view.getContext().startActivity(i);
+                        }
                     }
                 });
 
@@ -172,22 +169,24 @@ public class RecyclerViewAdapterRecep
                                             FormBody.Builder builder = new FormBody.Builder().add("status", "CANCELLED");
                                             RequestBody formBody = builder.build();
                                             try {
-                                                caretaker.save(booking);
-                                                String updatedAt =
-                                                        bookingViewModel.updateBooking(
-                                                                holder.itemView.getContext().getString(R.string.api_key),
-                                                                booking.getBookingID(),
-                                                                formBody);
-                                                booking.setUpdatedAt(updatedAt);
-                                                booking.setStatus("CANCELLED");
-                                                notifyDataSetChanged();
+                                                if (booking.getStatus().equals("CANCELLED") || booking.getStatus().equals("PROCESSED")){
+                                                    Toast.makeText(view.getContext(), "This booking cannot be cancelled", Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    caretaker.save(booking);
+                                                    String updatedAt =
+                                                            bookingViewModel.updateBooking(
+                                                                    holder.itemView.getContext().getString(R.string.api_key),
+                                                                    booking.getBookingID(),
+                                                                    formBody);
+                                                    booking.setUpdatedAt(updatedAt);
+                                                    booking.setStatus("CANCELLED");
+                                                    notifyDataSetChanged();
+                                                    Toast.makeText(view.getContext(), "Booking Cancelled", Toast.LENGTH_LONG).show();
 //                                                cancelBtn.setEnabled(false);
-
-
+                                                }
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
                                             }
-                                            Toast.makeText(view.getContext(), "Booking Cancelled", Toast.LENGTH_LONG).show();
                                         })
                                 .setNegativeButton(android.R.string.no, null)
                                 .setIcon(R.drawable.ic_launcher_background)
@@ -213,12 +212,8 @@ public class RecyclerViewAdapterRecep
                                             view.getContext().getString(R.string.api_key),
                                             booking.getBookingID(),
                                             formBody);
-
                             booking.setUpdatedAt(updatedAt);
                             notifyDataSetChanged();
-
-//                            sendNotification(view);
-//                            cancelBtn.setEnabled(true);
                         } catch (Exception e) {
                             Toast.makeText(view.getContext(), "No undo", Toast.LENGTH_SHORT).show();
                         }
@@ -244,10 +239,7 @@ public class RecyclerViewAdapterRecep
                                                                 booking.getBookingID());
                                                 if (deleted.equals("204")){
                                                     bookings.remove(pos);
-//                                                    notifyItemRemoved(pos);
-                                                    notifyDataSetChanged();
-//                                                    sendNotification(view);
-
+                                                    notifyItemRemoved(pos);
 
                                                     Toast.makeText(view.getContext(), "Booking Deleted", Toast.LENGTH_LONG).show();
                                                 } else if (deleted.equals("409")){
