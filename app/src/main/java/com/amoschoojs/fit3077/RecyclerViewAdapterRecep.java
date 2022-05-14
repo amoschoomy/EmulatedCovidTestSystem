@@ -43,14 +43,16 @@ import viewmodel.UserViewModel;
 public class RecyclerViewAdapterRecep
         extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder>{
     BookingViewModel bookingViewModel;
-//    TestingFacilityViewModel testingFacilityViewModel;
+    UserViewModel userViewModel;
+    TestingFacilityViewModel testingFacilityViewModel;
     ArrayList<Booking> bookings;
     BookingCaretaker caretaker = BookingCaretaker.getInstance();
 //    LiveData<String> myNotification;
 
-    public RecyclerViewAdapterRecep(Application application, BookingViewModel bookingViewModel) {
+    public RecyclerViewAdapterRecep(Application application, BookingViewModel bookingViewModel, UserViewModel userViewModel) {
         this.bookingViewModel = bookingViewModel;
-//        testingFacilityViewModel = new TestingFacilityViewModel(application);
+        this.userViewModel = userViewModel;
+        testingFacilityViewModel = new TestingFacilityViewModel(application);
 //        myNotification.observe(
 //                (LifecycleOwner) this, newData -> {
 //                    testfunction();
@@ -58,9 +60,31 @@ public class RecyclerViewAdapterRecep
 //                });
     }
 
-    public void testfunction() {
-        int testi = 2;
+    public void notifyObserver(TestingFacility testingFacility1, TestingFacility testingFacility2, View view) throws JSONException, IOException {
+        ArrayList<String> adminsInFac1 = testingFacility1.getAdmin();
+        ArrayList<String> adminsInFac2 = testingFacility2.getAdmin();
+
+        Log.d("myTag", adminsInFac1.get(0));
+        Log.d("myTag", adminsInFac2.get(0));
+
+        String notification = "A User from " + testingFacility1.getName() + " has switch to " + testingFacility2.getName();
+
+        for (String admin:adminsInFac1) {
+//            // user view model get user from userid
+//            User user = userViewModel.getUser(view.getContext().getString(R.string.api_key),admin);
+            // user update notification
+            userViewModel.setNotification(view.getContext().getString(R.string.api_key),"this is a pen", admin);
+        }
+
+        for (String admin:adminsInFac2) {
+            // user view model get user from userid
+//            User user = userViewModel.getUser(view.getContext().getString(R.string.api_key),admin);
+            // user update notification
+            userViewModel.setNotification(view.getContext().getString(R.string.api_key),"this is a pen", admin);
+        }
+
     }
+
 
     public void setBookings(ArrayList<Booking> bookings) {
         this.bookings = bookings;
@@ -147,7 +171,6 @@ public class RecyclerViewAdapterRecep
                         Log.d("myTag", booking.getBookingID());
                         view.getContext().startActivity(i);
 //                        sendNotification(view);
-                        bookingViewModel.setNotification("this is a pen");
                     }
                 });
 
@@ -162,7 +185,6 @@ public class RecyclerViewAdapterRecep
                         String myJson = gson.toJson(booking);
                         i.putExtra("key", myJson);
                         view.getContext().startActivity(i);
-                        bookingViewModel.setNotification("this is a pen");
 //                        sendNotification(view);
                     }
                 });
@@ -181,6 +203,7 @@ public class RecyclerViewAdapterRecep
                                             FormBody.Builder builder = new FormBody.Builder().add("status", "CANCELLED");
                                             RequestBody formBody = builder.build();
                                             try {
+                                                TestingFacility testingSite1 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key),booking.getTestingSiteID());
                                                 caretaker.save(booking);
                                                 String updatedAt =
                                                         bookingViewModel.updateBooking(
@@ -194,7 +217,7 @@ public class RecyclerViewAdapterRecep
 
                                                 // notification
 //                                                sendNotification(view);
-                                                bookingViewModel.setNotification("this is a pen");
+                                                notifyObserver(testingSite1, testingSite1, view);
 
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
@@ -228,7 +251,7 @@ public class RecyclerViewAdapterRecep
 
                             booking.setUpdatedAt(updatedAt);
                             notifyDataSetChanged();
-                            bookingViewModel.setNotification("this is a pen");
+
 //                            sendNotification(view);
 //                            cancelBtn.setEnabled(true);
                         } catch (Exception e) {
@@ -259,7 +282,7 @@ public class RecyclerViewAdapterRecep
 //                                                    notifyItemRemoved(pos);
                                                     notifyDataSetChanged();
 //                                                    sendNotification(view);
-                                                    bookingViewModel.setNotification("this is a pen");
+
 
                                                     Toast.makeText(view.getContext(), "Booking Deleted", Toast.LENGTH_LONG).show();
                                                 } else if (deleted.equals("409")){

@@ -45,7 +45,7 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
         bookingViewModel = new BookingViewModel(getApplication());
 
         // get user + user model
-//        userViewModel = new UserViewModel(getApplication());
+        userViewModel = new UserViewModel(getApplication());
 //        LoginAuthentication loginAuthentication = null;
 //        try {
 //            loginAuthentication = LoginAuthentication.getInstance();
@@ -59,7 +59,7 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
         // set recyclerview adapter
         RecyclerView recyclerView = findViewById(R.id.recyclerViewAdmin);
         recyclerViewAdapter =
-                new RecyclerViewAdapterRecep(getApplication(), bookingViewModel);
+                new RecyclerViewAdapterRecep(getApplication(), bookingViewModel, userViewModel);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
@@ -80,7 +80,7 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
             ioException.printStackTrace();
         }
 
-        bookingViewModel
+        userViewModel
                 .getNotification()
                 .observe(
                         this,

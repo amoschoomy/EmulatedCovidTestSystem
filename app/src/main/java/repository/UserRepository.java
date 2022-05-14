@@ -2,6 +2,7 @@ package repository;
 
 import android.app.Application;
 import android.os.StrictMode;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,8 +16,10 @@ import java.util.ArrayList;
 
 import models.BookingPackage.Booking;
 import models.BookingPackage.TestingOnSiteBooking;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class UserRepository {
@@ -24,6 +27,7 @@ public class UserRepository {
   public UserRepository(Application application) {}
 
   MutableLiveData<ArrayList<Booking>> bookings = new MutableLiveData<ArrayList<Booking>>();
+  MutableLiveData<String> notification = new MutableLiveData<String>();
 
   public LiveData<ArrayList<Booking>> getAllBookings(String userID, String API_KEY)
       throws IOException, JSONException {
@@ -85,30 +89,34 @@ public class UserRepository {
 
     return output;
   }
-//
-//  public String getNotification(String API_KEY, String userId)
-//          throws IOException, JSONException {
-//    OkHttpClient client = new OkHttpClient();
-//
-//    // insert key here
-//    String usersUrl = String.format("https://fit3077.com/api/v2/user/%s", userId);
-//    Request request =
-//            new Request.Builder()
-//                    .url(usersUrl)
-//                    .header("Authorization", API_KEY)
-//                    .get()
-//                    .build();
-//
-//    // Have the response run in background or system will crash
-//    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//    StrictMode.setThreadPolicy(policy);
-//
-//    Response response = client.newCall(request).execute();
-//    String output = response.body().string();
-//
-//    JSONObject jsonObject = new JSONObject(output);
-//    JSONObject additionalInfo = jsonObject.getJSONObject("additionalInfo");
-//
-//    return additionalInfo.getString("notification");
-//  }
+
+  public LiveData<String> setNotificationInfo(String API_KEY, String msg, String userId)
+          throws IOException, JSONException {
+    OkHttpClient client = new OkHttpClient();
+
+    String jsonstr =
+            String.format(
+                    "{\"additionalInfo\":{\"notification\":\"%s\"}}",
+                    msg);
+
+    RequestBody requestBody =
+            RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonstr);
+
+    // insert key here
+    String usersUrl = String.format("https://fit3077.com/api/v2/user/%s", userId);
+    Request request =
+            new Request.Builder()
+                    .url(usersUrl)
+                    .header("Authorization", API_KEY)
+                    .patch(requestBody)
+                    .build();
+
+    // Have the response run in background or system will crash
+    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
+    Response response = client.newCall(request).execute();
+
+    notification.setValue(msg);
+    return notification;
+  }
 }

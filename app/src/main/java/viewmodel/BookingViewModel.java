@@ -20,7 +20,6 @@ public class BookingViewModel extends AndroidViewModel {
 
   private final BookingRepository bookingRepository;
   private MutableLiveData<ArrayList<Booking>> bookings;
-  private MutableLiveData<String> notification;
 
   public BookingViewModel(@NonNull Application application) {
     super(application);
@@ -59,15 +58,5 @@ public class BookingViewModel extends AndroidViewModel {
     return (MutableLiveData<ArrayList<Booking>>) bookingRepository.getBookings(API_KEY);
   }
 
-  public MutableLiveData<String> getNotification() {
-    if (notification == null) {
-      notification = new MutableLiveData<String>("empty");
-    }
-    return notification;
 
-  }
-
-  public void setNotification(String test) {
-    notification.setValue(test);
-  }
 }

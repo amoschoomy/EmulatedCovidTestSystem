@@ -24,6 +24,7 @@ import repository.UserRepository;
 public class UserViewModel extends AndroidViewModel {
   private final UserRepository userRepository;
   private MutableLiveData<ArrayList<Booking>> bookings;
+  private MutableLiveData<String> notification;
 
   public UserViewModel(@NonNull Application application) {
     super(application);
@@ -43,24 +44,36 @@ public class UserViewModel extends AndroidViewModel {
     return (MutableLiveData<ArrayList<Booking>>) userRepository.getAllBookings(userID, API_KEY);
   }
 
-//  public User getUser(String API_KEY, String userID) throws JSONException, IOException {
-//    String userStr = userRepository.getUser(API_KEY,userID);
-//    JSONObject jsonObject = new JSONObject(userStr);
-//    String id = jsonObject.getString("id");
-//    String givenName = jsonObject.getString("givenName");
-//    String familyName = jsonObject.getString("familyName");
-//    String userName = jsonObject.getString("userName");
-//    String phoneNumber = jsonObject.getString("phoneNumber");
-//    Boolean isCustomer = jsonObject.getBoolean("isCustomer");
-//    Boolean isReceptionist = jsonObject.getBoolean("isReceptionist");
-//    Boolean isHealthcareWorker = jsonObject.getBoolean("isHealthcareWorker");
-//    JSONObject additionalInfo = jsonObject.getJSONObject("additionalInfo");
-//    User user;
-//    UserFactory uf;
-//    if (isReceptionist) uf = new ReceptionistFactory();
-//    else uf = new HealthcareWorkerFactory();
-//    user = uf.createSpecificUser(id,givenName,familyName,userName,phoneNumber,isCustomer,isReceptionist,isHealthcareWorker,additionalInfo);
-//    return user;
-//
-//  }
+  public User getUser(String API_KEY, String userID) throws JSONException, IOException {
+    String userStr = userRepository.getUser(API_KEY,userID);
+    JSONObject jsonObject = new JSONObject(userStr);
+    String id = jsonObject.getString("id");
+    String givenName = jsonObject.getString("givenName");
+    String familyName = jsonObject.getString("familyName");
+    String userName = jsonObject.getString("userName");
+    String phoneNumber = jsonObject.getString("phoneNumber");
+    Boolean isCustomer = jsonObject.getBoolean("isCustomer");
+    Boolean isReceptionist = jsonObject.getBoolean("isReceptionist");
+    Boolean isHealthcareWorker = jsonObject.getBoolean("isHealthcareWorker");
+    JSONObject additionalInfo = jsonObject.getJSONObject("additionalInfo");
+    User user;
+    UserFactory uf;
+    if (isReceptionist) uf = new ReceptionistFactory();
+    else uf = new HealthcareWorkerFactory();
+    user = uf.createSpecificUser(id,givenName,familyName,userName,phoneNumber,isCustomer,isReceptionist,isHealthcareWorker,additionalInfo);
+    return user;
+
+  }
+  public MutableLiveData<String> getNotification() {
+    if (notification == null) {
+      notification = new MutableLiveData<String>("dummy");
+    }
+    return notification;
+
+  }
+
+    public void setNotification(String API_KEY, String inputNotification, String userId) throws JSONException, IOException {
+      userRepository.setNotificationInfo(API_KEY, inputNotification, userId);
+      notification.setValue(inputNotification);
+    }
 }
