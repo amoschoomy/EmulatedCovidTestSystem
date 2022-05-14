@@ -44,45 +44,14 @@ public class RecyclerViewAdapterRecep
         extends RecyclerView.Adapter<RecyclerViewAdapterRecep.ViewHolder>{
     BookingViewModel bookingViewModel;
     UserViewModel userViewModel;
-    TestingFacilityViewModel testingFacilityViewModel;
+//    TestingFacilityViewModel testingFacilityViewModel;
     ArrayList<Booking> bookings;
     BookingCaretaker caretaker = BookingCaretaker.getInstance();
-//    LiveData<String> myNotification;
 
     public RecyclerViewAdapterRecep(Application application, BookingViewModel bookingViewModel, UserViewModel userViewModel) {
         this.bookingViewModel = bookingViewModel;
         this.userViewModel = userViewModel;
-        testingFacilityViewModel = new TestingFacilityViewModel(application);
-//        myNotification.observe(
-//                (LifecycleOwner) this, newData -> {
-//                    testfunction();
-//                    notifyDataSetChanged();
-//                });
-    }
-
-    public void notifyObserver(TestingFacility testingFacility1, TestingFacility testingFacility2, View view) throws JSONException, IOException {
-        ArrayList<String> adminsInFac1 = testingFacility1.getAdmin();
-        ArrayList<String> adminsInFac2 = testingFacility2.getAdmin();
-
-        Log.d("myTag", adminsInFac1.get(0));
-        Log.d("myTag", adminsInFac2.get(0));
-
-        String notification = "A User from " + testingFacility1.getName() + " has switch to " + testingFacility2.getName();
-
-        for (String admin:adminsInFac1) {
-//            // user view model get user from userid
-//            User user = userViewModel.getUser(view.getContext().getString(R.string.api_key),admin);
-            // user update notification
-            userViewModel.setNotification(view.getContext().getString(R.string.api_key),"this is a pen", admin);
-        }
-
-        for (String admin:adminsInFac2) {
-            // user view model get user from userid
-//            User user = userViewModel.getUser(view.getContext().getString(R.string.api_key),admin);
-            // user update notification
-            userViewModel.setNotification(view.getContext().getString(R.string.api_key),"this is a pen", admin);
-        }
-
+//        testingFacilityViewModel = new TestingFacilityViewModel(application);
     }
 
 
@@ -203,7 +172,6 @@ public class RecyclerViewAdapterRecep
                                             FormBody.Builder builder = new FormBody.Builder().add("status", "CANCELLED");
                                             RequestBody formBody = builder.build();
                                             try {
-                                                TestingFacility testingSite1 = testingFacilityViewModel.getTestingFacility(holder.itemView.getContext().getString(R.string.api_key),booking.getTestingSiteID());
                                                 caretaker.save(booking);
                                                 String updatedAt =
                                                         bookingViewModel.updateBooking(
@@ -215,9 +183,6 @@ public class RecyclerViewAdapterRecep
                                                 notifyDataSetChanged();
 //                                                cancelBtn.setEnabled(false);
 
-                                                // notification
-//                                                sendNotification(view);
-                                                notifyObserver(testingSite1, testingSite1, view);
 
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
@@ -305,13 +270,6 @@ public class RecyclerViewAdapterRecep
 
 
     }
-
-//    private void sendNotification(View view){
-//        Intent intent = new Intent();
-//        intent.setAction("com.amoschoojs.fit3077.mynotification");
-//        intent.putExtra("key", "hello from recycler");
-//        view.getContext().sendBroadcast(intent);
-//    }
 
     @Override
     public int getItemCount() {

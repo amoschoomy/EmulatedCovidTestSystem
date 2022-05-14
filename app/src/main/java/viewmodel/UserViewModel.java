@@ -24,7 +24,6 @@ import repository.UserRepository;
 public class UserViewModel extends AndroidViewModel {
   private final UserRepository userRepository;
   private MutableLiveData<ArrayList<Booking>> bookings;
-  private MutableLiveData<String> notification;
 
   public UserViewModel(@NonNull Application application) {
     super(application);
@@ -64,16 +63,5 @@ public class UserViewModel extends AndroidViewModel {
     return user;
 
   }
-  public MutableLiveData<String> getNotification() {
-    if (notification == null) {
-      notification = new MutableLiveData<String>("dummy");
-    }
-    return notification;
 
-  }
-
-    public void setNotification(String API_KEY, String inputNotification, String userId) throws JSONException, IOException {
-      userRepository.setNotificationInfo(API_KEY, inputNotification, userId);
-      notification.setValue(inputNotification);
-    }
 }

@@ -18,26 +18,14 @@ import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer {
 
-  MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     createNotificationChannel();
 
-    // create receiver for notification when booking changes
-    IntentFilter filter = new IntentFilter("com.amoschoojs.fit3077.mynotification");
-    registerReceiver(myBroadcastReceiver, filter);
-
     Intent switchActivityIntent = new Intent(this, LoginActivity.class);
     startActivity(switchActivityIntent);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    unregisterReceiver(myBroadcastReceiver);
   }
 
   private void createNotificationChannel() {

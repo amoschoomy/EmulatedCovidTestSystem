@@ -80,30 +80,7 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
             ioException.printStackTrace();
         }
 
-        userViewModel
-                .getNotification()
-                .observe(
-                        this,
-                        newData -> {
-                            sendNotification();
-                        });
     }
-
-    public void sendNotification() {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(
-                        this, "BOOKING CONFIRM")
-                        .setContentTitle("Booking Notification")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentText("test notification here")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        NotificationManager notificationManager =
-                (NotificationManager)
-                        this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build());
-
-    }
-
 
     // Need this to update when Booking is Processed
     @Override

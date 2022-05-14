@@ -3,6 +3,7 @@ package repository;
 import android.app.Application;
 import android.os.StrictMode;
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -181,6 +182,8 @@ public class BookingRepository {
 
 
     bookings.setValue(dummy);
+//    Pair<LiveData<ArrayList<Booking>>, ArrayList<Booking>> p = new Pair<LiveData<ArrayList<Booking>>, ArrayList<Booking>>(bookings, dummy);
+//    return p;
     return bookings;
   }
 }

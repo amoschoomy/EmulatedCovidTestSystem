@@ -90,33 +90,4 @@ public class UserRepository {
     return output;
   }
 
-  public LiveData<String> setNotificationInfo(String API_KEY, String msg, String userId)
-          throws IOException, JSONException {
-    OkHttpClient client = new OkHttpClient();
-
-    String jsonstr =
-            String.format(
-                    "{\"additionalInfo\":{\"notification\":\"%s\"}}",
-                    msg);
-
-    RequestBody requestBody =
-            RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonstr);
-
-    // insert key here
-    String usersUrl = String.format("https://fit3077.com/api/v2/user/%s", userId);
-    Request request =
-            new Request.Builder()
-                    .url(usersUrl)
-                    .header("Authorization", API_KEY)
-                    .patch(requestBody)
-                    .build();
-
-    // Have the response run in background or system will crash
-    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-    StrictMode.setThreadPolicy(policy);
-    Response response = client.newCall(request).execute();
-
-    notification.setValue(msg);
-    return notification;
-  }
 }

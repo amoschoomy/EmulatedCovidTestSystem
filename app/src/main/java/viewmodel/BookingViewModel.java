@@ -1,6 +1,7 @@
 package viewmodel;
 
 import android.app.Application;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -55,6 +56,9 @@ public class BookingViewModel extends AndroidViewModel {
 
   private MutableLiveData<ArrayList<Booking>> inGetBookings(String API_KEY)
           throws JSONException, IOException {
+//    Pair<LiveData<ArrayList<Booking>>, ArrayList<Booking>> output = bookingRepository.getBookings(API_KEY);
+//    bookings.setValue(output.second);
+//    return (MutableLiveData<ArrayList<Booking>>) output.first;
     return (MutableLiveData<ArrayList<Booking>>) bookingRepository.getBookings(API_KEY);
   }
 
