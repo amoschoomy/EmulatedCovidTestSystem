@@ -10,6 +10,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+
+import models.data.LoginSystemPackage.LoginAuthentication;
+import models.data.UserPackage.User;
 import viewmodel.BookingViewModel;
 
 /** CheckBooking UI class */
@@ -58,13 +64,26 @@ public class CheckBooking extends AppCompatActivity {
         });
     Button viewAll = findViewById(R.id.viewallbooking);
     viewAll.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
+            new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
 
-            Intent switchActivityIntent = new Intent(getApplicationContext(), ViewBookings.class);
-            startActivity(switchActivityIntent);
-          }
-        });
+                Intent switchActivityIntent = new Intent(getApplicationContext(), ViewBookings.class);
+                startActivity(switchActivityIntent);
+              }
+            });
+
+    // Only allow Customer to view all bookings
+    try {
+      User user = LoginAuthentication.getInstance().getUser();
+      if (!user.getCustomer()) viewAll.setVisibility(View.GONE);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+
+
+
   }
 }
