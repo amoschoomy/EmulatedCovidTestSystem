@@ -1,16 +1,11 @@
 package com.amoschoojs.fit3077;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,13 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-import models.BookingPackage.Booking;
-import models.LoginSystemPackage.LoginAuthentication;
-import models.UserPackage.User;
 import viewmodel.BookingViewModel;
 import viewmodel.UserViewModel;
 

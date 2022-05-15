@@ -1,8 +1,6 @@
 package com.amoschoojs.fit3077;
 
 import android.app.Application;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,9 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.NotificationCompat;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -25,19 +20,14 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-import models.BookingPackage.Booking;
-import models.BookingPackage.BookingCaretaker;
-import models.BookingPackage.TestingOnSiteBooking;
-import models.LoginSystemPackage.LoginAuthentication;
-import models.TestingFacilityPackage.TestingFacility;
-import models.UserPackage.User;
+import models.data.BookingPackage.Booking;
+import models.data.BookingPackage.BookingCaretaker;
+import models.data.LoginSystemPackage.LoginAuthentication;
+import models.data.UserPackage.User;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import viewmodel.BookingViewModel;
-import viewmodel.TestingFacilityViewModel;
 import viewmodel.UserViewModel;
 
 public class RecyclerViewAdapterRecep

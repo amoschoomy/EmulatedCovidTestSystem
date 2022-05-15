@@ -13,9 +13,9 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import models.BookingPackage.TestingOnSiteBooking;
-import models.TestingFacilityPackage.TestingFacility;
-import models.TestingFacilityPackage.TestingFacilityCollection;
+import models.data.BookingPackage.TestingOnSiteBooking;
+import models.data.TestingFacilityPackage.TestingFacility;
+import models.data.TestingFacilityPackage.TestingFacilityCollection;
 import viewmodel.UserViewModel;
 
 public class SearchTestingSite extends AppCompatActivity {

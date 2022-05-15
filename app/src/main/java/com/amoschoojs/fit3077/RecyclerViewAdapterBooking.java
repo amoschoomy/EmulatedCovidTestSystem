@@ -20,10 +20,10 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import models.BookingPackage.Booking;
-import models.BookingPackage.BookingCaretaker;
-import models.BookingPackage.TestingOnSiteBooking;
-import models.ExceptionPackage.InvalidUndoException;
+import models.data.BookingPackage.Booking;
+import models.data.BookingPackage.BookingCaretaker;
+import models.data.BookingPackage.TestingOnSiteBooking;
+import models.data.ExceptionPackage.InvalidUndoException;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import viewmodel.BookingViewModel;

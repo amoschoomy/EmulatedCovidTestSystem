@@ -2,7 +2,7 @@
 
 ## Compilation
 
-1) Clone repository to Android Studio
+1) Clone models.repository to Android Studio
 2) Add your API key to a Android resource file inside (`app/src/main/res/values`)
 3) Run the project in Android Studio
 

@@ -1,11 +1,9 @@
 package viewmodel;
 
 import android.app.Application;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import org.json.JSONException;
@@ -13,9 +11,9 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import models.BookingPackage.Booking;
+import models.data.BookingPackage.Booking;
+import models.repository.BookingRepository;
 import okhttp3.RequestBody;
-import repository.BookingRepository;
 
 public class BookingViewModel extends AndroidViewModel {
 

@@ -6,20 +6,18 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.gson.Gson;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import models.BookingPackage.Booking;
-import models.UserPackage.HealthcareWorkerFactory;
-import models.UserPackage.ReceptionistFactory;
-import models.UserPackage.User;
-import models.UserPackage.UserFactory;
-import repository.UserRepository;
+import models.data.BookingPackage.Booking;
+import models.data.UserPackage.HealthcareWorkerFactory;
+import models.data.UserPackage.ReceptionistFactory;
+import models.data.UserPackage.User;
+import models.data.UserPackage.UserFactory;
+import models.repository.UserRepository;
 
 public class UserViewModel extends AndroidViewModel {
   private final UserRepository userRepository;

@@ -11,8 +11,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import models.TestingFacilityPackage.TestingFacility;
-import repository.TestingFacilityRepository;
+import models.data.TestingFacilityPackage.TestingFacility;
+import models.repository.TestingFacilityRepository;
 
 public class TestingFacilityViewModel extends AndroidViewModel {
 

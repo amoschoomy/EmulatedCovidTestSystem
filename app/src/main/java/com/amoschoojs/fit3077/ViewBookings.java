@@ -10,8 +10,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import models.LoginSystemPackage.LoginAuthentication;
-import models.UserPackage.User;
+import models.data.LoginSystemPackage.LoginAuthentication;
+import models.data.UserPackage.User;
 import viewmodel.UserViewModel;
 
 public class ViewBookings extends AppCompatActivity {
