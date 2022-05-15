@@ -104,5 +104,5 @@ simplyfing the process of applying memento design pattern. Care has been taken t
 attributes private and only revealing the getter methods to prevent any internal modification of a
 memento state.
 
-![alt text](markdown_images/bookingmemento.png)\
+![alt text](markdown_images/insidebookingclass.png)\
 *Figure 7. Saving and reverting state in a Booking class*
