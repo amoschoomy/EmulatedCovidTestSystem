@@ -46,19 +46,12 @@ public class BookingViewModel extends AndroidViewModel {
 
   public MutableLiveData<ArrayList<Booking>> getBookings(String API_KEY)
           throws JSONException, IOException {
-//    if (bookings == null) {
-//      bookings = inGetBookings(API_KEY);
-//    }
-//    return bookings;
     bookings = inGetBookings(API_KEY);
     return bookings;
   }
 
   private MutableLiveData<ArrayList<Booking>> inGetBookings(String API_KEY)
           throws JSONException, IOException {
-//    Pair<LiveData<ArrayList<Booking>>, ArrayList<Booking>> output = bookingRepository.getBookings(API_KEY);
-//    bookings.setValue(output.second);
-//    return (MutableLiveData<ArrayList<Booking>>) output.first;
     return (MutableLiveData<ArrayList<Booking>>) bookingRepository.getBookings(API_KEY);
   }
 
