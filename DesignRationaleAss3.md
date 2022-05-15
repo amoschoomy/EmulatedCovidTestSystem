@@ -158,7 +158,7 @@ compared to web applications. Too often, in Assignment 2, we are confused about 
 of the codes, for example we need to show a Android Dialog when user making a booking, in a well
 defined MVC pattern, the dialog should be defined in the View part, but for Android it must be
 defined in the (Activity)Controller class. It causes a huge failure on separation of concerns
-because neither the View or the Controller is seperated. With a MVVM architecture, both the XML
+because neither the View or the Controller is separated. With a MVVM architecture, both the XML
 files and Activity class are considered as View now.
 
 In MVVM, the View holds a reference to the ViewModel therefore allowing us to put some logic into
