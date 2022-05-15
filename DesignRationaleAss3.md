@@ -47,8 +47,6 @@ the UI. In essence, BookingViewModel now holds the methods of a BookingFacade cl
 ![alt text](markdown_images/bookingviewmodel.png)\
 *Figure 2. BookingViewModel class*
 
-### Memento Pattern
-
 ### Observer Pattern
 
 In Android MVVM architecture, Observer pattern can be applied easily using Android. LiveData is an
@@ -77,3 +75,34 @@ As noticed above, the simplicity of applying Observer pattern is extremely simpl
 LiveData. We would just have to retrieve the bookings from the ViewModel, then just leverage
 the `observe` method provided in an Android LiveData. And once this `observe` is triggered, we can
 just refresh our View in the UI easily.
+
+### Memento Pattern
+
+A Booking memento design pattern is needed here because of the 'Revert' functionality specified.
+Memento design pattern provides us the extensibility of reusing our design in Assignment 2, without
+changing the internal functionalities of a Booking class. A memento allows us to save and restore
+the any internal state or attribute, which is needed if a user wants to undo his changes made to a
+Booking. Also a memento design pattern is designed such a way that the originator class or in this
+use case the `Booking` class has no changes while new classes such as `BookingCaretaker`
+and a nested `BookingMemento` class is created instead. This also supports our SOLID principles of
+Open-Closed principles where a class should be closed for modification but open for extension. With
+this Memento design pattern, it proves that our design in Assignment 2 is highly extensible.
+
+For the `BookingCaretaker` class, we also implemented a singleton design pattern to it, as we want
+to make sure that there is only once instance of a caretaker at lifetime of our application. With
+this singleton design pattern, different Views can access to a same singular instance
+of `BookingCaretaker` so they can save or retrieve the same booking details only.
+
+![alt text](markdown_images/bookingcaretaker.png)\
+*Figure 5. BookingCaretaker class*
+
+![alt text](markdown_images/bookingmemento.png)\
+*Figure 6. BookingMemento class*
+
+The `BookingMemento` class is nested inside the abstract Booking class because Java allows it,
+simplyfing the process of applying memento design pattern. Care has been taken to make the
+attributes private and only revealing the getter methods to prevent any internal modification of a
+memento state.
+
+![alt text](markdown_images/bookingmemento.png)\
+*Figure 7. Saving and reverting state in a Booking class*
