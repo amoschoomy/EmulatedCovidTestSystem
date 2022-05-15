@@ -62,6 +62,8 @@ would most likely added additional complexity to our system design in Assignment
 new interfaces and observer classes. With our MVVM refactoring, we can largely use our design from
 Assignment 2 without any major changes.
 
+In our use case, we used Observer pattern to refresh the UI each time a booking has changed or
+cancelled.
 ![alt text](markdown_images/livedata1.png)\
 *Figure 3. LiveData returned in methods in BookingViewModel class*
 
