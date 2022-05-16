@@ -21,3 +21,8 @@ https://drive.google.com/file/d/1f3u9t2CTxxz6vqMuu8mkEFTSNH4UHO3A/view?usp=shari
 
 [Here](DesignRationaleAss3.md)
 
+## Code Demonstration Assignment 3 Video
+
+The video can be accessed using the google drive link below:
+
+https://drive.google.com/file/d/1PaDg5QyNkGdvJAGhEnmrYkTa0HKNmUYr/view?usp=sharing
