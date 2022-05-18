@@ -39,6 +39,7 @@ public class CheckBooking extends AppCompatActivity {
             boolean isPin = true;
             try {
               String pinText = pin.getText().toString();
+              // if pinText>6, pinText=BookingID
               if (pinText.length() > 6) {
                 isPin = false;
               }

@@ -19,12 +19,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * User Repository class that does API calls to get the data for Users
+ */
 public class UserRepository {
 
   public UserRepository(Application application) {}
 
   MutableLiveData<ArrayList<Booking>> bookings = new MutableLiveData<ArrayList<Booking>>();
-  MutableLiveData<String> notification = new MutableLiveData<String>();
 
   public LiveData<ArrayList<Booking>> getAllBookings(String userID, String API_KEY)
       throws IOException, JSONException {

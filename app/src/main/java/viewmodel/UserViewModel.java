@@ -19,6 +19,9 @@ import models.data.UserPackage.User;
 import models.data.UserPackage.UserFactory;
 import models.repository.UserRepository;
 
+/**
+ * User ViewModel class that houses all operations related to Users
+ */
 public class UserViewModel extends AndroidViewModel {
   private final UserRepository userRepository;
   private MutableLiveData<ArrayList<Booking>> bookings;
@@ -28,6 +31,14 @@ public class UserViewModel extends AndroidViewModel {
     userRepository = new UserRepository(application);
   }
 
+  /**
+   * Gets bookings made by user
+   * @param userID
+   * @param API_KEY
+   * @return user bookings
+   * @throws JSONException
+   * @throws IOException
+   */
   public MutableLiveData<ArrayList<Booking>> retrieveBookings(String userID, String API_KEY)
       throws JSONException, IOException {
     if (bookings == null) {

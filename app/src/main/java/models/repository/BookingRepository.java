@@ -22,6 +22,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Booking Repository class that does API calls to get the data for bookings
+ */
 public class BookingRepository {
 
   public BookingRepository(Application application) {}

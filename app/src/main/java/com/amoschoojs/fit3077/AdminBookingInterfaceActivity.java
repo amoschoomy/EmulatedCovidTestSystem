@@ -65,6 +65,7 @@ public class AdminBookingInterfaceActivity extends AppCompatActivity {
         LifecycleOwner currView = this;
         Log.d("myTag", String.valueOf(currView));
 
+        // update bookings when refresh button is clicked
         Button refreshBtn = findViewById(R.id.refreshBtn);
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override

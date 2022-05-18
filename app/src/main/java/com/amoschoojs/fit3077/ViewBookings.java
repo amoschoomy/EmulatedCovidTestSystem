@@ -42,6 +42,7 @@ public class ViewBookings extends AppCompatActivity {
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(recyclerViewAdapter);
 
+    // Populates the recyclerView with user bookings
     try {
       userViewModel
           .retrieveBookings(user.getUserId(), API_KEY)
@@ -60,6 +61,7 @@ public class ViewBookings extends AppCompatActivity {
 
   @Override
   protected void onResume() {
+    // if the user leaves the activity and return, repopulate the recyclerView
     try {
       final String API_KEY = getString(R.string.api_key);
       LoginAuthentication loginAuthentication = null;

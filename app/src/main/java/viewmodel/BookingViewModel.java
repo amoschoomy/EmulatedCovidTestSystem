@@ -15,6 +15,9 @@ import models.data.BookingPackage.Booking;
 import models.repository.BookingRepository;
 import okhttp3.RequestBody;
 
+/**
+ * Booking ViewModel class that houses all operations related to Bookings
+ */
 public class BookingViewModel extends AndroidViewModel {
 
   private final BookingRepository bookingRepository;
@@ -43,7 +46,13 @@ public class BookingViewModel extends AndroidViewModel {
     return bookingRepository.delete(API_KEY, bookingID);
   }
 
-
+  /**
+   * Gets all bookings made
+   * @param API_KEY
+   * @return bookings
+   * @throws JSONException
+   * @throws IOException
+   */
   public MutableLiveData<ArrayList<Booking>> getBookings(String API_KEY)
           throws JSONException, IOException {
     bookings = inGetBookings(API_KEY);

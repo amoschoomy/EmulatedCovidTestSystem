@@ -72,6 +72,7 @@ public class RecyclerViewAdapterRecep
         Button processBtn = holder.itemView.findViewById(R.id.processBtn);
         Button undoBtn = holder.itemView.findViewById(R.id.undoBtn);
 
+        // setting the view
         try {
             String[] array =
                     bookingViewModel.checkBooking(

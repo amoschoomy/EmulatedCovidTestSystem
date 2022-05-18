@@ -64,6 +64,7 @@ public class RecyclerViewAdapterBooking
     Button cancelButton = holder.itemView.findViewById(R.id.cancelbutton);
     Button undoButton = holder.itemView.findViewById(R.id.undocard);
 
+    // setting the view
     try {
       String[] array =
           bookingViewModel.checkBooking(
@@ -89,6 +90,7 @@ public class RecyclerViewAdapterBooking
     }
     updatedAt.setText(booking.getUpdatedAt());
 
+    // Cancel Booking
     cancelButton.setOnClickListener(
         new View.OnClickListener() {
           @Override
