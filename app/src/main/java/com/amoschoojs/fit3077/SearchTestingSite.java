@@ -8,11 +8,15 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
-import TestingFacilityPackage.TestingFacility;
-import TestingFacilityPackage.TestingFacilityCollection;
+import models.data.BookingPackage.TestingOnSiteBooking;
+import models.data.TestingFacilityPackage.TestingFacility;
+import models.data.TestingFacilityPackage.TestingFacilityCollection;
+import viewmodel.UserViewModel;
 
 public class SearchTestingSite extends AppCompatActivity {
 
@@ -21,10 +25,21 @@ public class SearchTestingSite extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_search_testing_site);
     RecyclerView recyclerView = findViewById(R.id.recyclerView2);
-    RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter();
+    Bundle extras = getIntent().getExtras();
+    UserViewModel userViewModel = new UserViewModel(getApplication());
+    String bookingJSON = null;
+    if (extras != null) {
+      bookingJSON = extras.getString("key");
+    }
+
+    Gson gson = new Gson();
+    TestingOnSiteBooking ob = gson.fromJson(bookingJSON, TestingOnSiteBooking.class);
+    RecyclerViewAdapterSTS recyclerViewAdapter =
+        new RecyclerViewAdapterSTS(getApplication(), ob, this);
     ArrayList<TestingFacility> testingFacilities;
     final String API_KEY = getString(R.string.api_key);
     TestingFacilityCollection testingFacilityCollection = TestingFacilityCollection.getInstance();
+
     try {
       testingFacilities = testingFacilityCollection.retrieveTestingFacilities(API_KEY);
       recyclerViewAdapter.setCars(testingFacilities);

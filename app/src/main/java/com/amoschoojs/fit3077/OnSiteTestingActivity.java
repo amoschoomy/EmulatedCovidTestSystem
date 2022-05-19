@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import BookingPackage.BookingFacade;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import viewmodel.BookingViewModel;
 
 public class OnSiteTestingActivity extends AppCompatActivity {
 
@@ -29,6 +29,8 @@ public class OnSiteTestingActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_on_site_testing);
+
+    BookingViewModel bookingViewModel = new BookingViewModel(getApplication());
 
     RadioGroup feverRadioGroup = findViewById(R.id.FeverRadioGroup);
     RadioGroup coughRadioGroup = findViewById(R.id.CoughRadioGroup);
@@ -51,11 +53,22 @@ public class OnSiteTestingActivity extends AppCompatActivity {
               diarrheaStatus = checkStatus(diarrheaRadioGroup);
               nauseaStatus = checkStatus(nauseaRadioGroup);
               jointStatus = checkStatus(jointRadioGroup);
-              String pin = bookingPin.getText().toString();
-              String[] array = BookingFacade.checkBooking(pin, getString(R.string.api_key));
-              if (pin.length() < 6) {
-                throw new Exception("Invalid Pin");
+
+              // Getting BookingId
+              Bundle extras = getIntent().getExtras();
+              String bookingID = null;
+              if (extras != null) {
+                bookingID = extras.getString("bookingId");
+              } else {
+                String pin = bookingPin.getText().toString();
+                String[] array =
+                        bookingViewModel.checkBooking(pin, getString(R.string.api_key), true);
+                if (pin.length() < 6) {
+                  throw new Exception("Invalid Pin");
+                }
+                bookingID = array[0];
               }
+
               TextView testRecView = findViewById(R.id.RecommendedTestTxt);
               String recommendedTest = "PCR Test";
               if (feverStatus
@@ -75,7 +88,7 @@ public class OnSiteTestingActivity extends AppCompatActivity {
               }
               testRecView.setVisibility(View.VISIBLE);
 
-              String bookingID = array[0];
+              // Send Info
               String jsonstr =
                   String.format(
                       "{\"additionalInfo\":{\"recommendedTest\":\"%s\"}, \"status\": \"PROCESSED\"}",
@@ -83,7 +96,8 @@ public class OnSiteTestingActivity extends AppCompatActivity {
 
               RequestBody body =
                   RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonstr);
-              BookingFacade.updateBookingDetails(getString(R.string.api_key), bookingID, body);
+              bookingViewModel.updateBooking(getString(R.string.api_key), bookingID, body);
+              Toast.makeText(OnSiteTestingActivity.this, "Booking Processed", Toast.LENGTH_SHORT).show();
             } catch (NullPointerException e) {
               Toast.makeText(getApplicationContext(), "Please Input All Fields", Toast.LENGTH_SHORT)
                   .show();

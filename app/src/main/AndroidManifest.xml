@@ -11,6 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FIT3077">
+
+    <activity
+            android:name=".AdminBookingInterfaceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewBookings"
+            android:exported="false" />
         <activity
             android:name=".CheckBooking"
             android:exported="false" />

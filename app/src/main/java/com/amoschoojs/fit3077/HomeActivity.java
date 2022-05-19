@@ -11,8 +11,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import LoginSystemPackage.LoginAuthentication;
-import UserPackage.User;
+import models.data.LoginSystemPackage.LoginAuthentication;
+import models.data.UserPackage.User;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -24,6 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     Button onSiteTestingBtn = this.findViewById(R.id.onSiteTestingBtn);
     Button SearchTestingSitesBtn = this.findViewById(R.id.searchTestingSitesBtn);
     Button checkBookingButton = this.findViewById(R.id.checkbooking);
+    Button adminInterfaceButton = this.findViewById(R.id.adminInterfaceBtn);
 
     LoginAuthentication loginAuthentication = null;
     try {
@@ -44,6 +45,17 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(switchActivityIntent);
           }
         });
+
+      // Only receptionist and healthcare worker can go to admin interface
+      if (user.getReceptionist() || user.getHealthcareWorker()) adminInterfaceButton.setVisibility(View.VISIBLE);
+      adminInterfaceButton.setOnClickListener(
+              new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view) {
+                      Intent switchActivityIntent = new Intent(getApplicationContext(), AdminBookingInterfaceActivity.class);
+                      startActivity(switchActivityIntent);
+                  }
+              });
 
     // Healthcare workers cannot check booking status
     if (user.getHealthcareWorker()) checkBookingButton.setVisibility(View.GONE);

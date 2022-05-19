@@ -2,13 +2,21 @@ package com.amoschoojs.fit3077;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Observable;
+import java.util.Observer;
+
+public class MainActivity extends AppCompatActivity implements Observer {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -34,5 +42,24 @@ public class MainActivity extends AppCompatActivity {
       NotificationManager notificationManager = getSystemService(NotificationManager.class);
       notificationManager.createNotificationChannel(channel);
     }
+  }
+
+  // Observe if got notification, if got, then push notification
+  @Override
+  public void update(Observable observable, Object o) {
+    String notification = (String) o;
+    NotificationCompat.Builder builder =
+            new NotificationCompat.Builder(
+                    this, "BOOKING CONFIRM")
+                    .setContentTitle("Booking Update")
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentText(notification)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+    Toast.makeText(this, notification, Toast.LENGTH_LONG)
+            .show();
+    NotificationManager notificationManager =
+            (NotificationManager)
+                    this.getSystemService(Context.NOTIFICATION_SERVICE);
+    notificationManager.notify(1, builder.build());
   }
 }
